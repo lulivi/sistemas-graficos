@@ -74,8 +74,8 @@ class Robot extends THREE.Object3D {
     // **************
 
     this.add(this.createBody())
-    // this.add(this.createLeg(this.legLeftPosition))
-    // this.add(this.createLeg(this.legRightPosition))
+    // this.add(this.createFoot(this.legLeftPosition))
+    // this.add(this.createFoot(this.legRightPosition))
   }
 
   // ***************
@@ -103,7 +103,6 @@ class Robot extends THREE.Object3D {
       this.material
     )
     this.head.position.y = this.bodyHeight
-    this.head.rotation.z = 20 * Math.PI / 180
     this.head.castShadow = true
     this.head.add(this.createEye())
     return this.head
@@ -115,7 +114,8 @@ class Robot extends THREE.Object3D {
       this.material
     )
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2))
-    this.eye.position.x = this.headRadius
+    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius, 0, 0))
+    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(20 * Math.PI / 180))
     this.eye.castShadow = true
     return this.eye
   }
