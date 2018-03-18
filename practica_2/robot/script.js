@@ -27,15 +27,6 @@ function createGUI (withStats) {
     this.rotation = 6;
     this.distance = 10;
     this.height   = 10;
-    this.addBox   = function () {
-      setMessage ("Añadir cajas clicando en el suelo");
-      applicationMode = TheScene.ADDING_BOXES;
-    };
-    this.moveBox  = function () {
-      setMessage ("Mover y rotar cajas clicando en ellas");
-      applicationMode = TheScene.MOVING_BOXES;
-    };
-    this.takeBox  = false;
   }
   
   var gui = new dat.GUI();
@@ -43,28 +34,7 @@ function createGUI (withStats) {
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
     axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :');
   
-  var actions = gui.addFolder ('Actions');
-    var addingBoxes = actions.add(GUIcontrols, 'addBox').name (': Adding boxes :');
-    var movingBoxes = actions.add (GUIcontrols, 'moveBox').name (': Move and rotate boxes :');
-    var takingBoxes = actions.add (GUIcontrols, 'takeBox').name ('Take the box below');
-    takingBoxes.onChange (function (value) {
-        if (value) {
-        newHeight = scene.takeBox();
-          if (newHeight > 0) {
-              GUIcontrols.height = newHeight;
-              GUIcontrols.takeBox = true; 
-          } else {
-              GUIcontrols.takeBox = false;  
-          }
-        } else {
-          scene.dropBox ();
-        }
-    });
   
-  var craneControls = gui.addFolder ('Crane Controls');
-    craneControls.add (GUIcontrols, 'rotation', 0, 12, 0.001).name('Rotation :');
-    craneControls.add (GUIcontrols, 'distance', 0, 50, 0.1).name('Distance :');
-    craneControls.add (GUIcontrols, 'height', 0, 50, 0.1).name('Height :').listen();
     // The method  listen()  allows the height attribute to be written, not only read
   
   if (withStats)
