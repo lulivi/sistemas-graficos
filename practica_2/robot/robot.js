@@ -43,15 +43,25 @@ class Robot extends THREE.Object3D {
     this.bodyRadius = (parameters.craneWidth === undefined ? 10 : parameters.robotBodyRadius)
 
     // Head
-    this.headRadius = this.bodyRadius * 9 / 10
+    this.headRadius = this.bodyRadius * 0.9
     this.eyeHeight = this.headRadius / 2
     this.eyeRadius = this.headRadius / 5
 
     // Legs
-    this.legsHeight = this.bodyHeight
-    this.legsRadius = this.headRadius / 5
-    this.legLeftPosition = this.bodyRadius + (0.9 * this.bodyRadius) + this.legsRadius
-    this.legRightPosition = -(this.bodyRadius + (0.9 * this.bodyRadius) + this.legsRadius)
+    this.legHeight = this.bodyHeight
+    this.legRadius = this.headRadius / 5
+    this.legLeftPosition = this.bodyRadius + this.legRadius * 1.2
+    this.legRightPosition = -(this.bodyRadius + this.legRadius * 1.2)
+
+    // Feet
+    this.footHeight = this.headRadius / 2
+    this.footRadiusTop = this.legRadius * 1.2
+    this.footRadiusBottom = this.footRadiusTop * 2
+
+    // Shoulders
+    this.shoulderWidth = this.footRadiusTop * 2
+    this.shoulderHeight = this.footRadiusTop * 2
+    this.shoulderDepth = this.footRadiusTop * 3
 
     // **************
     // MEASURE LIMITS
@@ -67,15 +77,15 @@ class Robot extends THREE.Object3D {
 
     // Max leg lenght = 20% of normal leg lenght
     this.legsMinHeight = this.bodyHeight
-    this.legsMaxHeight = this.legsHeight + (this.legsHeight * 20 / 100)
+    this.legsMaxHeight = this.legHeight + (this.legHeight * 20 / 100)
 
     // **************
     // MODEL CREATION
     // **************
 
     this.add(this.createBody())
-    // this.add(this.createFoot(this.legLeftPosition))
-    // this.add(this.createFoot(this.legRightPosition))
+    this.add(this.createFoot(this.legLeftPosition))
+    this.add(this.createFoot(this.legRightPosition))
   }
 
   // ***************
@@ -114,139 +124,40 @@ class Robot extends THREE.Object3D {
       this.material
     )
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2))
-    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius, 0, 0))
+    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius * 0.9, 0, 0))
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(20 * Math.PI / 180))
     this.eye.castShadow = true
     return this.eye
   }
 
   createFoot (legPosition) {
-
+    var foot = new THREE.Mesh(
+      new THREE.CylinderGeometry(this.footRadiusTop, this.footRadiusBottom, this.footHeight, 50),
+      this.material
+    )
+    foot.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.footHeight / 2, 0))
+    foot.position.z = legPosition
+    foot.add(this.createLeg(legPosition))
+    foot.add(this.createShoulder(legPosition))
+    return foot
   }
 
   createLeg (legPosition) {
-
+    var leg = new THREE.Mesh(
+      new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight, 50),
+      this.material
+    )
+    leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2, 0))
+    return leg
   }
 
   createShoulder (legPosition) {
-
-  }
-
-  /// It sets the angle of the jib
-  /**
-   * @param anAngle - The angle of the jib
-   */
-  setJib (anAngle) {
-    this.angle = anAngle
-    this.jib.rotation.y = this.angle
-    if (this.feedBack.visible) {
-      this.feedBack.update()
-    }
-  }
-
-  /// It sets the distance of the trolley from the mast
-  /**
-   * @param aDistance - The distance of the trolley from the mast
-   */
-  setTrolley (aDistance) {
-    if (this.distanceMin <= aDistance && aDistance <= this.distanceMax) {
-      this.distance = aDistance
-      this.trolley.position.x = this.distance
-    }
-  }
-
-  /// It sets the distance of the hook from the bottom of the base
-  /**
-   * @param aHeight - The distance of the hook from the bottom of the base
-   */
-  setHook (aHeight) {
-    if (this.heightMin <= aHeight && aHeight <= this.heightMax) {
-      this.height = aHeight
-      this.stringLength = this.computeStringLength()
-      this.string.scale.y = this.stringLength
-      this.hook.position.y = -this.stringLength
-    }
-  }
-
-  /// It makes the crane feedback visible or not
-  /**
-   * @param onOff - Visibility (true or false)
-   */
-  setFeedBack (onOff) {
-    this.feedBack.visible = onOff
-  }
-
-  /// It sets the hook according to
-  /**
-   * @param anAngle - The angle of the jib
-   * @param aDistance - The distance of the trolley from the mast
-   * @param aHeight - The distance of the hook from the bottom of the base
-   */
-  setHookPosition (anAngle, aDistance, aHeight) {
-    this.setJib(anAngle)
-    this.setTrolley(aDistance)
-    this.setHook(aHeight)
-  }
-
-  /// It returns the position of the hook
-  /**
-   * @param world - Whether the returned position is referenced to the World Coordinates System (Robot.WORLD) or is referenced to the crane position (Robot.LOCAL)
-   * @return A Vector3 with the asked position
-   */
-  getHookPosition (world) {
-    if (world === undefined) {
-      world = Robot.WORLD
-    }
-    var hookPosition = new THREE.Vector3()
-    hookPosition.setFromMatrixPosition(this.hook.matrixWorld)
-    hookPosition.y -= this.baseHookHeight
-    if (world === Robot.LOCAL) {
-      var cranePosition = new THREE.Vector3()
-      cranePosition.setFromMatrixPosition(this.matrixWorld)
-      hookPosition.sub(cranePosition)
-    }
-    return hookPosition
-  }
-
-  /// The crane takes a box
-  /**
-   * @param aBox - The box to be taken
-   * @return The new height of the hook, on the top of the box. Zero if no box is taken
-   */
-  takeBox (aBox) {
-    if (this.box === null) {
-      this.setFeedBack(true)
-      this.box = aBox
-      var newHeight = this.box.position.y + this.box.geometry.parameters
-        .height
-      this.heightMin = this.box.geometry.parameters.height
-      this.box.position.x = 0
-      this.box.position.y = -this.box.geometry.parameters.height -
-        this.baseHookHeight
-      this.box.position.z = 0
-      this.box.rotation.y -= this.jib.rotation.y
-      this.hook.add(this.box)
-      return newHeight
-    }
-    return 0
-  }
-
-  /// The crane drops its taken box
-  /**
-   * @return The dropped box, or null if no box is dropped.
-   */
-  dropBox () {
-    if (this.box !== null) {
-      this.setFeedBack(false)
-      var theBox = this.box
-      this.hook.remove(this.box)
-      this.box = null
-      theBox.rotation.y += this.jib.rotation.y
-      this.heightMin = 0
-      return theBox
-    } else {
-      return null
-    }
+    var shoulder = new THREE.Mesh(
+      new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth),
+      this.material
+    )
+    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
+    return shoulder
   }
 }
 
