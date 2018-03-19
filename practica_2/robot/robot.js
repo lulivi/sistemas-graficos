@@ -39,16 +39,16 @@ class Robot extends THREE.Object3D {
     // **************
 
     // Body
-    this.bodyHeight = (parameters.craneHeight === undefined ? 40 : parameters.robotBodyHeight)
-    this.bodyRadius = (parameters.craneWidth === undefined ? 10 : parameters.robotBodyRadius)
+    this.bodyHeight = (parameters.craneHeight === undefined ? 28 : parameters.robotBodyHeight)
+    this.bodyRadius = (parameters.craneWidth === undefined ? 12 : parameters.robotBodyRadius)
 
     // Head
-    this.headRadius = this.bodyRadius * 0.9
+    this.headRadius = this.bodyRadius * 0.95
     this.eyeHeight = this.headRadius / 2
     this.eyeRadius = this.headRadius / 5
 
     // Legs
-    this.legHeight = this.bodyHeight
+    this.legHeight = this.bodyHeight * 1.15
     this.legRadius = this.headRadius / 5
     this.legLeftPosition = this.bodyRadius + this.legRadius * 1.2
     this.legRightPosition = -(this.bodyRadius + this.legRadius * 1.2)
@@ -168,7 +168,7 @@ class Robot extends THREE.Object3D {
       new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth),
       this.material
     )
-    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
+    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0,  this.legHeight, 0))
     shoulder.castShadow = true
     if (legPosition > 0) {
       this.shoulderRight = shoulder
@@ -179,15 +179,29 @@ class Robot extends THREE.Object3D {
   }
 
   setLeg (newLegHeight) {
-    var requestedLegHeight = this.legMinHeight * (1 + (newLegHeight / 100))
+      var requestedLegHeight = this.legMinHeight * (1 + (newLegHeight / 100))
+
     if (requestedLegHeight >= this.legMinHeight && requestedLegHeight <= this.legMaxHeight) {
-      this.legHeight = requestedLegHeight
+	this.legHeight = requestedLegHeight / this.legMinHeight
       this.legLeft.scale.y = this.legHeight
       this.legRight.scale.y = this.legHeight
       this.shoulderRight.position.y = this.legHeight
-      this.shoulderLeft.position.y = this.legHeight
+	this.shoulderLeft.position.y = this.legHeight
+	this.updateBody(this.legMinHeight * this.legHeight - this.legMinHeight)
     }
   }
+
+    updateBody(height) {
+	
+	this.body.position.y = this.headRadius + height 
+	this.shoulderLeft.position.y = this.legHeight + height
+	this.shoulderRight.position.y = this.legHeight + height
+    }
+
+    setHeadTwist(headTwist) {
+	this.head.rotation.y = headTwist  * Math.PI/180
+    }
+    
 }
 
 // class variables

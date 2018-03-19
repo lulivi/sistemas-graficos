@@ -124,16 +124,17 @@ class TheScene extends THREE.Scene {
   //     box.position.y = 0;
   //     this.ground.dropBox (box);
   //   }
-  // }
+    // }
 
   /// It sets the crane position according to the GUI
   /**
    * @controls - The GUI information
    */
-  animate (controls) {
-    this.axis.visible = controls.axis
-    this.spotLight.intensity = controls.lightIntensity
-    // this.robot.setLeg(controls.robotLegHeight)
+    animate (controls) {
+	this.axis.visible = controls.axis
+	this.spotLight.intensity = controls.lightIntensity
+	this.robot.setLeg(controls.robotLegHeight)
+	this.robot.setHeadTwist(controls.robotHeadTwist)
     // this.crane.setHookPosition (controls.rotation, controls.distance, controls.height);
   }
 
@@ -177,3 +178,4 @@ class TheScene extends THREE.Scene {
   TheScene.SELECT_BOX = 2;
   TheScene.ROTATE_BOX = 3;
   TheScene.END_ACTION = 10;
+

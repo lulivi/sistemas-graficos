@@ -23,7 +23,8 @@ function createGUI(withStats) {
   GUIcontrols = new function () {
     this.axis = true
     this.lightIntensity = 0.5
-    this.robotLegHeight = 0
+      this.robotLegHeight = 0
+      this.robotHeadTwist = 0
   }
 
   var gui = new dat.GUI()
@@ -32,7 +33,8 @@ function createGUI(withStats) {
   axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :')
 
   var robotControls = gui.addFolder('Robot Controls')
-  robotControls.add(GUIcontrols, 'robotLegHeight', 0.0, 20.0).name('Robot leg height :')
+    robotControls.add(GUIcontrols, 'robotLegHeight', 0.0, 20.0).name('Robot leg height :')
+    robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0,80.0).name('Robot head twist :')
 
   // The method  listen()  allows the height attribute to be written, not only read
 
