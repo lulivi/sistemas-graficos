@@ -1,17 +1,16 @@
-
 /// Several functions, including the main
 
 /// The scene graph
-scene = null;
+scene = null
 
 /// The GUI information
-GUIcontrols = null;
+GUIcontrols = null
 
 /// The object for the statistics
-stats = null;
+stats = null
 
 /// A boolean to know if the left button of the mouse is down
-mouseDown = false;
+mouseDown = false
 
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
@@ -20,23 +19,23 @@ applicationMode = TheScene.NO_ACTION;
 /**
  * @param withStats - A boolean to show the statictics or not
  */
-function createGUI (withStats) {
-  GUIcontrols = new function() {
-    this.axis = true;
-    this.lightIntensity = 0.5;
-    this.rotation = 6;
-    this.distance = 10;
-    this.height   = 10;
+function createGUI(withStats) {
+  GUIcontrols = new function () {
+    this.axis = true
+    this.lightIntensity = 0.5
+    this.robotLegHeight = 0
   }
-  
-  var gui = new dat.GUI();
-  var axisLights = gui.addFolder ('Axis and Lights');
-    axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :');
-  
-  
-    // The method  listen()  allows the height attribute to be written, not only read
-  
+
+  var gui = new dat.GUI()
+  var axisLights = gui.addFolder('Axis and Lights')
+  axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
+  axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :')
+
+  var robotControls = gui.addFolder('Robot Controls')
+  robotControls.add(GUIcontrols, 'robotLegHeight', 0.0, 20.0).name('Robot leg height :')
+
+  // The method  listen()  allows the height attribute to be written, not only read
+
   if (withStats)
     stats = initStats();
 }
@@ -46,18 +45,18 @@ function createGUI (withStats) {
  * @return The statistics object
  */
 function initStats() {
-  
+
   var stats = new Stats();
-  
+
   stats.setMode(0); // 0: fps, 1: ms
-  
+
   // Align top-left
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0px';
   stats.domElement.style.top = '0px';
-  
-  $("#Stats-output").append( stats.domElement );
-  
+
+  $("#Stats-output").append(stats.domElement);
+
   return stats;
 }
 
@@ -65,35 +64,35 @@ function initStats() {
 /**
  * @param str - The message
  */
-function setMessage (str) {
-  document.getElementById ("Messages").innerHTML = "<h2>"+str+"</h2>";
+function setMessage(str) {
+  document.getElementById("Messages").innerHTML = "<h2>" + str + "</h2>";
 }
 
 /// It processes the clic-down of the mouse
 /**
  * @param event - Mouse information
  */
-function onMouseDown (event) {
+function onMouseDown(event) {
   if (event.ctrlKey) {
     // The Trackballcontrol only works if Ctrl key is pressed
-    scene.getCameraControls().enabled = true;
-  } else {  
-    scene.getCameraControls().enabled = false;
-    if (event.button === 0) {   // Left button
-      mouseDown = true;
+    scene.getCameraControls().enabled = true
+  } else {
+    scene.getCameraControls().enabled = false
+    if (event.button === 0) { // Left button
+      mouseDown = true
       switch (applicationMode) {
-        case TheScene.ADDING_BOXES :
-          scene.addBox (event, TheScene.NEW_BOX);
+        case TheScene.ADDING_BOXES:
+          scene.addBox(event, TheScene.NEW_BOX);
           break;
-        case TheScene.MOVING_BOXES :
-          scene.moveBox (event, TheScene.SELECT_BOX);
+        case TheScene.MOVING_BOXES:
+          scene.moveBox(event, TheScene.SELECT_BOX);
           break;
-        default :
+        default:
           applicationMode = TheScene.NO_ACTION;
           break;
       }
     } else {
-      setMessage ("");
+      setMessage("");
       applicationMode = TheScene.NO_ACTION;
     }
   }
@@ -103,14 +102,14 @@ function onMouseDown (event) {
 /**
  * @param event - Mouse information
  */
-function onMouseMove (event) {
+function onMouseMove(event) {
   if (mouseDown) {
     switch (applicationMode) {
-      case TheScene.ADDING_BOXES :
-      case TheScene.MOVING_BOXES :
-        scene.moveBox (event, TheScene.MOVE_BOX);
+      case TheScene.ADDING_BOXES:
+      case TheScene.MOVING_BOXES:
+        scene.moveBox(event, TheScene.MOVE_BOX);
         break;
-      default :
+      default:
         applicationMode = TheScene.NO_ACTION;
         break;
     }
@@ -121,20 +120,20 @@ function onMouseMove (event) {
 /**
  * @param event - Mouse information
  */
-function onMouseUp (event) {
+function onMouseUp(event) {
   if (mouseDown) {
     switch (applicationMode) {
-      case TheScene.ADDING_BOXES :
-        scene.addBox (event, TheScene.END_ACTION);
+      case TheScene.ADDING_BOXES:
+        scene.addBox(event, TheScene.END_ACTION);
         break;
-      case TheScene.MOVING_BOXES :
-        scene.moveBox (event, TheScene.END_ACTION);
+      case TheScene.MOVING_BOXES:
+        scene.moveBox(event, TheScene.END_ACTION);
         break;
-      default :
+      default:
         applicationMode = TheScene.NO_ACTION;
         break;
     }
-    mouseDown = false;
+    mouseDown = false
   }
 }
 
@@ -142,16 +141,16 @@ function onMouseUp (event) {
 /**
  * @param event - Mouse information
  */
-function onMouseWheel (event) {
+function onMouseWheel(event) {
   if (event.ctrlKey) {
     // The Trackballcontrol only works if Ctrl key is pressed
-    scene.getCameraControls().enabled = true;
-  } else {  
-    scene.getCameraControls().enabled = false;
+    scene.getCameraControls().enabled = true
+  } else {
+    scene.getCameraControls().enabled = false
     if (mouseDown) {
       switch (applicationMode) {
-        case TheScene.MOVING_BOXES :
-          scene.moveBox (event, TheScene.ROTATE_BOX);
+        case TheScene.MOVING_BOXES:
+          scene.moveBox(event, TheScene.ROTATE_BOX);
           break;
       }
     }
@@ -159,51 +158,51 @@ function onMouseWheel (event) {
 }
 
 /// It processes the window size changes
-function onWindowResize () {
-  scene.setCameraAspect (window.innerWidth / window.innerHeight);
-  renderer.setSize (window.innerWidth, window.innerHeight);
+function onWindowResize() {
+  scene.setCameraAspect(window.innerWidth / window.innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 /// It creates and configures the WebGL renderer
 /**
  * @return The renderer
  */
-function createRenderer () {
+function createRenderer() {
   var renderer = new THREE.WebGLRenderer();
   renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  return renderer;  
+  renderer.shadowMap.enabled = true
+  return renderer;
 }
 
 /// It renders every frame
 function render() {
   requestAnimationFrame(render);
-  
+
   stats.update();
-  scene.getCameraControls().update ();
+  scene.getCameraControls().update();
   scene.animate(GUIcontrols);
-  
+
   renderer.render(scene, scene.getCamera());
 }
 
 /// The main function
-$(function () {
+$(function() {
   // create a render and set the size
   renderer = createRenderer();
   // add the output of the renderer to the html element
   $("#WebGL-output").append(renderer.domElement);
   // liseners
-  window.addEventListener ("resize", onWindowResize);
-  window.addEventListener ("mousemove", onMouseMove, true);
-  window.addEventListener ("mousedown", onMouseDown, true);
-  window.addEventListener ("mouseup", onMouseUp, true);
-  window.addEventListener ("mousewheel", onMouseWheel, true);   // For Chrome an others
-  window.addEventListener ("DOMMouseScroll", onMouseWheel, true); // For Firefox
-  
+  window.addEventListener("resize", onWindowResize);
+  window.addEventListener("mousemove", onMouseMove, true);
+  window.addEventListener("mousedown", onMouseDown, true);
+  window.addEventListener("mouseup", onMouseUp, true);
+  window.addEventListener("mousewheel", onMouseWheel, true); // For Chrome an others
+  window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
+
   // create a scene, that will hold all our elements such as objects, cameras and lights.
-  scene = new TheScene (renderer.domElement);
- 
+  scene = new TheScene(renderer.domElement);
+
   createGUI(true);
 
   render();

@@ -53,11 +53,11 @@ class TheScene extends THREE.Scene {
 
     // add spotlight for the shadows
     this.spotLight = new THREE.SpotLight( 0xffffff );
-    this.spotLight.position.set( 80, 80, 60 );
+    this.spotLight.position.set( 100, 100, 30 );
     this.spotLight.castShadow = true;
     // the shadow resolution
-    this.spotLight.shadow.mapSize.width=2048
-    this.spotLight.shadow.mapSize.height=2048;
+    this.spotLight.shadow.mapSize.width = 2048
+    this.spotLight.shadow.mapSize.height = 2048
     this.add (this.spotLight);
   }
 
@@ -131,8 +131,9 @@ class TheScene extends THREE.Scene {
    * @controls - The GUI information
    */
   animate (controls) {
-    this.axis.visible = controls.axis;
-    this.spotLight.intensity = controls.lightIntensity;
+    this.axis.visible = controls.axis
+    this.spotLight.intensity = controls.lightIntensity
+    // this.robot.setLeg(controls.robotLegHeight)
     // this.crane.setHookPosition (controls.rotation, controls.distance, controls.height);
   }
 

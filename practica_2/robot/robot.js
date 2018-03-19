@@ -76,8 +76,8 @@ class Robot extends THREE.Object3D {
     this.bodyHeadMaxRotationBackward = -45 * Math.PI / 180
 
     // Max leg lenght = 20% of normal leg lenght
-    this.legsMinHeight = this.bodyHeight
-    this.legsMaxHeight = this.legHeight + (this.legHeight * 20 / 100)
+    this.legMinHeight = this.bodyHeight
+    this.legMaxHeight = this.legHeight + (this.legHeight * 20 / 100)
 
     // **************
     // MODEL CREATION
@@ -137,8 +137,14 @@ class Robot extends THREE.Object3D {
     )
     foot.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.footHeight / 2, 0))
     foot.position.z = legPosition
+    foot.castShadow = true
     foot.add(this.createLeg(legPosition))
     foot.add(this.createShoulder(legPosition))
+    if (legPosition > 0) {
+      this.footRight = foot
+    } else {
+      this.footLeft = foot
+    }
     return foot
   }
 
@@ -148,6 +154,12 @@ class Robot extends THREE.Object3D {
       this.material
     )
     leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2, 0))
+    leg.castShadow = true
+    if (legPosition > 0) {
+      this.legRight = leg
+    } else {
+      this.legLeft = leg
+    }
     return leg
   }
 
@@ -157,7 +169,24 @@ class Robot extends THREE.Object3D {
       this.material
     )
     shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
+    shoulder.castShadow = true
+    if (legPosition > 0) {
+      this.shoulderRight = shoulder
+    } else {
+      this.shoulderLeft = shoulder
+    }
     return shoulder
+  }
+
+  setLeg (newLegHeight) {
+    var requestedLegHeight = this.legMinHeight * (1 + (newLegHeight / 100))
+    if (requestedLegHeight >= this.legMinHeight && requestedLegHeight <= this.legMaxHeight) {
+      this.legHeight = requestedLegHeight
+      this.legLeft.scale.y = this.legHeight
+      this.legRight.scale.y = this.legHeight
+      this.shoulderRight.position.y = this.legHeight
+      this.shoulderLeft.position.y = this.legHeight
+    }
   }
 }
 
