@@ -62,7 +62,7 @@ class Robot extends THREE.Object3D {
     this.shoulderWidth = this.footRadiusTop * 2
     this.shoulderHeight = this.footRadiusTop * 2
     this.shoulderDepth = this.footRadiusTop * 3
-    this.shoulderBodyQuotient = 4/5 * this.bodyHeight
+    this.shoulderBodyHeight = this.shoulderHeight / 2 + this.legHeight - this.headRadius
 
     // **************
     // MEASURE LIMITS
@@ -95,33 +95,21 @@ class Robot extends THREE.Object3D {
 
   createSwingNode() {
     this.swingNode = new THREE.Object3D()
-    this.swingNode.position.y =  this.shoulderBodyQuotient + this.headRadius
-
+    this.swingNode.position.y = this.headRadius
     this.swingNode.add(this.createBody())
     return this.swingNode
   }
   
   createBody() {
-    this.body = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius, this.bodyHeight, 50),
-      this.material
-    )
-    // Translate the body above the ground
+    this.body = new THREE.Mesh(new THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius, this.bodyHeight, 50), this.material)
     this.body.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.bodyHeight / 2, 0))
-    // Translate the body and it childs mid-head above the ground
-
-    this.body.position.y = -this.shoulderBodyQuotient
     this.body.castShadow = true
     this.body.add(this.createHead())
     return this.body
   }
 
   createHead() {
-    // SphereGeometry(radius : Float, widthSegments : Integer, heightSegments
-    this.head = new THREE.Mesh(
-      new THREE.SphereGeometry(this.headRadius, 32, 32),
-      this.material
-    )
+    this.head = new THREE.Mesh(new THREE.SphereGeometry(this.headRadius, 32, 32), this.material)
     this.head.position.y = this.bodyHeight
     this.head.castShadow = true
     this.head.add(this.createEye())
@@ -129,10 +117,7 @@ class Robot extends THREE.Object3D {
   }
 
   createEye() {
-    this.eye = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.eyeRadius, this.eyeRadius, this.eyeHeight, 50),
-      this.material
-    )
+    this.eye = new THREE.Mesh(new THREE.CylinderGeometry(this.eyeRadius, this.eyeRadius, this.eyeHeight, 50), this.material)
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2))
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius * 0.9, 0, 0))
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(20 * Math.PI / 180))
@@ -141,10 +126,7 @@ class Robot extends THREE.Object3D {
   }
 
   createFoot(legPosition) {
-    var foot = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.footRadiusTop, this.footRadiusBottom, this.footHeight, 50),
-      this.material
-    )
+    var foot = new THREE.Mesh(new THREE.CylinderGeometry(this.footRadiusTop, this.footRadiusBottom, this.footHeight, 50), this.material)
     foot.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.footHeight / 2, 0))
     foot.position.z = legPosition
     foot.castShadow = true
@@ -159,10 +141,7 @@ class Robot extends THREE.Object3D {
   }
 
   createLeg(legPosition) {
-    var leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight, 50),
-      this.material
-    )
+    var leg = new THREE.Mesh(new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight, 50), this.material)
     leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2, 0))
     leg.castShadow = true
     if (legPosition > 0) {
@@ -174,10 +153,7 @@ class Robot extends THREE.Object3D {
   }
 
   createShoulder(legPosition) {
-    var shoulder = new THREE.Mesh(
-      new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth),
-      this.material
-    )
+    var shoulder = new THREE.Mesh(new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth), this.material)
     shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
     shoulder.castShadow = true
     if (legPosition > 0) {
@@ -190,7 +166,7 @@ class Robot extends THREE.Object3D {
 
   
   updateBodyHeight(height) {
-    this.swingNode.position.y =  height + this.shoulderBodyQuotient + this.headRadius
+    this.swingNode.position.y =  height + this.shoulderBodyHeight + this.headRadius
     this.shoulderLeft.position.y = height
     this.shoulderRight.position.y = height
   }
