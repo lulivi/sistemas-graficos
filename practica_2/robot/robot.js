@@ -24,6 +24,7 @@ class Robot extends THREE.Object3D {
     // **********
     this.body = null
     this.head = null
+    this.swingNode = null
     this.eye = null
 
     this.shoulderLeft = null
@@ -61,6 +62,7 @@ class Robot extends THREE.Object3D {
     this.shoulderWidth = this.footRadiusTop * 2
     this.shoulderHeight = this.footRadiusTop * 2
     this.shoulderDepth = this.footRadiusTop * 3
+    this.shoulderBodyQuotient = 4/5 * this.bodyHeight
 
     // **************
     // MEASURE LIMITS
@@ -82,15 +84,23 @@ class Robot extends THREE.Object3D {
     // MODEL CREATION
     // **************
 
-    this.add(this.createBody())
+    this.add(this.createSwingNode())
     this.add(this.createFoot(this.legLeftPosition))
     this.add(this.createFoot(this.legRightPosition))
   }
 
   // ***************
-  // PRIVATE MDETHODS
+  // PRIVATE METHODS
   // ***************
 
+  createSwingNode() {
+    this.swingNode = new THREE.Object3D()
+    this.swingNode.position.y =  this.shoulderBodyQuotient + this.headRadius
+
+    this.swingNode.add(this.createBody())
+    return this.swingNode
+  }
+  
   createBody() {
     this.body = new THREE.Mesh(
       new THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius, this.bodyHeight, 50),
@@ -99,7 +109,8 @@ class Robot extends THREE.Object3D {
     // Translate the body above the ground
     this.body.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.bodyHeight / 2, 0))
     // Translate the body and it childs mid-head above the ground
-    this.body.position.y = this.headRadius
+
+    this.body.position.y = -this.shoulderBodyQuotient
     this.body.castShadow = true
     this.body.add(this.createHead())
     return this.body
@@ -179,7 +190,7 @@ class Robot extends THREE.Object3D {
 
   
   updateBodyHeight(height) {
-    this.body.position.y = this.headRadius + height
+    this.swingNode.position.y =  height + this.shoulderBodyQuotient + this.headRadius
     this.shoulderLeft.position.y = height
     this.shoulderRight.position.y = height
   }
@@ -200,15 +211,12 @@ class Robot extends THREE.Object3D {
   setHeadTwist(headTwistAngle) {
     this.head.rotation.y = headTwistAngle * Math.PI / 180
   }
-
-  // Esto está fallando loquichuelo
-  updateBodySwing(bodySwingAngle) {
-    this.body.rotation.z = bodySwingAngle * Math.PI /180
-  }
   
   setBodySwing(bodySwingAngle) {
+    var oldY = this.swingNode.position.y
     this.body.position.y = -this.bodyHeight + this.shoulderHeight
-    this.updateBodySwing(bodySwingAngle)
+    this.swingNode.rotation.z = bodySwingAngle * Math.PI /180
+    this.swingNode.position.y = oldY
   }
 
 }

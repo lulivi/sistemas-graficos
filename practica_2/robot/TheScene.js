@@ -77,7 +77,7 @@ class TheScene extends THREE.Scene {
     model.add(this.robot)
 
     // Ground model
-    var groundTexture = loader.load('imgs/wood.jpg')
+    var groundTexture = loader.load('imgs/rock.jpg')
     this.ground = new Ground(300, 300, new THREE.MeshPhongMaterial({
       map: groundTexture
     }), 4)
