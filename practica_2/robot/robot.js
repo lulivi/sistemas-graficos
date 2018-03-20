@@ -12,7 +12,7 @@
 class Robot extends THREE.Object3D {
   constructor(parameters) {
     super()
-    
+
     this.material = (parameters.material === undefined ? new THREE.MeshPhongMaterial({
       color: 0xd4af37,
       specular: 0xfbf804,
@@ -93,13 +93,11 @@ class Robot extends THREE.Object3D {
 
   createBody() {
     this.body = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius, this.bodyHeight,
-				 50),
+      new THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius, this.bodyHeight, 50),
       this.material
     )
     // Translate the body above the ground
-    this.body.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.bodyHeight /
-								       2, 0))
+    this.body.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.bodyHeight / 2, 0))
     // Translate the body and it childs mid-head above the ground
     this.body.position.y = this.headRadius
     this.body.castShadow = true
@@ -121,27 +119,22 @@ class Robot extends THREE.Object3D {
 
   createEye() {
     this.eye = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.eyeRadius, this.eyeRadius, this.eyeHeight,
-				 50),
+      new THREE.CylinderGeometry(this.eyeRadius, this.eyeRadius, this.eyeHeight, 50),
       this.material
     )
     this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(Math.PI / 2))
-    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius *
-								      0.9, 0, 0))
-    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(20 * Math.PI /
-								    180))
+    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(this.headRadius * 0.9, 0, 0))
+    this.eye.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(20 * Math.PI / 180))
     this.eye.castShadow = true
     return this.eye
   }
 
   createFoot(legPosition) {
     var foot = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.footRadiusTop, this.footRadiusBottom,
-				 this.footHeight, 50),
+      new THREE.CylinderGeometry(this.footRadiusTop, this.footRadiusBottom, this.footHeight, 50),
       this.material
     )
-    foot.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.footHeight /
-								  2, 0))
+    foot.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.footHeight / 2, 0))
     foot.position.z = legPosition
     foot.castShadow = true
     foot.add(this.createLeg(legPosition))
@@ -156,12 +149,10 @@ class Robot extends THREE.Object3D {
 
   createLeg(legPosition) {
     var leg = new THREE.Mesh(
-      new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight,
-				 50),
+      new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight, 50),
       this.material
     )
-    leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight /
-								 2, 0))
+    leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2, 0))
     leg.castShadow = true
     if (legPosition > 0) {
       this.legRight = leg
@@ -176,8 +167,7 @@ class Robot extends THREE.Object3D {
       new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth),
       this.material
     )
-    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight /
-								      2 + this.legHeight, 0))
+    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
     shoulder.castShadow = true
     if (legPosition > 0) {
       this.shoulderRight = shoulder
