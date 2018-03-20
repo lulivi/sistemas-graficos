@@ -187,6 +187,13 @@ class Robot extends THREE.Object3D {
     return shoulder
   }
 
+  
+  updateBodyHeight(height) {
+    this.body.position.y = this.headRadius + height
+    this.shoulderLeft.position.y = height
+    this.shoulderRight.position.y = height
+  }
+  
   setLegHeight(newLegHeight) {
     var requestedLegHeight = (1 + (newLegHeight / 100))
 
@@ -196,18 +203,22 @@ class Robot extends THREE.Object3D {
       this.legRight.scale.y = this.legScaleFactor
       this.shoulderRight.position.y = this.legScaleFactor
       this.shoulderLeft.position.y = this.legScaleFactor
-      this.updateBody(this.legMinHeight * this.legScaleFactor - this.legMinHeight)
+      this.updateBodyHeight(this.legMinHeight * this.legScaleFactor - this.legMinHeight)
     }
   }
 
-  updateBody(height) {
-    this.body.position.y = this.headRadius + height
-    this.shoulderLeft.position.y = height
-    this.shoulderRight.position.y = height
+  setHeadTwist(headTwistAngle) {
+    this.head.rotation.y = headTwistAngle * Math.PI / 180
   }
 
-  setHeadTwist(headTwist) {
-    this.head.rotation.y = headTwist * Math.PI / 180
+  // Esto está fallando loquichuelo
+  updateBodySwing(bodySwingAngle) {
+    this.body.rotation.z = bodySwingAngle * Math.PI /180
+  }
+  
+  setBodySwing(bodySwingAngle) {
+    this.body.position.y = -this.bodyHeight + this.shoulderHeight
+    this.updateBodySwing(bodySwingAngle)
   }
 
 }
