@@ -20,26 +20,28 @@ applicationMode = TheScene.NO_ACTION;
  * @param withStats - A boolean to show the statictics or not
  */
 function createGUI(withStats) {
-  GUIcontrols = new function () {
-    this.axis = true
-    this.lightIntensity = 0.5
-      this.robotLegHeight = 0
-      this.robotHeadTwist = 0
-  }
+	GUIcontrols = new function() {
+		this.axis = true
+		this.lightIntensity = 0.5
+		this.robotLegScaleFactor = 0
+		this.robotHeadTwist = 0
+	}
 
-  var gui = new dat.GUI()
-  var axisLights = gui.addFolder('Axis and Lights')
-  axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
-  axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :')
+	var gui = new dat.GUI()
+	var axisLights = gui.addFolder('Axis and Lights')
+	axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
+	axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light intensity :')
 
-  var robotControls = gui.addFolder('Robot Controls')
-    robotControls.add(GUIcontrols, 'robotLegHeight', 0.0, 20.0).name('Robot leg height :')
-    robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0,80.0).name('Robot head twist :')
+	var robotControls = gui.addFolder('Robot Controls')
+	robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
+		'Robot leg height :')
+	robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0, 80.0).name(
+		'Robot head twist :')
 
-  // The method  listen()  allows the height attribute to be written, not only read
+	// The method  listen()  allows the height attribute to be written, not only read
 
-  if (withStats)
-    stats = initStats();
+	if (withStats)
+		stats = initStats();
 }
 
 /// It adds statistics information to a previously created Div
@@ -48,18 +50,18 @@ function createGUI(withStats) {
  */
 function initStats() {
 
-  var stats = new Stats();
+	var stats = new Stats();
 
-  stats.setMode(0); // 0: fps, 1: ms
+	stats.setMode(0); // 0: fps, 1: ms
 
-  // Align top-left
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '0px';
+	// Align top-left
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
 
-  $("#Stats-output").append(stats.domElement);
+	$("#Stats-output").append(stats.domElement);
 
-  return stats;
+	return stats;
 }
 
 /// It shows a feed-back message for the user
@@ -67,7 +69,7 @@ function initStats() {
  * @param str - The message
  */
 function setMessage(str) {
-  document.getElementById("Messages").innerHTML = "<h2>" + str + "</h2>";
+	document.getElementById("Messages").innerHTML = "<h2>" + str + "</h2>";
 }
 
 /// It processes the clic-down of the mouse
@@ -75,29 +77,29 @@ function setMessage(str) {
  * @param event - Mouse information
  */
 function onMouseDown(event) {
-  if (event.ctrlKey) {
-    // The Trackballcontrol only works if Ctrl key is pressed
-    scene.getCameraControls().enabled = true
-  } else {
-    scene.getCameraControls().enabled = false
-    if (event.button === 0) { // Left button
-      mouseDown = true
-      switch (applicationMode) {
-        case TheScene.ADDING_BOXES:
-          scene.addBox(event, TheScene.NEW_BOX);
-          break;
-        case TheScene.MOVING_BOXES:
-          scene.moveBox(event, TheScene.SELECT_BOX);
-          break;
-        default:
-          applicationMode = TheScene.NO_ACTION;
-          break;
-      }
-    } else {
-      setMessage("");
-      applicationMode = TheScene.NO_ACTION;
-    }
-  }
+	if (event.ctrlKey) {
+		// The Trackballcontrol only works if Ctrl key is pressed
+		scene.getCameraControls().enabled = true
+	} else {
+		scene.getCameraControls().enabled = false
+		if (event.button === 0) { // Left button
+			mouseDown = true
+			switch (applicationMode) {
+				case TheScene.ADDING_BOXES:
+					scene.addBox(event, TheScene.NEW_BOX);
+					break;
+				case TheScene.MOVING_BOXES:
+					scene.moveBox(event, TheScene.SELECT_BOX);
+					break;
+				default:
+					applicationMode = TheScene.NO_ACTION;
+					break;
+			}
+		} else {
+			setMessage("");
+			applicationMode = TheScene.NO_ACTION;
+		}
+	}
 }
 
 /// It processes the drag of the mouse
@@ -105,17 +107,17 @@ function onMouseDown(event) {
  * @param event - Mouse information
  */
 function onMouseMove(event) {
-  if (mouseDown) {
-    switch (applicationMode) {
-      case TheScene.ADDING_BOXES:
-      case TheScene.MOVING_BOXES:
-        scene.moveBox(event, TheScene.MOVE_BOX);
-        break;
-      default:
-        applicationMode = TheScene.NO_ACTION;
-        break;
-    }
-  }
+	if (mouseDown) {
+		switch (applicationMode) {
+			case TheScene.ADDING_BOXES:
+			case TheScene.MOVING_BOXES:
+				scene.moveBox(event, TheScene.MOVE_BOX);
+				break;
+			default:
+				applicationMode = TheScene.NO_ACTION;
+				break;
+		}
+	}
 }
 
 /// It processes the clic-up of the mouse
@@ -123,20 +125,20 @@ function onMouseMove(event) {
  * @param event - Mouse information
  */
 function onMouseUp(event) {
-  if (mouseDown) {
-    switch (applicationMode) {
-      case TheScene.ADDING_BOXES:
-        scene.addBox(event, TheScene.END_ACTION);
-        break;
-      case TheScene.MOVING_BOXES:
-        scene.moveBox(event, TheScene.END_ACTION);
-        break;
-      default:
-        applicationMode = TheScene.NO_ACTION;
-        break;
-    }
-    mouseDown = false
-  }
+	if (mouseDown) {
+		switch (applicationMode) {
+			case TheScene.ADDING_BOXES:
+				scene.addBox(event, TheScene.END_ACTION);
+				break;
+			case TheScene.MOVING_BOXES:
+				scene.moveBox(event, TheScene.END_ACTION);
+				break;
+			default:
+				applicationMode = TheScene.NO_ACTION;
+				break;
+		}
+		mouseDown = false
+	}
 }
 
 /// It processes the wheel rolling of the mouse
@@ -144,25 +146,25 @@ function onMouseUp(event) {
  * @param event - Mouse information
  */
 function onMouseWheel(event) {
-  if (event.ctrlKey) {
-    // The Trackballcontrol only works if Ctrl key is pressed
-    scene.getCameraControls().enabled = true
-  } else {
-    scene.getCameraControls().enabled = false
-    if (mouseDown) {
-      switch (applicationMode) {
-        case TheScene.MOVING_BOXES:
-          scene.moveBox(event, TheScene.ROTATE_BOX);
-          break;
-      }
-    }
-  }
+	if (event.ctrlKey) {
+		// The Trackballcontrol only works if Ctrl key is pressed
+		scene.getCameraControls().enabled = true
+	} else {
+		scene.getCameraControls().enabled = false
+		if (mouseDown) {
+			switch (applicationMode) {
+				case TheScene.MOVING_BOXES:
+					scene.moveBox(event, TheScene.ROTATE_BOX);
+					break;
+			}
+		}
+	}
 }
 
 /// It processes the window size changes
 function onWindowResize() {
-  scene.setCameraAspect(window.innerWidth / window.innerHeight);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+	scene.setCameraAspect(window.innerWidth / window.innerHeight);
+	renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 /// It creates and configures the WebGL renderer
@@ -170,42 +172,42 @@ function onWindowResize() {
  * @return The renderer
  */
 function createRenderer() {
-  var renderer = new THREE.WebGLRenderer();
-  renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true
-  return renderer;
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.shadowMap.enabled = true
+	return renderer;
 }
 
 /// It renders every frame
 function render() {
-  requestAnimationFrame(render);
+	requestAnimationFrame(render);
 
-  stats.update();
-  scene.getCameraControls().update();
-  scene.animate(GUIcontrols);
+	stats.update();
+	scene.getCameraControls().update();
+	scene.animate(GUIcontrols);
 
-  renderer.render(scene, scene.getCamera());
+	renderer.render(scene, scene.getCamera());
 }
 
 /// The main function
 $(function() {
-  // create a render and set the size
-  renderer = createRenderer();
-  // add the output of the renderer to the html element
-  $("#WebGL-output").append(renderer.domElement);
-  // liseners
-  window.addEventListener("resize", onWindowResize);
-  window.addEventListener("mousemove", onMouseMove, true);
-  window.addEventListener("mousedown", onMouseDown, true);
-  window.addEventListener("mouseup", onMouseUp, true);
-  window.addEventListener("mousewheel", onMouseWheel, true); // For Chrome an others
-  window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
+	// create a render and set the size
+	renderer = createRenderer();
+	// add the output of the renderer to the html element
+	$("#WebGL-output").append(renderer.domElement);
+	// liseners
+	window.addEventListener("resize", onWindowResize);
+	window.addEventListener("mousemove", onMouseMove, true);
+	window.addEventListener("mousedown", onMouseDown, true);
+	window.addEventListener("mouseup", onMouseUp, true);
+	window.addEventListener("mousewheel", onMouseWheel, true); // For Chrome an others
+	window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
 
-  // create a scene, that will hold all our elements such as objects, cameras and lights.
-  scene = new TheScene(renderer.domElement);
+	// create a scene, that will hold all our elements such as objects, cameras and lights.
+	scene = new TheScene(renderer.domElement);
 
-  createGUI(true);
+	createGUI(true);
 
-  render();
+	render();
 });
