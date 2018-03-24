@@ -71,12 +71,13 @@ class TheScene extends THREE.Scene {
 
     // Robot model
     var robotTexture = loader.load('imgs/metal.jpg')
+    var legTexture = loader.load('imgs/leg.jpg')
     this.robot = new Robot({
       eyeMaterial: new THREE.MeshPhongMaterial({ color: "#000000", shininess: 70 }),
       headMaterial: new THREE.MeshPhongMaterial({ color: "#888888", shininess: 70 }),
       bodyMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8", shininess: 70 }),
       footMaterial: new THREE.MeshPhongMaterial({ color: "#001284", shininess: 70 }),
-      legMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8", shininess: 70 }),
+      legMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8", shininess: 70 , map: legTexture}),
       shoulderMaterial: new THREE.MeshPhongMaterial({ color: "#001284", shininess: 70 })
     })
     // model.add (this.crane);
