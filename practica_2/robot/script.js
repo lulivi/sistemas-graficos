@@ -21,11 +21,11 @@ applicationMode = TheScene.NO_ACTION;
  */
 function createGUI(withStats) {
     GUIcontrols = new function() {
-	this.axis = true
-	this.lightIntensity = 0.5
-	this.robotLegScaleFactor = 0
-	this.robotHeadTwist = 0
-	this.robotBodySwing = 0
+        this.axis = true
+        this.lightIntensity = 0.5
+        this.robotLegScaleFactor = 0
+        this.robotHeadTwist = 0
+        this.robotBodySwing = 0
     }
 
     var gui = new dat.GUI()
@@ -36,17 +36,17 @@ intensity :')
 
     var robotControls = gui.addFolder('Robot Controls')
     robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
-	'Robot leg height :')
+        'Robot leg height :')
     robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0, 80.0).name(
-	'Robot head twist :')
+        'Robot head twist :')
     robotControls.add(GUIcontrols, 'robotBodySwing',
-		      -45.0,30.0).name('Robot body swing :') 
+                      -45.0,30.0).name('Robot body swing :') 
 
     // The method  listen()  allows the height attribute to be written,
     // not only read 
 
     if (withStats)
-	stats = initStats();
+        stats = initStats();
 }
 
 /// It adds statistics information to a previously created Div
@@ -75,7 +75,7 @@ function initStats() {
  */
 function setMessage(str) {
     document.getElementById("Messages").innerHTML = "<h2>" + str +
-	"</h2>";
+        "</h2>";
 }
 
 /// It processes the clic-down of the mouse
@@ -84,27 +84,27 @@ function setMessage(str) {
  */
 function onMouseDown(event) {
     if (event.ctrlKey) {
-	// The Trackballcontrol only works if Ctrl key is pressed
-	scene.getCameraControls().enabled = true
+        // The Trackballcontrol only works if Ctrl key is pressed
+        scene.getCameraControls().enabled = true
     } else {
-	scene.getCameraControls().enabled = false
-	if (event.button === 0) { // Left button
-	    mouseDown = true
-	    switch (applicationMode) {
-	    case TheScene.ADDING_BOXES:
-		scene.addBox(event, TheScene.NEW_BOX);
-		break;
-	    case TheScene.MOVING_BOXES:
-		scene.moveBox(event, TheScene.SELECT_BOX);
-		break;
-	    default:
-		applicationMode = TheScene.NO_ACTION;
-		break;
-	    }
-	} else {
-	    setMessage("");
-	    applicationMode = TheScene.NO_ACTION;
-	}
+        scene.getCameraControls().enabled = false
+        if (event.button === 0) { // Left button
+            mouseDown = true
+            switch (applicationMode) {
+            case TheScene.ADDING_BOXES:
+                scene.addBox(event, TheScene.NEW_BOX);
+                break;
+            case TheScene.MOVING_BOXES:
+                scene.moveBox(event, TheScene.SELECT_BOX);
+                break;
+            default:
+                applicationMode = TheScene.NO_ACTION;
+                break;
+            }
+        } else {
+            setMessage("");
+            applicationMode = TheScene.NO_ACTION;
+        }
     }
 }
 
@@ -114,15 +114,15 @@ function onMouseDown(event) {
  */
 function onMouseMove(event) {
     if (mouseDown) {
-	switch (applicationMode) {
-	case TheScene.ADDING_BOXES:
-	case TheScene.MOVING_BOXES:
-	    scene.moveBox(event, TheScene.MOVE_BOX);
-	    break;
-	default:
-	    applicationMode = TheScene.NO_ACTION;
-	    break;
-	}
+        switch (applicationMode) {
+        case TheScene.ADDING_BOXES:
+        case TheScene.MOVING_BOXES:
+            scene.moveBox(event, TheScene.MOVE_BOX);
+            break;
+        default:
+            applicationMode = TheScene.NO_ACTION;
+            break;
+        }
     }
 }
 
@@ -132,18 +132,18 @@ function onMouseMove(event) {
  */
 function onMouseUp(event) {
     if (mouseDown) {
-	switch (applicationMode) {
-	case TheScene.ADDING_BOXES:
-	    scene.addBox(event, TheScene.END_ACTION);
-	    break;
-	case TheScene.MOVING_BOXES:
-	    scene.moveBox(event, TheScene.END_ACTION);
-	    break;
-	default:
-	    applicationMode = TheScene.NO_ACTION;
-	    break;
-	}
-	mouseDown = false
+        switch (applicationMode) {
+        case TheScene.ADDING_BOXES:
+            scene.addBox(event, TheScene.END_ACTION);
+            break;
+        case TheScene.MOVING_BOXES:
+            scene.moveBox(event, TheScene.END_ACTION);
+            break;
+        default:
+            applicationMode = TheScene.NO_ACTION;
+            break;
+        }
+        mouseDown = false
     }
 }
 
@@ -153,17 +153,17 @@ function onMouseUp(event) {
  */
 function onMouseWheel(event) {
     if (event.ctrlKey) {
-	// The Trackballcontrol only works if Ctrl key is pressed
-	scene.getCameraControls().enabled = true
+        // The Trackballcontrol only works if Ctrl key is pressed
+        scene.getCameraControls().enabled = true
     } else {
-	scene.getCameraControls().enabled = false
-	if (mouseDown) {
-	    switch (applicationMode) {
-	    case TheScene.MOVING_BOXES:
-		scene.moveBox(event, TheScene.ROTATE_BOX);
-		break;
-	    }
-	}
+        scene.getCameraControls().enabled = false
+        if (mouseDown) {
+            switch (applicationMode) {
+            case TheScene.MOVING_BOXES:
+                scene.moveBox(event, TheScene.ROTATE_BOX);
+                break;
+            }
+        }
     }
 }
 
@@ -203,13 +203,13 @@ function keyListener(e) {
     var rotationSpeed = 5
     
     if (key == 87) { // W
-	scene.robot.moveRobotForward(speed);
+        scene.robot.moveRobotForward(speed);
     }else if (key == 83) { // S
-	scene.robot.moveRobotForward(-speed);
+        scene.robot.moveRobotForward(-speed);
     }else if (key == 65) { // A
-	scene.robot.rotateRobot(rotationSpeed)
+        scene.robot.rotateRobot(rotationSpeed)
     }else if (key == 68) {
-	scene.robot.rotateRobot(-rotationSpeed)
+        scene.robot.rotateRobot(-rotationSpeed)
     }
 }
 
