@@ -192,6 +192,23 @@ function render() {
   renderer.render(scene, scene.getCamera());
 }
 
+// Attempt to create key listener
+function keyListener(e) {
+   var key = e.keyCode ? e.keyCode : e.which;
+  var speed = 2
+  var rotationSpeed = 5
+  
+   if (key == 87) { // W
+     scene.robot.moveRobotForward(speed);
+   }else if (key == 83) { // S
+     scene.robot.moveRobotForward(-speed);
+   }else if (key == 65) { // A
+     scene.robot.rotateRobot(rotationSpeed)
+   }else if (key == 68) {
+     scene.robot.rotateRobot(-rotationSpeed)
+   }
+}
+
 /// The main function
 $(function() {
   // create a render and set the size
@@ -205,7 +222,8 @@ $(function() {
   window.addEventListener("mouseup", onMouseUp, true);
   window.addEventListener("mousewheel", onMouseWheel, true); // For Chrome an others
   window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
-
+  window.onkeydown = keyListener;
+  
   // create a scene, that will hold all our elements such as objects, cameras and lights.
   scene = new TheScene(renderer.domElement);
 

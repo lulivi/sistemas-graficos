@@ -38,6 +38,7 @@ class Robot extends THREE.Object3D {
     // BODY PARTS
     // **********
     this.movementNode = null
+    this.lookAt = null
     this.swingNode = null
     this.body = null
     this.head = null
@@ -54,6 +55,9 @@ class Robot extends THREE.Object3D {
     // BASIC MEASURES
     // **************
 
+    // Movement node
+    this.rotationOffset = 90 // lookAt has a 90 degrees offset
+    
     // Body
     this.bodyHeight = (parameters.craneHeight === undefined ? 28 : parameters.robotBodyHeight)
     this.bodyRadius = (parameters.craneWidth === undefined ? 12 : parameters.robotBodyRadius)
@@ -115,6 +119,7 @@ class Robot extends THREE.Object3D {
     this.movementNode.add(this.createSwingNode())
     this.movementNode.add(this.createFoot(this.legLeftPosition))
     this.movementNode.add(this.createFoot(this.legRightPosition))
+    this.lookAt = [1,0,0]
     return this.movementNode
   }
 
@@ -219,13 +224,22 @@ class Robot extends THREE.Object3D {
   setBodySwing(bodySwingAngle) {
     var oldY = this.swingNode.position.y
     this.body.position.y = -this.bodyHeight + this.shoulderHeight
-    this.swingNode.rotation.z = bodySwingAngle * Math.PI /180
+    this.swingNode.rotation.z = bodySwingAngle * Math.PI / 180
     this.swingNode.position.y = oldY
   }
 
-  setRobotMovement(newRotation, newPosition){
-    this.movementNode.rotation.y += newRotation * Math.PI / 180
+  rotateRobot(value){
+    this.movementNode.rotation.y += value * Math.PI / 180
+    this.lookAt[2] = Math.cos(this.movementNode.rotation.y + this.rotationOffset) 
+    this.lookAt[0] = Math.sin(this.movementNode.rotation.y + this.rotationOffset)
   }
+
+  moveRobotForward(value) {
+    this.movementNode.position.x += value * this.lookAt[0] // X component of lookAt vector
+    this.movementNode.position.z += value * this.lookAt[2] // Z component of lookAt vector
+    console.log("x: ", this.lookAt[0], "z: ", this.lookAt[2])
+  }
+
 
 }
 
