@@ -37,9 +37,10 @@ class Robot extends THREE.Object3D {
     // **********
     // BODY PARTS
     // **********
+    this.movementNode = null
+    this.swingNode = null
     this.body = null
     this.head = null
-    this.swingNode = null
     this.eye = null
 
     this.shoulderLeft = null
@@ -63,7 +64,7 @@ class Robot extends THREE.Object3D {
     this.eyeRadius = this.headRadius / 5
 
     // Legs
-    this.legHeight = this.bodyHeight * 1.15
+    this.legHeight = this.bodyHeight
     this.legRadius = this.headRadius / 5
     this.legLeftPosition = this.bodyRadius + this.legRadius * 1.2
     this.legRightPosition = -(this.bodyRadius + this.legRadius * 1.2)
@@ -99,18 +100,27 @@ class Robot extends THREE.Object3D {
     // MODEL CREATION
     // **************
 
-    this.add(this.createSwingNode())
-    this.add(this.createFoot(this.legLeftPosition))
-    this.add(this.createFoot(this.legRightPosition))
+    this.add(this.createMovementNode())
+    // this.add(this.createSwingNode())
+    // this.add(this.createFoot(this.legLeftPosition))
+    // this.add(this.createFoot(this.legRightPosition))
   }
 
   // ***************
-  // PRIVATE METHODS
+  // MODEL CREATION
   // ***************
+
+  createMovementNode(){
+    this.movementNode = new THREE.Object3D()
+    this.movementNode.add(this.createSwingNode())
+    this.movementNode.add(this.createFoot(this.legLeftPosition))
+    this.movementNode.add(this.createFoot(this.legRightPosition))
+    return this.movementNode
+  }
 
   createSwingNode() {
     this.swingNode = new THREE.Object3D()
-    this.swingNode.position.y = this.headRadius
+    this.swingNode.position.y = this.headRadius + this.footHeight
     this.swingNode.add(this.createBody())
     return this.swingNode
   }
@@ -157,7 +167,7 @@ class Robot extends THREE.Object3D {
 
   createLeg(legPosition) {
     var leg = new THREE.Mesh(new THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight, 50), this.legMaterial)
-    leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2, 0))
+    leg.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.legHeight / 2 + this.footHeight, 0))
     leg.castShadow = true
     if (legPosition > 0) {
       this.legRight = leg
@@ -169,7 +179,7 @@ class Robot extends THREE.Object3D {
 
   createShoulder(legPosition) {
     var shoulder = new THREE.Mesh(new THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight, this.shoulderDepth), this.shoulderMaterial)
-    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight, 0))
+    shoulder.geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 + this.legHeight + this.footHeight, 0))
     shoulder.castShadow = true
     if (legPosition > 0) {
       this.shoulderRight = shoulder
@@ -179,9 +189,12 @@ class Robot extends THREE.Object3D {
     return shoulder
   }
 
+  // ******************
+  // MODEL MANIPULATION
+  // ******************
 
-  updateBodyHeight(height) {
-    this.swingNode.position.y =  height + this.shoulderBodyHeight + this.headRadius
+  setBodyHeight(height) {
+    this.swingNode.position.y =  height + this.shoulderBodyHeight + this.headRadius + this.footHeight
     this.shoulderLeft.position.y = height
     this.shoulderRight.position.y = height
   }
@@ -195,7 +208,7 @@ class Robot extends THREE.Object3D {
       this.legRight.scale.y = this.legScaleFactor
       this.shoulderRight.position.y = this.legScaleFactor
       this.shoulderLeft.position.y = this.legScaleFactor
-      this.updateBodyHeight(this.legMinHeight * this.legScaleFactor - this.legMinHeight)
+      this.setBodyHeight(this.legMinHeight * this.legScaleFactor - this.legMinHeight)
     }
   }
 
@@ -208,6 +221,10 @@ class Robot extends THREE.Object3D {
     this.body.position.y = -this.bodyHeight + this.shoulderHeight
     this.swingNode.rotation.z = bodySwingAngle * Math.PI /180
     this.swingNode.position.y = oldY
+  }
+
+  setRobotMovement(newRotation, newPosition){
+    this.movementNode.rotation.y += newRotation * Math.PI / 180
   }
 
 }
