@@ -261,18 +261,15 @@ class Robot extends THREE.Object3D {
 
     rotateRobot(value){
         this.movementNode.rotation.y += value * Math.PI / 180
-        this.lookAt[2] = Math.cos(this.movementNode.rotation.y +
-                                  this.rotationOffset) 
-        this.lookAt[0] = Math.sin(this.movementNode.rotation.y +
-                                  this.rotationOffset)
+        this.lookAt[0] = Math.cos(this.movementNode.rotation.y) 
+        this.lookAt[2] = -Math.sin(this.movementNode.rotation.y)
     }
 
     moveRobotForward(value) {
-        this.movementNode.position.x += value * this.lookAt[0] // X
-        // component of lookAt vector
-        this.movementNode.position.z += value * this.lookAt[2] // Z
-        // component of lookAt vector
-        console.log("x: ", this.lookAt[0], "z: ", this.lookAt[2])
+        this.movementNode.position.x += value * this.lookAt[0] 
+                                    // X component of lookAt vector
+        this.movementNode.position.z += value * this.lookAt[2]
+                                    // Z component of lookAt vector
     }
 
 

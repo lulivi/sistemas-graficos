@@ -31,8 +31,8 @@ function createGUI(withStats) {
     var gui = new dat.GUI()
     var axisLights = gui.addFolder('Axis and Lights')
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
-    axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light
-intensity :') 
+    axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light' +
+                                                               'intensity :')   
 
     var robotControls = gui.addFolder('Robot Controls')
     robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
