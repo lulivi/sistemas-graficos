@@ -84,9 +84,9 @@ class TheScene extends THREE.Scene {
             footMaterial: new THREE.MeshPhongMaterial({ color: "#001284",
                                                         shininess: 70 }),
             legMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8",
-                                                       shininess: 70 , map: legTexture}),
+            shininess: 70 , map: legTexture}),
             shoulderMaterial: new THREE.MeshPhongMaterial({ color:
-                                                            "#001284", shininess: 70 })
+            "#001284", shininess: 70 })
         })
         // model.add (this.crane);
         model.add(this.robot)

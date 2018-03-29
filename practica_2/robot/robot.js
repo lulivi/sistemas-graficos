@@ -39,7 +39,7 @@ class Robot extends THREE.Object3D {
                             this.material : parameters.legMaterial)
 
         this.shoulderMaterial = (parameters.shoulderMaterial === undefined
-                                 ? this.material : parameters.shoulderMaterial)
+                            ? this.material : parameters.shoulderMaterial)
 
         // **********
         // BODY PARTS
@@ -196,8 +196,8 @@ class Robot extends THREE.Object3D {
     createLeg(legPosition) {
         var leg = new THREE.Mesh(new
         THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight,
-			       50), this.legMaterial)
-	leg.geometry.applyMatrix(new
+                               50), this.legMaterial)
+        leg.geometry.applyMatrix(new
         THREE.Matrix4().makeTranslation(0, this.legHeight / 2 +
         this.footHeight, 0)) 
         leg.castShadow = true

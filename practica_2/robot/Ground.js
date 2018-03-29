@@ -123,7 +123,7 @@ class Ground extends THREE.Object3D {
                     new THREE.MeshPhongMaterial ({color: Math.floor
                                                   (Math.random()*16777215)}));
                 this.box.geometry.applyMatrix (new
-                                               THREE.Matrix4().makeTranslation (0, this.boxSize/2, 0));
+                THREE.Matrix4().makeTranslation (0, this.boxSize/2, 0));  
                 this.box.position.x = pointOnGround.x;
                 this.box.position.y = 0;
                 this.box.position.z = pointOnGround.y;
