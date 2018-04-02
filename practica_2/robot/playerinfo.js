@@ -22,7 +22,7 @@ var PlayerInfo = function() {
         REVISION: 11,
         domElement: container,
         update: function (newPlayerLife){
-            playerLife = newPlayerLife;
+            playerLifeText.textContent = newPlayerLife + ' % Life';
         }
     }
 }
