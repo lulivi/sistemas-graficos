@@ -12,6 +12,11 @@ stats = null
 /// A boolean to know if the left button of the mouse is down
 mouseDown = false
 
+/// The object for player information
+playerInfo = null
+
+playerLife = 100
+
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
 
@@ -32,7 +37,7 @@ function createGUI(withStats) {
     var axisLights = gui.addFolder('Axis and Lights')
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
     axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light' +
-                                                               'intensity :')   
+                                                               'intensity :')
 
     var robotControls = gui.addFolder('Robot Controls')
     robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
@@ -40,13 +45,15 @@ function createGUI(withStats) {
     robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0, 80.0).name(
         'Robot head twist :')
     robotControls.add(GUIcontrols, 'robotBodySwing',
-                      -45.0,30.0).name('Robot body swing :') 
+                      -45.0,30.0).name('Robot body swing :')
 
     // The method  listen()  allows the height attribute to be written,
-    // not only read 
+    // not only read
 
     if (withStats)
         stats = initStats();
+
+    playerInfo = initPlayerInfo();
 }
 
 /// It adds statistics information to a previously created Div
@@ -67,6 +74,18 @@ function initStats() {
     $("#Stats-output").append(stats.domElement);
 
     return stats;
+}
+
+function initPlayerInfo() {
+    var playerInfo = new PlayerInfo();
+
+    playerInfo.domElement.style.position = 'absolute';
+    playerInfo.domElement.style.left = '0px';
+    playerInfo.domElement.style.top = '100px';
+
+    $("#Player-info").append(playerInfo.domElement);
+
+    return playerInfo;
 }
 
 /// It shows a feed-back message for the user
@@ -190,6 +209,7 @@ function render() {
     requestAnimationFrame(render);
 
     stats.update();
+    playerInfo.update(playerLife);
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
@@ -201,7 +221,7 @@ function keyListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
     var speed = 2
     var rotationSpeed = 5
-    
+
     if (key == 87) { // W
         scene.robot.moveRobotForward(speed);
     }else if (key == 83) { // S
@@ -228,7 +248,7 @@ $(function() {
     // Chrome an others
     window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
     window.onkeydown = keyListener;
-    
+
     // create a scene, that will hold all our elements such as objects,
     // cameras and lights.
     scene = new TheScene(renderer.domElement);
