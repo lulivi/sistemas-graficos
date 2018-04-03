@@ -12,10 +12,14 @@ stats = null
 /// A boolean to know if the left button of the mouse is down
 mouseDown = false
 
-/// The object for player information
+pressedKey = null
+
+/// Player information GUI
 playerInfo = null
 
-playerLife = 100
+playerHealth = 69
+
+playerScore = 10
 
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
@@ -209,11 +213,16 @@ function render() {
     requestAnimationFrame(render);
 
     stats.update();
-    playerInfo.update(playerLife);
+    playerInfo.update(playerHealth, playerScore);
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
     renderer.render(scene, scene.getCamera());
+
+    if (pressedKey){
+        scene.moveRobot(pressedKey)
+    }
+
 }
 
 // Attempt to create key listener
@@ -233,6 +242,24 @@ function keyListener(e) {
     }
 }
 
+/**
+ * @param event - mouse/keyboard event
+ */
+function onKeyDown(event){
+    var key = event.keyCode ? event.keyCode : event.which;
+    switch (key) {
+        case String.charCodeAt('W'):
+        case String.charCodeAt('A'):
+        case String.charCodeAt('S'):
+        case String.charCodeAt('D'):
+            pressedKey = key;
+    }
+}
+
+function onKeyUp(event){
+    pressedKey = null;
+}
+
 /// The main function
 $(function() {
     // create a render and set the size
@@ -247,7 +274,9 @@ $(function() {
     window.addEventListener("mousewheel", onMouseWheel, true); // For
     // Chrome an others
     window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
-    window.onkeydown = keyListener;
+    window.addEventListener("keydown", onKeyDown, false); // For Firefox
+    window.addEventListener("keyup", onKeyUp, false); // For Firefox
+    // window.onkeydown = keyListener;
 
     // create a scene, that will hold all our elements such as objects,
     // cameras and lights.
