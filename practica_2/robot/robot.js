@@ -118,6 +118,14 @@ class Robot extends THREE.Object3D {
         // this.add(this.createSwingNode())
         // this.add(this.createFoot(this.legLeftPosition))
         // this.add(this.createFoot(this.legRightPosition))
+
+	// ****************
+	// ROBOT ATTRIBUTES
+	// ****************
+
+	this.energy = 100
+	this.score = 0
+	const MAX_POINTS = 5
     }
 
     // ***************
@@ -275,7 +283,28 @@ class Robot extends THREE.Object3D {
     }
 
 
+    // *****************************
+    // MODEL ATTRIBUTES MANIPULATION
+    // *****************************
+
+    reduceEnergy() {
+	if(this.energy > 10)
+	    this.energy -= 10
+	else
+	    this.energy = 0
+    }
+
+    increaseEnergy() {
+	var points = Math.floor(Math.random() * Math.floor(MAX_POINTS))
+	this.score += points
+	if(this.energy + MAX_POINTS - points <= 100)
+	    this.energy += MAX_POINTS - points
+	else
+	    this.energy = 100
+	
+    }
 }
+
 
 // class variables
 Robot.WORLD = 0
