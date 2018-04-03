@@ -17,9 +17,9 @@ pressedKey = null
 /// Player information GUI
 playerInfo = null
 
-playerHealth = 69
+playerHealth = 100
 
-playerScore = 10
+playerScore = 0
 
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
