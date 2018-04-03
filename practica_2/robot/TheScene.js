@@ -185,6 +185,24 @@ class TheScene extends THREE.Scene {
         this.camera.updateProjectionMatrix();
     }
 
+    moveRobot(key) {
+        var speed = 1;
+        var rotationSpeed = 2;
+        switch (key) {
+            case String.charCodeAt('W'): // W
+                this.robot.moveRobotForward(speed);
+                break;
+            case String.charCodeAt('A'): // A
+                this.robot.rotateRobot(rotationSpeed);
+                break;
+            case String.charCodeAt('S'): // S
+                this.robot.moveRobotForward(-speed);
+                break;
+            case String.charCodeAt('D'):
+                this.robot.rotateRobot(-rotationSpeed);
+                break;
+        }
+    }
 }
 
 // class variables
