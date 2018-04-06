@@ -116,13 +116,13 @@ class TheScene extends THREE.Scene {
         // modelo (this.model) y luego estos hay que moverlos y cuando
 	// lleguen a una posición determinada, borrarlos e instanciar
 	// unos nuevos
-	this.spawner();
+	this.spawner(this.spawnedFO);
         this.mover();
 	this.remover();
     }
 
-    spawner() {
-        if(this.spawnedFO < 3) {
+    spawner(FOindex) {
+        if(FOindex < 3) {
 	    // Nos aseguramos de que el objeto que se genere no esté
 	    // ya en el juego
 	    do {
@@ -132,9 +132,10 @@ class TheScene extends THREE.Scene {
 		});
 	    } while(found !== undefined);
 	    
-            this.spawnedFOArray[this.spawnedFO] =
+            this.spawnedFOArray[FOindex] =
                 lastGenerated;
 	    ++this.spawnedFO;
+	    this.flyingObjects[lastGenerated].initialize();
             this.model.add(this.flyingObjects[lastGenerated]);
         }
     }
@@ -143,6 +144,7 @@ class TheScene extends THREE.Scene {
 	for(var i = 0; i < this.spawnedFO; ++i) {
 	    this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
 	}
+	
     }
     remover() {
 	for(var i = 0; i < this.spawnedFO; ++i) {
@@ -151,7 +153,8 @@ class TheScene extends THREE.Scene {
 		this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
 		--this.spawnedFO;
 		this.spawnedFOArray[i] = -1;
-		this.spawner();
+		this.spawner(i);
+		console.log("borro")
 	    }
 	    
 	    //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x

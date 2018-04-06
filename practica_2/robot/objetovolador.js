@@ -20,11 +20,14 @@ class ObjetoVolador extends THREE.Object3D {
 
     moveTowardsNegativeX() {
         this.sphere.position.x -= 1;
-        if (this.sphere.position.x < -100){
-            this.sphere.position.x = 100 + randNum(75);
-            // Select number between -100,100
+    }
+
+    initialize() {
+	if (this.sphere.position.x < -100){
+	    // Select number between -100,100
             var newZ = Math.floor(randNum(200)) - 100;
             this.sphere.position.z = newZ;
+            this.sphere.position.x = 100 + randNum(75);
         }
     }
 }
