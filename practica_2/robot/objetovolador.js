@@ -5,7 +5,7 @@ class ObjetoVolador extends THREE.Object3D {
 	
 	// Quantitative attributes
 	this.radius = 5;
-	this.spawnXPos = 50 + randNum(50);
+	this.spawnXPos = 100 + randNum(75);
 	this.spawnYPos = 40;
 	// Select number between -100,100
 	this.spawnZPos = randNum(200) - 100;
@@ -21,7 +21,7 @@ class ObjetoVolador extends THREE.Object3D {
     moveTowardsNegativeX() {
         this.sphere.position.x -= 1;
         if (this.sphere.position.x < -100){
-            this.sphere.position.x = 100;
+            this.sphere.position.x = 100 + randNum(75);
             // Select number between -100,100
             var newZ = Math.floor(randNum(200)) - 100;
             this.sphere.position.z = newZ;

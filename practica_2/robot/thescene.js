@@ -18,7 +18,7 @@ class TheScene extends THREE.Scene {
         this.ground = null
         this.flyingObjects = null
         this.spawnedFO = 0
-        this.spawnedFOArray = [0,0,0]
+        this.spawnedFOArray = [-1,-1,-1]
 
         this.createLights()
         this.createCamera(renderer)
@@ -126,37 +126,36 @@ class TheScene extends THREE.Scene {
 	    // Nos aseguramos de que el objeto que se genere no esté
 	    // ya en el juego
 	    do {
-		var lastGenerated = Math.floor(Math.random() *
-            Math.floor(10));  
+		var lastGenerated = randNum(10);  
 		var found = this.spawnedFOArray.find(function(element) {
 		    return element == lastGenerated;
 		});
-	    } while(found != undefined);
+	    } while(found !== undefined);
 	    
             this.spawnedFOArray[this.spawnedFO] =
                 lastGenerated;
 	    ++this.spawnedFO;
-	    console.log("last generated: " + lastGenerated)
             this.model.add(this.flyingObjects[lastGenerated]);
         }
     }
 
     mover() {
-	for(var i = 0; i < 3; ++i) {
+	for(var i = 0; i < this.spawnedFO; ++i) {
 	    this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
 	}
     }
     remover() {
-	for(var i = 0; i < 3; ++i) {
+	for(var i = 0; i < this.spawnedFO; ++i) {
 	    if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-	       == -100) {
+	       < -100) {
 		this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
 		--this.spawnedFO;
+		this.spawnedFOArray[i] = -1;
 		this.spawner();
 	    }
 	    
-	    console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-		       );
+	    //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+	//	       );
 	}
     }
     // Public methods
@@ -215,7 +214,7 @@ class TheScene extends THREE.Scene {
         this.robot.setLegHeight(controls.robotLegScaleFactor)
         this.robot.setHeadTwist(controls.robotHeadTwist)
         this.robot.setBodySwing(controls.robotBodySwing)
-    this.flyingObjectsAgent()
+	this.flyingObjectsAgent()
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
