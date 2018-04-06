@@ -17,8 +17,8 @@ class TheScene extends THREE.Scene {
         this.robot = null
         this.ground = null
         this.flyingObjects = null
-        this.spawnedFlyingObjects = 0
-        this.spawnedFlyingObjectsArray = [0,0,0]
+        this.spawnedFO = 0
+        this.spawnedFOArray = [0,0,0]
 
         this.createLights()
         this.createCamera(renderer)
@@ -102,34 +102,63 @@ class TheScene extends THREE.Scene {
         model.add(this.ground)
 
         // Flying object
-        this.flyingObjects = new Array(5)
-        for (var i = 0; i < 4; i++)
+        this.flyingObjects = new Array(10)
+        for (var i = 0; i < 8; i++)
             this.flyingObjects[i] = new OvoMa({})
 
-        this.flyingObjects[4] = new OvoBu({})
+	for (var i = 8; i < 10; i++)
+            this.flyingObjects[i] = new OvoBu({})
         return model
     }
 
     flyingObjectsAgent() {
         // Primero hay que spawnear algún objeto, añadiéndolo al
-        // modelo (this.model) y luego estos hay que moverlos
-
-        if(this.spawnedFlyingObjects < 4) {
-            ++this.spawnedFlyingObjects;
-            var lastGenerated = Math.floor(Math.random() * Math.floor(5));
-
-            this.spawnedFlyingObjectsArray[this.spawnedFlyingObjects] =
-                lastGenerated;
-            this.model.add(this.flyingObjects[lastGenerated]);
-
-        }
-
-        console.log('array: ' + this.spawnedFlyingObjectsArray[0])
-        this.flyingObjects[this.spawnedFlyingObjectsArray[0]].moveTowardsNegativeX();
-        this.flyingObjects[this.spawnedFlyingObjectsArray[1]].moveTowardsNegativeX();
-        this.flyingObjects[this.spawnedFlyingObjectsArray[2]].moveTowardsNegativeX();
+        // modelo (this.model) y luego estos hay que moverlos y cuando
+	// lleguen a una posición determinada, borrarlos e instanciar
+	// unos nuevos
+	this.spawner();
+        this.mover();
+	this.remover();
     }
 
+    spawner() {
+        if(this.spawnedFO < 3) {
+	    // Nos aseguramos de que el objeto que se genere no esté
+	    // ya en el juego
+	    do {
+		var lastGenerated = Math.floor(Math.random() *
+            Math.floor(10));  
+		var found = this.spawnedFOArray.find(function(element) {
+		    return element == lastGenerated;
+		});
+	    } while(found != undefined);
+	    
+            this.spawnedFOArray[this.spawnedFO] =
+                lastGenerated;
+	    ++this.spawnedFO;
+	    console.log("last generated: " + lastGenerated)
+            this.model.add(this.flyingObjects[lastGenerated]);
+        }
+    }
+
+    mover() {
+	for(var i = 0; i < 3; ++i) {
+	    this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
+	}
+    }
+    remover() {
+	for(var i = 0; i < 3; ++i) {
+	    if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+	       == -100) {
+		this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
+		--this.spawnedFO;
+		this.spawner();
+	    }
+	    
+	    console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+		       );
+	}
+    }
     // Public methods
 
     /// It adds a new box, or finish the action
@@ -235,6 +264,12 @@ class TheScene extends THREE.Scene {
         }
     }
 }
+
+
+function randNum(top) {
+    return Math.floor(Math.random() * Math.floor(top));
+}
+
 
 // class variables
 

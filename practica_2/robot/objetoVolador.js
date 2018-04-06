@@ -1,14 +1,14 @@
 class ObjetoVolador extends THREE.Object3D {
     constructor(parameters) {
-    super();
-    this.sphere = null;
-
-    // Quantitative attributes
-    this.radius = 5;
-    this.spawnXPos = 50;
-    this.spawnYPos = 40;
-    // Select number between -100,100
-    this.spawnZPos = Math.floor(Math.random() * Math.floor(200)) - 100;
+	super();
+	this.sphere = null;
+	
+	// Quantitative attributes
+	this.radius = 5;
+	this.spawnXPos = 50 + randNum(50);
+	this.spawnYPos = 40;
+	// Select number between -100,100
+	this.spawnZPos = randNum(200) - 100;
 
     }
 
@@ -23,7 +23,7 @@ class ObjetoVolador extends THREE.Object3D {
         if (this.sphere.position.x < -100){
             this.sphere.position.x = 100;
             // Select number between -100,100
-            var newZ = Math.floor(Math.random() * Math.floor(200)) - 100;
+            var newZ = Math.floor(randNum(200)) - 100;
             this.sphere.position.z = newZ;
         }
     }
