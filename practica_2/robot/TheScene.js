@@ -16,6 +16,9 @@ class TheScene extends THREE.Scene {
         this.crane = null
         this.robot = null
         this.ground = null
+        this.flyingObjects = null
+        this.spawnedFlyingObjects = 0
+        this.spawnedFlyingObjectsArray = [0,0,0]
 
         this.createLights()
         this.createCamera(renderer)
@@ -97,7 +100,34 @@ class TheScene extends THREE.Scene {
             map: groundTexture
         }), 4)
         model.add(this.ground)
+
+        // Flying object
+        this.flyingObjects = new Array(5)
+        for (var i = 0; i < 4; i++)
+            this.flyingObjects[i] = new OvoMa({})
+
+        this.flyingObjects[4] = new OvoBu({})
         return model
+    }
+
+    flyingObjectsAgent() {
+        // Primero hay que spawnear algún objeto, añadiéndolo al
+        // modelo (this.model) y luego estos hay que moverlos
+
+        if(this.spawnedFlyingObjects < 4) {
+            ++this.spawnedFlyingObjects;
+            var lastGenerated = Math.floor(Math.random() * Math.floor(5));
+
+            this.spawnedFlyingObjectsArray[this.spawnedFlyingObjects] =
+                lastGenerated;
+            this.model.add(this.flyingObjects[lastGenerated]);
+
+        }
+
+        console.log('array: ' + this.spawnedFlyingObjectsArray[0])
+        this.flyingObjects[this.spawnedFlyingObjectsArray[0]].moveTowardsNegativeX();
+        this.flyingObjects[this.spawnedFlyingObjectsArray[1]].moveTowardsNegativeX();
+        this.flyingObjects[this.spawnedFlyingObjectsArray[2]].moveTowardsNegativeX();
     }
 
     // Public methods
@@ -156,6 +186,7 @@ class TheScene extends THREE.Scene {
         this.robot.setLegHeight(controls.robotLegScaleFactor)
         this.robot.setHeadTwist(controls.robotHeadTwist)
         this.robot.setBodySwing(controls.robotBodySwing)
+    this.flyingObjectsAgent()
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }

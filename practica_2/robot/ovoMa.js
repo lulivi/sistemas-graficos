@@ -9,10 +9,10 @@ class OvoMa extends ObjetoVolador {
         this.ovoMaMaterial = (parameters.ovoMaMaterial === undefined ?
                               this.material : parameters.ovoBuMaterial);
 
-        this.add(this.createOvoMa());
+        this.add(this.createOvoMa(parameters));
     }
 
-    createOvoMa() {
+    createOvoMa(parameters) {
         this.sphere = new THREE.Mesh(new THREE.SphereGeometry(this.radius, 32,
                                      32), this.ovoMaMaterial);
         this.sphere.position.x = (parameters.spawnXPos === undefined ?

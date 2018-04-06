@@ -9,10 +9,10 @@ class OvoBu extends ObjetoVolador {
         this.ovoBuMaterial = (parameters.ovoBuMaterial === undefined ?
                               this.material : parameters.ovoBuMaterial);
 
-        this.add(this.createOvoBu());
+        this.add(this.createOvoBu(parameters));
     }
 
-    createOvoBu() {
+    createOvoBu(parameters) {
         this.sphere = new THREE.Mesh(new THREE.SphereGeometry(this.radius, 32,
                                      32), this.ovoBuMaterial);
         this.sphere.position.x = (parameters.spawnXPos === undefined ?
