@@ -20,6 +20,7 @@ class ObjetoVolador extends THREE.Object3D {
 
     moveTowardsNegativeX() {
         this.sphere.position.x -= 1;
+	this.sphere.rotation.y += 0.1;
     }
 
     initialize() {
