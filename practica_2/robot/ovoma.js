@@ -7,7 +7,7 @@ class OvoMa extends ObjetoVolador {
             shininess: 70
         });
         this.ovoMaMaterial = (parameters.ovoMaMaterial === undefined ?
-                              this.material : parameters.ovoBuMaterial);
+                              this.material : parameters.ovoMaMaterial);
 
         this.add(this.createOvoMa(parameters));
     }

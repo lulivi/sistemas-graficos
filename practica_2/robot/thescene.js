@@ -102,12 +102,14 @@ class TheScene extends THREE.Scene {
         model.add(this.ground)
 
         // Flying object
+	var ovoMaTexture = loader.load('imgs/ovoma.jpg')
         this.flyingObjects = new Array(10)
         for (var i = 0; i < 8; i++)
-            this.flyingObjects[i] = new OvoMa({})
+            this.flyingObjects[i] = new OvoMa({ovoMaMaterial: new THREE.MeshPhongMaterial({color: "#ff0000", shininess: 70, map: ovoMaTexture})})
 
+	var ovoBuTexture = loader.load('imgs/ovobu.jpg')
 	for (var i = 8; i < 10; i++)
-            this.flyingObjects[i] = new OvoBu({})
+            this.flyingObjects[i] = new OvoBu({ovoBuMaterial: new THREE.MeshPhongMaterial({color: "#00ff00", shininess: 70, map: ovoBuTexture})})
         return model
     }
 
