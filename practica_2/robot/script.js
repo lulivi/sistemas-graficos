@@ -30,26 +30,26 @@ applicationMode = TheScene.NO_ACTION;
  */
 function createGUI(withStats) {
     GUIcontrols = new function() {
-        this.axis = true
-        this.lightIntensity = 0.5
-        this.robotLegScaleFactor = 0
-        this.robotHeadTwist = 0
-        this.robotBodySwing = 0
+        this.axis = false;
+        this.lightIntensity = 0.3;
+        this.robotLegScaleFactor = 0;
+        this.robotHeadTwist = 0;
+        this.robotBodySwing = 0;
     }
 
-    var gui = new dat.GUI()
-    var axisLights = gui.addFolder('Axis and Lights')
-    axisLights.add(GUIcontrols, 'axis').name('Axis on/off :')
+    var gui = new dat.GUI();
+    var axisLights = gui.addFolder('Axis and Lights');
+    axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
     axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light' +
-                                                               'intensity :')
+                                                               'intensity :');
 
-    var robotControls = gui.addFolder('Robot Controls')
+    var robotControls = gui.addFolder('Robot Controls');
     robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
-        'Robot leg height :')
+        'Robot leg height :');
     robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0, 80.0).name(
-        'Robot head twist :')
+        'Robot head twist :');
     robotControls.add(GUIcontrols, 'robotBodySwing',
-                      -45.0,30.0).name('Robot body swing :')
+		      -45.0,30.0).name('Robot body swing :');
 
     // The method  listen()  allows the height attribute to be written,
     // not only read
@@ -166,7 +166,7 @@ function onMouseUp(event) {
             applicationMode = TheScene.NO_ACTION;
             break;
         }
-        mouseDown = false
+        mouseDown = false;
     }
 }
 
@@ -177,9 +177,9 @@ function onMouseUp(event) {
 function onMouseWheel(event) {
     if (event.ctrlKey) {
         // The Trackballcontrol only works if Ctrl key is pressed
-        scene.getCameraControls().enabled = true
+        scene.getCameraControls().enabled = true;
     } else {
-        scene.getCameraControls().enabled = false
+        scene.getCameraControls().enabled = false;
         if (mouseDown) {
             switch (applicationMode) {
             case TheScene.MOVING_BOXES:
@@ -204,7 +204,7 @@ function createRenderer() {
     var renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true
+    renderer.shadowMap.enabled = true;
     return renderer;
 }
 
@@ -220,7 +220,7 @@ function render() {
     renderer.render(scene, scene.getCamera());
 
     if (pressedKey){
-        scene.moveRobot(pressedKey)
+        scene.moveRobot(pressedKey);
     }
 
 }
@@ -228,8 +228,8 @@ function render() {
 // Attempt to create key listener
 function keyListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
-    var speed = 2
-    var rotationSpeed = 5
+    var speed = 2;
+    var rotationSpeed = 5;
 
     if (key == 87) { // W
         scene.robot.moveRobotForward(speed);
