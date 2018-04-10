@@ -202,26 +202,9 @@ class Robot extends THREE.Object3D {
 		window.innerWidth / window.innerHeight,
 		0.1,
 		1000);
-	this.updateCamera();
-//	this.subjectiveCamera.position.set(0,100,0);
-	this.add(this.subjectiveCamera);
-    }
-
-    updateCamera() {
-	
-	this.subjectiveCamera.lookAt(
-	    new THREE.Vector3(10,0,0));
-	var worldCameraPosition = new THREE.Vector3();
-        this.head.getWorldPosition(worldCameraPosition);
-        worldCameraPosition.x += this.lookAt[0] * this.headRadius;
-	worldCameraPosition.y += 5;
-        worldCameraPosition.z += this.lookAt[2] * this.headRadius;
-	this.subjectiveCamera.position.set(worldCameraPosition.x,
-					   worldCameraPosition.y,
-					   worldCameraPosition.z);
-	worldCameraPosition.x += this.lookAt[0] * this.headRadius;
-	worldCameraPosition.z += this.lookAt[2] * this.headRadius;
-	this.subjectiveCamera.lookAt(worldCameraPosition);
+	this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
+	this.subjectiveCamera.position.x += 10;
+	this.eye.add(this.subjectiveCamera);
     }
 
     createFoot(legPosition) {

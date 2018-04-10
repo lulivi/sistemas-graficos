@@ -27,6 +27,7 @@ class TheScene extends THREE.Scene {
         this.add(this.axis)
         this.model = this.createModel()
         this.add(this.model)
+//	this.fog = new THREE.Fog(0xffffff, 70, 200)
     }
 
     /// It creates the camera and adds it to the graph
@@ -97,7 +98,7 @@ class TheScene extends THREE.Scene {
 
         // Ground model
         var groundTexture = loader.load('imgs/rock.jpg')
-        this.ground = new Ground(300, 300, new THREE.MeshPhongMaterial({
+        this.ground = new Ground(500, 500, new THREE.MeshPhongMaterial({
             map: groundTexture
         }), 4)
         model.add(this.ground)
@@ -231,7 +232,6 @@ class TheScene extends THREE.Scene {
      */
     getCamera() {
 	if (this.firstPersonCamera) {
-	    this.robot.updateCamera();
 	    return this.robot.getCamera();
 	} else {
             return this.camera;
