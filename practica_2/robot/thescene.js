@@ -156,7 +156,6 @@ class TheScene extends THREE.Scene {
 		--this.spawnedFO;
 		this.spawnedFOArray[i] = -1;
 		this.spawner(i);
-		console.log("borro")
 	    }
 	    
 	    //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x

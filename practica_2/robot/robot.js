@@ -199,6 +199,7 @@ class Robot extends THREE.Object3D {
 	target.position.z = this.frontalLight.position.z + 20 *
         this.lookAt[2];
 	this.frontalLight.target = target;
+	this.frontalLight.angle = Math.PI * 50/ 180;
 	this.add(this.frontalLight.target);
 	this.frontalLight.castShadow = true;
 	this.frontalLight.shadow.mapSize.width = 2048;
@@ -309,17 +310,17 @@ class Robot extends THREE.Object3D {
     updateLight() {
 	var worldLightPosition = new THREE.Vector3();
 	this.head.getWorldPosition(worldLightPosition);
-	worldLightPosition.x = this.lookAt[0] * this.headRadius+1;
-	worldLightPosition.z = this.lookAt[2] * this.headRadius+1;
-	console.log(worldLightPosition);
+	worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
+	worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
+	//console.log(worldLightPosition);
 	this.frontalLight.position.set(worldLightPosition.x,
         worldLightPosition.y, worldLightPosition.z);
 	var target = new THREE.Object3D()
 	target.position.x = this.frontalLight.position.x +
-            20 * this.lookAt[0];
+            40 * this.lookAt[0];
 	target.position.y = this.frontalLight.position.y + this.lookAt[1] -
-	    14;
-	target.position.z = this.frontalLight.position.z + 20 *
+	    18;
+	target.position.z = this.frontalLight.position.z + 40 *
         this.lookAt[2];
 	this.frontalLight.target = target;
 	this.add(this.frontalLight.target);
