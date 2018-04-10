@@ -22,10 +22,12 @@ class TheScene extends THREE.Scene {
 
         this.createLights()
         this.createCamera(renderer)
+	this.firstPersonCamera = false;
         this.axis = new THREE.AxisHelper(25)
         this.add(this.axis)
         this.model = this.createModel()
         this.add(this.model)
+//	this.fog = new THREE.Fog(0xffffff, 70, 200)
     }
 
     /// It creates the camera and adds it to the graph
@@ -39,7 +41,6 @@ class TheScene extends THREE.Scene {
         this.camera.position.set(80, 50, 80);
         var look = new THREE.Vector3(0, 20, 0);
         this.camera.lookAt(look);
-
         this.trackballControls = new THREE.TrackballControls(this.camera,
                                                              renderer);
         this.trackballControls.rotateSpeed = 5;
@@ -47,6 +48,7 @@ class TheScene extends THREE.Scene {
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
 
+	
         this.add(this.camera);
     }
 
@@ -96,7 +98,7 @@ class TheScene extends THREE.Scene {
 
         // Ground model
         var groundTexture = loader.load('imgs/rock.jpg')
-        this.ground = new Ground(300, 300, new THREE.MeshPhongMaterial({
+        this.ground = new Ground(500, 500, new THREE.MeshPhongMaterial({
             map: groundTexture
         }), 4)
         model.add(this.ground)
@@ -229,7 +231,17 @@ class TheScene extends THREE.Scene {
      * @return The camera
      */
     getCamera() {
-        return this.camera;
+	if (this.firstPersonCamera) {
+	    return this.robot.getCamera();
+	} else {
+            return this.camera;
+	}
+    }
+
+    swapCamera() {
+	this.firstPersonCamera ?
+	    this.firstPersonCamera = false :
+	    this.firstPersonCamera = true;
     }
 
     /// It returns the camera controls
@@ -265,6 +277,9 @@ class TheScene extends THREE.Scene {
             case String.charCodeAt('D'):
                 this.robot.rotateRobot(-rotationSpeed);
                 break;
+	    case String.charCodeAt('V'):
+	        this.swapCamera();
+	        break;
         }
     }
 }
