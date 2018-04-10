@@ -221,7 +221,6 @@ class TheScene extends THREE.Scene {
         this.robot.setHeadTwist(controls.robotHeadTwist)
         this.robot.setBodySwing(controls.robotBodySwing)
 	this.flyingObjectsAgent()
-	this.robot.updateLight();
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
