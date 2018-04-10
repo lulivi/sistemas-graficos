@@ -228,18 +228,8 @@ function render() {
 // Attempt to create key listener
 function keyListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
-    var speed = 2;
-    var rotationSpeed = 5;
-
-    if (key == 87) { // W
-        scene.robot.moveRobotForward(speed);
-    }else if (key == 83) { // S
-        scene.robot.moveRobotForward(-speed);
-    }else if (key == 65) { // A
-        scene.robot.rotateRobot(rotationSpeed)
-    }else if (key == 68) {
-        scene.robot.rotateRobot(-rotationSpeed)
-    }
+    if (key == String.charCodeAt('V'))
+	scene.swapCamera();
 }
 
 /**
@@ -276,7 +266,7 @@ $(function() {
     window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
     window.addEventListener("keydown", onKeyDown, false); // For Firefox
     window.addEventListener("keyup", onKeyUp, false); // For Firefox
-    // window.onkeydown = keyListener;
+    window.onkeydown = keyListener;
 
     // create a scene, that will hold all our elements such as objects,
     // cameras and lights.

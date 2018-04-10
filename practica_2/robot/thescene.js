@@ -22,6 +22,7 @@ class TheScene extends THREE.Scene {
 
         this.createLights()
         this.createCamera(renderer)
+	this.firstPersonCamera = false;
         this.axis = new THREE.AxisHelper(25)
         this.add(this.axis)
         this.model = this.createModel()
@@ -39,7 +40,6 @@ class TheScene extends THREE.Scene {
         this.camera.position.set(80, 50, 80);
         var look = new THREE.Vector3(0, 20, 0);
         this.camera.lookAt(look);
-
         this.trackballControls = new THREE.TrackballControls(this.camera,
                                                              renderer);
         this.trackballControls.rotateSpeed = 5;
@@ -47,6 +47,7 @@ class TheScene extends THREE.Scene {
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
 
+	
         this.add(this.camera);
     }
 
@@ -229,7 +230,18 @@ class TheScene extends THREE.Scene {
      * @return The camera
      */
     getCamera() {
-        return this.camera;
+	if (this.firstPersonCamera) {
+	    this.robot.updateCamera();
+	    return this.robot.getCamera();
+	} else {
+            return this.camera;
+	}
+    }
+
+    swapCamera() {
+	this.firstPersonCamera ?
+	    this.firstPersonCamera = false :
+	    this.firstPersonCamera = true;
     }
 
     /// It returns the camera controls
@@ -265,6 +277,9 @@ class TheScene extends THREE.Scene {
             case String.charCodeAt('D'):
                 this.robot.rotateRobot(-rotationSpeed);
                 break;
+	    case String.charCodeAt('V'):
+	        this.swapCamera();
+	        break;
         }
     }
 }

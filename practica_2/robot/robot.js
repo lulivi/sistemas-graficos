@@ -50,7 +50,8 @@ class Robot extends THREE.Object3D {
         this.body = null;
         this.head = null;
         this.eye = null;
-
+	this.subjectiveCamera = null;
+	
         this.shoulderLeft = null;
         this.shoulderRight = null;
         this.footLeft = null;
@@ -184,27 +185,43 @@ class Robot extends THREE.Object3D {
             THREE.Matrix4().makeRotationZ(20 * Math.PI / 180));
         this.eye.castShadow = true;
         // "Miner" Light
-        var worldLightPosition = new THREE.Vector3();
-        this.head.getWorldPosition(worldLightPosition);
-        worldLightPosition.x = this.lookAt[0] * this.headRadius+1;
-        worldLightPosition.z = this.lookAt[2] * this.headRadius+1;
-        this.frontalLight.position.set(worldLightPosition.x,
-        worldLightPosition.y, worldLightPosition.z);
-        var target = new THREE.Object3D()
-        target.position.x = this.frontalLight.position.x +
-            20 * this.lookAt[0];
-        target.position.y = this.frontalLight.position.y + this.lookAt[1] -
-            14;
-        target.position.z = this.frontalLight.position.z + 20 *
-        this.lookAt[2];
-        this.frontalLight.target = target;
-        this.frontalLight.angle = Math.PI * 50/ 180;
-        this.add(this.frontalLight.target);
+        this.updateLight();
         this.frontalLight.castShadow = true;
         this.frontalLight.shadow.mapSize.width = 2048;
         this.frontalLight.shadow.mapSize.height = 2048;
         this.add(this.frontalLight);
-        return this.eye;
+	// Subjective Camera
+	this.createCamera();
+	return this.eye;
+    }
+
+    createCamera() {
+	this.subjectiveCamera =
+	    new THREE.PerspectiveCamera(
+		45,
+		window.innerWidth / window.innerHeight,
+		0.1,
+		1000);
+	this.updateCamera();
+//	this.subjectiveCamera.position.set(0,100,0);
+	this.add(this.subjectiveCamera);
+    }
+
+    updateCamera() {
+	
+	this.subjectiveCamera.lookAt(
+	    new THREE.Vector3(10,0,0));
+	var worldCameraPosition = new THREE.Vector3();
+        this.head.getWorldPosition(worldCameraPosition);
+        worldCameraPosition.x += this.lookAt[0] * this.headRadius;
+	worldCameraPosition.y += 5;
+        worldCameraPosition.z += this.lookAt[2] * this.headRadius;
+	this.subjectiveCamera.position.set(worldCameraPosition.x,
+					   worldCameraPosition.y,
+					   worldCameraPosition.z);
+	worldCameraPosition.x += this.lookAt[0] * this.headRadius;
+	worldCameraPosition.z += this.lookAt[2] * this.headRadius;
+	this.subjectiveCamera.lookAt(worldCameraPosition);
     }
 
     createFoot(legPosition) {
@@ -322,6 +339,10 @@ class Robot extends THREE.Object3D {
         this.lookAt[2];
         this.frontalLight.target = target;
         this.add(this.frontalLight.target);
+    }
+
+    getCamera() {
+	return this.subjectiveCamera;
     }
 
 
