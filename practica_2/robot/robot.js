@@ -45,7 +45,7 @@ class Robot extends THREE.Object3D {
         // BODY PARTS
         // **********
         this.movementNode = null;
-	this.lookAt = [1,0,0];
+        this.lookAt = [1,0,0];
         this.swingNode = null;
         this.body = null;
         this.head = null;
@@ -110,9 +110,9 @@ class Robot extends THREE.Object3D {
         this.legMinHeight = this.bodyHeight;
         this.legMaxHeight = this.legHeight + (this.legHeight * 20 / 100);
 
-	
-	// ROBOT ILUMINATION
-	this.frontalLight = new THREE.SpotLight(0xffffff);
+        
+        // ROBOT ILUMINATION
+        this.frontalLight = new THREE.SpotLight(0xffffff);
         // **************
         // MODEL CREATION
         // **************
@@ -122,7 +122,7 @@ class Robot extends THREE.Object3D {
         // this.add(this.createFoot(this.legLeftPosition))
         // this.add(this.createFoot(this.legRightPosition))
 
-	
+        
         // ****************
         // ROBOT ATTRIBUTES
         // ****************
@@ -183,28 +183,27 @@ class Robot extends THREE.Object3D {
         this.eye.geometry.applyMatrix(new
             THREE.Matrix4().makeRotationZ(20 * Math.PI / 180));
         this.eye.castShadow = true;
-	// "Miner" Light
-	
-	var worldLightPosition = new THREE.Vector3();
-	this.head.getWorldPosition(worldLightPosition);
-	worldLightPosition.x = this.lookAt[0] * this.headRadius+1;
-	worldLightPosition.z = this.lookAt[2] * this.headRadius+1;
-	this.frontalLight.position.set(worldLightPosition.x,
+        // "Miner" Light
+        var worldLightPosition = new THREE.Vector3();
+        this.head.getWorldPosition(worldLightPosition);
+        worldLightPosition.x = this.lookAt[0] * this.headRadius+1;
+        worldLightPosition.z = this.lookAt[2] * this.headRadius+1;
+        this.frontalLight.position.set(worldLightPosition.x,
         worldLightPosition.y, worldLightPosition.z);
-	var target = new THREE.Object3D()
-	target.position.x = this.frontalLight.position.x +
+        var target = new THREE.Object3D()
+        target.position.x = this.frontalLight.position.x +
             20 * this.lookAt[0];
-	target.position.y = this.frontalLight.position.y + this.lookAt[1] -
-	    14;
-	target.position.z = this.frontalLight.position.z + 20 *
+        target.position.y = this.frontalLight.position.y + this.lookAt[1] -
+            14;
+        target.position.z = this.frontalLight.position.z + 20 *
         this.lookAt[2];
-	this.frontalLight.target = target;
-	this.frontalLight.angle = Math.PI * 50/ 180;
-	this.add(this.frontalLight.target);
-	this.frontalLight.castShadow = true;
-	this.frontalLight.shadow.mapSize.width = 2048;
-	this.frontalLight.shadow.mapSize.height = 2048;
-	this.add(this.frontalLight);
+        this.frontalLight.target = target;
+        this.frontalLight.angle = Math.PI * 50/ 180;
+        this.add(this.frontalLight.target);
+        this.frontalLight.castShadow = true;
+        this.frontalLight.shadow.mapSize.width = 2048;
+        this.frontalLight.shadow.mapSize.height = 2048;
+        this.add(this.frontalLight);
         return this.eye;
     }
 
@@ -230,9 +229,9 @@ class Robot extends THREE.Object3D {
         var leg = new THREE.Mesh(new
         THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight,
                                50), this.legMaterial);
+        leg.position.y = this.footHeight;
         leg.geometry.applyMatrix(new
-        THREE.Matrix4().makeTranslation(0, this.legHeight / 2 +
-                                        this.footHeight, 0));
+        THREE.Matrix4().makeTranslation(0, this.legHeight / 2 , 0));
         leg.castShadow = true;
         if (legPosition > 0) {
             this.legRight = leg;
@@ -308,22 +307,21 @@ class Robot extends THREE.Object3D {
     }
 
     updateLight() {
-	var worldLightPosition = new THREE.Vector3();
-	this.head.getWorldPosition(worldLightPosition);
-	worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
-	worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
-	//console.log(worldLightPosition);
-	this.frontalLight.position.set(worldLightPosition.x,
+        var worldLightPosition = new THREE.Vector3();
+        this.head.getWorldPosition(worldLightPosition);
+        worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
+        worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
+        this.frontalLight.position.set(worldLightPosition.x,
         worldLightPosition.y, worldLightPosition.z);
-	var target = new THREE.Object3D()
-	target.position.x = this.frontalLight.position.x +
+        var target = new THREE.Object3D()
+        target.position.x = this.frontalLight.position.x +
             40 * this.lookAt[0];
-	target.position.y = this.frontalLight.position.y + this.lookAt[1] -
-	    18;
-	target.position.z = this.frontalLight.position.z + 40 *
+        target.position.y = this.frontalLight.position.y + this.lookAt[1] -
+            18;
+        target.position.z = this.frontalLight.position.z + 40 *
         this.lookAt[2];
-	this.frontalLight.target = target;
-	this.add(this.frontalLight.target);
+        this.frontalLight.target = target;
+        this.add(this.frontalLight.target);
     }
 
 
