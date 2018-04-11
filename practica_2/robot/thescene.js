@@ -19,6 +19,7 @@ class TheScene extends THREE.Scene {
         this.flyingObjects = null
         this.spawnedFO = 0
         this.spawnedFOArray = [-1,-1,-1]
+	this.endGame = false;
 
         this.createLights()
         this.createCamera(renderer)
@@ -215,14 +216,28 @@ class TheScene extends THREE.Scene {
      * @controls - The GUI information
      */
     animate(controls) {
-        this.axis.visible = controls.axis
-        this.spotLight.intensity = controls.lightIntensity
-        this.robot.setLegHeight(controls.robotLegScaleFactor)
-        this.robot.setHeadTwist(controls.robotHeadTwist)
-        this.robot.setBodySwing(controls.robotBodySwing)
-	this.flyingObjectsAgent()
+        this.axis.visible = controls.axis;
+        this.spotLight.intensity = controls.lightIntensity;
+        this.robot.setLegHeight(controls.robotLegScaleFactor);
+        this.robot.setHeadTwist(controls.robotHeadTwist);
+        this.robot.setBodySwing(controls.robotBodySwing);
+	this.flyingObjectsAgent();
+	this.checkPosition();
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
+    }
+
+    checkPosition() {
+	if(!this.endGame){
+	    var robotPosition = new THREE.Vector3();
+	    this.robot.body.getWorldPosition(robotPosition);
+	    var posX = robotPosition.x;
+	    var posZ = robotPosition.z;
+	    if(posX < -this.ground.width / 2 || posX > this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ > this.ground.deep / 2) {
+		this.endGame = true;
+		alert('Ooopsie wopsieeee you ran away from the fieeeelldd w.w You loosse o.o Im sowy');
+	    }
+	}
     }
 
     /// It returns the camera
