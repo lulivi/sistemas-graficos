@@ -124,7 +124,7 @@ class TheScene extends THREE.Scene {
             this.flyingObjects[i] = new OvoMa({ovoMaMaterial: new THREE.MeshPhongMaterial({color: '#ff0000', shininess: 70, map: ovoMaTexture})});
 
         var ovoBuTexture = loader.load('imgs/ovobu.jpg');
-        for (var i = 8; i < 10; i++)
+        for (i = 8; i < 10; i++)
             this.flyingObjects[i] = new OvoBu({ovoBuMaterial: new THREE.MeshPhongMaterial({color: '#00ff00', shininess: 70, map: ovoBuTexture})});
         return model;
     }
@@ -278,16 +278,20 @@ class TheScene extends THREE.Scene {
         var speed = 1;
         var rotationSpeed = 2;
         switch (key) {
-        case String.charCodeAt('W'): // W
+        case String.charCodeAt('W'): // Up
+        case 38: // Up
             this.robot.moveRobotForward(speed);
             break;
-        case String.charCodeAt('A'): // A
+        case String.charCodeAt('A'): // Left
+        case 37: // Left
             this.robot.rotateRobot(rotationSpeed);
             break;
-        case String.charCodeAt('S'): // S
+        case String.charCodeAt('S'): // Down
+        case 40: // Down
             this.robot.moveRobotForward(-speed);
             break;
-        case String.charCodeAt('D'):
+        case String.charCodeAt('D'): // Right
+        case 39: // Right
             this.robot.rotateRobot(-rotationSpeed);
             break;
         case String.charCodeAt('V'):
