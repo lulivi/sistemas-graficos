@@ -197,11 +197,8 @@ class Robot extends THREE.Object3D {
         THREE.Matrix4().makeRotationZ(20 * Math.PI / 180));
         this.eye.castShadow = true;
         // "Miner" Light
-        this.updateLight();
-        this.frontalLight.castShadow = true;
-        this.frontalLight.shadow.mapSize.width = 2048;
-        this.frontalLight.shadow.mapSize.height = 2048;
-        this.add(this.frontalLight);
+        this.createLight();
+        this.eye.add(this.frontalLight);
         // Subjective Camera
         this.createCamera();
         return this.eye;
@@ -331,8 +328,17 @@ class Robot extends THREE.Object3D {
         // Z component of lookAt vector
     }
 
-    updateLight() {
-        var worldLightPosition = new THREE.Vector3();
+    createLight() {
+        var target = new THREE.Object3D();
+        target.position.x = 100;
+        target.position.y = -30;
+        this.frontalLight.position.x += 15;
+        this.frontalLight.target = target;
+        this.eye.add(this.frontalLight.target);
+        this.frontalLight.castShadow = true;
+        this.frontalLight.shadow.mapSize.width = 2048;
+        this.frontalLight.shadow.mapSize.height = 2048;
+        /*        var worldLightPosition = new THREE.Vector3();
         this.head.getWorldPosition(worldLightPosition);
         worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
         worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
@@ -347,8 +353,8 @@ class Robot extends THREE.Object3D {
             18;
         target.position.z = this.frontalLight.position.z + 40 *
         this.lookAt[2];
-        this.frontalLight.target = target;
-        this.add(this.frontalLight.target);
+        this.frontalLight.target = target;*/
+        //this.add(this.frontalLight.target);
     }
 
     getCamera() {

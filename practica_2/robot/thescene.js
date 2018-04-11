@@ -31,7 +31,7 @@ class TheScene extends THREE.Scene {
         this.add(this.axis);
         this.model = this.createModel();
         this.add(this.model);
-        //	this.fog = new THREE.Fog(0xffffff, 70, 200)
+        //    this.fog = new THREE.Fog(0xffffff, 70, 200)
     }
 
     /// It creates the camera and adds it to the graph
@@ -58,7 +58,7 @@ class TheScene extends THREE.Scene {
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
 
-	
+
         this.add(this.camera);
     }
 
@@ -141,41 +141,41 @@ class TheScene extends THREE.Scene {
 
     spawner(FOindex) {
         if(FOindex < 3) {
-	    // Nos aseguramos de que el objeto que se genere no esté
-	    // ya en el juego
-	    do {
-                var lastGenerated = randNum(10);  
+        // Nos aseguramos de que el objeto que se genere no esté
+        // ya en el juego
+            do {
+                var lastGenerated = randNum(10);
                 var found = this.spawnedFOArray.find(function(element) {
-		    return element == lastGenerated;
+                    return element == lastGenerated;
                 });
-	    } while(found !== undefined);
-	    
+            } while(found !== undefined);
+
             this.spawnedFOArray[FOindex] =
                 lastGenerated;
-	    ++this.spawnedFO;
-	    this.flyingObjects[lastGenerated].initialize();
+            ++this.spawnedFO;
+            this.flyingObjects[lastGenerated].initialize();
             this.model.add(this.flyingObjects[lastGenerated]);
         }
     }
 
     mover() {
         for(var i = 0; i < this.spawnedFO; ++i) {
-	    this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
+            this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
         }
-	
+
     }
     remover() {
         for(var i = 0; i < this.spawnedFO; ++i) {
-	    if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-	       < -100) {
+            if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+           < -100) {
                 this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
                 --this.spawnedFO;
                 this.spawnedFOArray[i] = -1;
                 this.spawner(i);
-	    }
-	    
-	    //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-            //	       );
+            }
+
+        //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+            //           );
         }
     }
     // Public methods
@@ -235,7 +235,6 @@ class TheScene extends THREE.Scene {
         this.robot.setHeadTwist(controls.robotHeadTwist);
         this.robot.setBodySwing(controls.robotBodySwing);
         this.flyingObjectsAgent();
-        this.robot.updateLight();
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
@@ -246,7 +245,7 @@ class TheScene extends THREE.Scene {
      */
     getCamera() {
         if (this.firstPersonCamera) {
-	    return this.robot.getCamera();
+            return this.robot.getCamera();
         } else {
             return this.camera;
         }
@@ -254,8 +253,8 @@ class TheScene extends THREE.Scene {
 
     swapCamera() {
         this.firstPersonCamera ?
-	    this.firstPersonCamera = false :
-	    this.firstPersonCamera = true;
+            this.firstPersonCamera = false :
+            this.firstPersonCamera = true;
     }
 
     /// It returns the camera controls
@@ -291,9 +290,9 @@ class TheScene extends THREE.Scene {
         case String.charCodeAt('D'):
             this.robot.rotateRobot(-rotationSpeed);
             break;
-	    case String.charCodeAt('V'):
-	        this.swapCamera();
-	        break;
+        case String.charCodeAt('V'):
+            this.swapCamera();
+            break;
         }
     }
 }
