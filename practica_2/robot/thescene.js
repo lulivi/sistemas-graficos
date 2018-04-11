@@ -24,7 +24,7 @@ class TheScene extends THREE.Scene {
             -1
         ];
 
-	this.endGame = false;
+        this.endGame = false;
         this.createLights();
         this.createCamera(renderer);
         this.firstPersonCamera = false;
@@ -236,27 +236,24 @@ class TheScene extends THREE.Scene {
         this.robot.setLegHeight(controls.robotLegScaleFactor);
         this.robot.setHeadTwist(controls.robotHeadTwist);
         this.robot.setBodySwing(controls.robotBodySwing);
-<<<<<<< HEAD
-	this.flyingObjectsAgent();
-	this.checkPosition();
-=======
         this.flyingObjectsAgent();
->>>>>>> 896d45ac7f424fb7a13c832f10755903944be774
+        this.checkPosition();
+
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
 
     checkPosition() {
-	if(!this.endGame){
-	    var robotPosition = new THREE.Vector3();
-	    this.robot.body.getWorldPosition(robotPosition);
-	    var posX = robotPosition.x;
-	    var posZ = robotPosition.z;
-	    if(posX < -this.ground.width / 2 || posX > this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ > this.ground.deep / 2) {
-		this.endGame = true;
-		alert('Ooopsie wopsieeee you ran away from the fieeeelldd w.w You loosse o.o Im sowy');
-	    }
-	}
+        if(!this.endGame){
+            var robotPosition = new THREE.Vector3();
+            this.robot.body.getWorldPosition(robotPosition);
+            var posX = robotPosition.x;
+            var posZ = robotPosition.z;
+            if(posX < -this.ground.width / 2 || posX > this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ > this.ground.deep / 2) {
+                this.endGame = true;
+                alert('Ooopsie wopsieeee you ran away from the fieeeelldd w.w You loosse o.o Im sowy');
+            }
+        }
     }
 
     /// It returns the camera

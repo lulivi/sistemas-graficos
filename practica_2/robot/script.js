@@ -54,7 +54,7 @@ function createGUI(withStats) {
     ).name('Robot head twist :');
     robotControls.add(
         GUIcontrols, 'robotBodySwing',
-              -45.0,30.0
+        -45.0,30.0
     ).name('Robot body swing :');
 
     // The method  listen()  allows the height attribute to be written,
