@@ -17,41 +17,45 @@ class Robot extends THREE.Object3D {
         // MATERIALS
         // *********
         this.material = (parameters.material === undefined ? new
-                         THREE.MeshPhongMaterial({
-                             color: 0xd4af37,
-                             specular: 0xfbf804,
-                             shininess: 70
-                         }) : parameters.material);
+        THREE.MeshPhongMaterial({
+            color: 0xd4af37,
+            specular: 0xfbf804,
+            shininess: 70
+        }) : parameters.material);
 
         this.eyeMaterial = (parameters.eyeMaterial === undefined ?
-                            this.material : parameters.eyeMaterial);
+            this.material : parameters.eyeMaterial);
 
         this.headMaterial = (parameters.headMaterial === undefined ?
-                             this.material : parameters.headMaterial);
+            this.material : parameters.headMaterial);
 
         this.bodyMaterial = (parameters.bodyMaterial === undefined ?
-                             this.material : parameters.bodyMaterial);
+            this.material : parameters.bodyMaterial);
 
         this.footMaterial = (parameters.footMaterial === undefined ?
-                             this.material : parameters.footMaterial);
+            this.material : parameters.footMaterial);
 
         this.legMaterial = (parameters.legMaterial === undefined ?
-                            this.material : parameters.legMaterial);
+            this.material : parameters.legMaterial);
 
         this.shoulderMaterial = (parameters.shoulderMaterial === undefined
-                            ? this.material : parameters.shoulderMaterial);
+            ? this.material : parameters.shoulderMaterial);
 
         // **********
         // BODY PARTS
         // **********
         this.movementNode = null;
-        this.lookAt = [1,0,0];
+        this.lookAt = [
+            1,
+            0,
+            0
+        ];
         this.swingNode = null;
         this.body = null;
         this.head = null;
         this.eye = null;
-	this.subjectiveCamera = null;
-	
+        this.subjectiveCamera = null;
+
         this.shoulderLeft = null;
         this.shoulderRight = null;
         this.footLeft = null;
@@ -67,10 +71,10 @@ class Robot extends THREE.Object3D {
         this.rotationOffset = 90; // lookAt has a 90 degrees offset
 
         // Body
-        this.bodyHeight = (parameters.craneHeight === undefined ? 28 :
-                           parameters.robotBodyHeight);
-        this.bodyRadius = (parameters.craneWidth === undefined ? 12 :
-                           parameters.robotBodyRadius);
+        this.bodyHeight = (parameters.craneHeight === undefined ?
+            28 : parameters.robotBodyHeight);
+        this.bodyRadius = (parameters.craneWidth === undefined ?
+            12 : parameters.robotBodyRadius);
 
         // Head
         this.headRadius = this.bodyRadius * 0.95;
@@ -111,7 +115,7 @@ class Robot extends THREE.Object3D {
         this.legMinHeight = this.bodyHeight;
         this.legMaxHeight = this.legHeight + (this.legHeight * 20 / 100);
 
-        
+
         // ROBOT ILUMINATION
         this.frontalLight = new THREE.SpotLight(0xffffff);
         // **************
@@ -123,7 +127,7 @@ class Robot extends THREE.Object3D {
         // this.add(this.createFoot(this.legLeftPosition))
         // this.add(this.createFoot(this.legRightPosition))
 
-        
+
         // ****************
         // ROBOT ATTRIBUTES
         // ****************
@@ -153,11 +157,13 @@ class Robot extends THREE.Object3D {
     }
 
     createBody() {
-        this.body = new THREE.Mesh(new
-            THREE.CylinderGeometry(this.bodyRadius, this.bodyRadius,
-                                   this.bodyHeight, 50), this.bodyMaterial);
+        this.body = new THREE.Mesh(new THREE.CylinderGeometry(
+            this.bodyRadius, this.bodyRadius,this.bodyHeight, 50
+        ), this.bodyMaterial);
         this.body.geometry.applyMatrix(new
-            THREE.Matrix4().makeTranslation(0, this.bodyHeight / 2, 0));
+        THREE.Matrix4().makeTranslation(
+            0, this.bodyHeight / 2, 0
+        ));
         this.body.castShadow = true;
         this.body.add(this.createHead());
         return this.body;
@@ -165,8 +171,10 @@ class Robot extends THREE.Object3D {
 
     createHead() {
         this.head = new THREE.Mesh(new
-            THREE.SphereGeometry(this.headRadius, 32, 32),
-                                 this.headMaterial);
+        THREE.SphereGeometry(
+            this.headRadius, 32, 32
+        ),
+                                   this.headMaterial);
         this.head.position.y = this.bodyHeight;
         this.head.castShadow = true;
         this.head.add(this.createEye());
@@ -175,14 +183,18 @@ class Robot extends THREE.Object3D {
 
     createEye() {
         this.eye = new THREE.Mesh(new
-            THREE.CylinderGeometry(this.eyeRadius, this.eyeRadius,
-                                   this.eyeHeight, 50), this.eyeMaterial);
+        THREE.CylinderGeometry(
+            this.eyeRadius, this.eyeRadius,
+            this.eyeHeight, 50
+        ), this.eyeMaterial);
         this.eye.geometry.applyMatrix(new
-            THREE.Matrix4().makeRotationZ(Math.PI / 2));
+        THREE.Matrix4().makeRotationZ(Math.PI / 2));
         this.eye.geometry.applyMatrix(new
-            THREE.Matrix4().makeTranslation(this.headRadius * 0.9, 0, 0));
+        THREE.Matrix4().makeTranslation(
+            this.headRadius * 0.9, 0, 0
+        ));
         this.eye.geometry.applyMatrix(new
-            THREE.Matrix4().makeRotationZ(20 * Math.PI / 180));
+        THREE.Matrix4().makeRotationZ(20 * Math.PI / 180));
         this.eye.castShadow = true;
         // "Miner" Light
         this.updateLight();
@@ -190,48 +202,57 @@ class Robot extends THREE.Object3D {
         this.frontalLight.shadow.mapSize.width = 2048;
         this.frontalLight.shadow.mapSize.height = 2048;
         this.add(this.frontalLight);
-	// Subjective Camera
-	this.createCamera();
-	return this.eye;
+        // Subjective Camera
+        this.createCamera();
+        return this.eye;
     }
 
     createCamera() {
-	this.subjectiveCamera =
-	    new THREE.PerspectiveCamera(
-		45,
-		window.innerWidth / window.innerHeight,
-		0.1,
-		1000);
-	this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
-	this.subjectiveCamera.position.x += 10;
-	this.eye.add(this.subjectiveCamera);
+        this.subjectiveCamera =
+        new THREE.PerspectiveCamera(
+            45,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
+        this.subjectiveCamera.position.x += 10;
+        this.eye.add(this.subjectiveCamera);
     }
 
     createFoot(legPosition) {
         var foot = new THREE.Mesh(new
-        THREE.CylinderGeometry(this.footRadiusTop,
-        this.footRadiusBottom, this.footHeight, 50), this.footMaterial);
+        THREE.CylinderGeometry(
+            this.footRadiusTop,
+            this.footRadiusBottom, this.footHeight, 50
+        ), this.footMaterial);
         foot.geometry.applyMatrix(new
-        THREE.Matrix4().makeTranslation(0, this.footHeight / 2, 0));
+        THREE.Matrix4().makeTranslation(
+            0, this.footHeight / 2, 0
+        ));
         foot.position.z = legPosition;
         foot.castShadow = true;
         foot.add(this.createLeg(legPosition));
         foot.add(this.createShoulder(legPosition));
         if (legPosition > 0) {
-            this.footRight = foot
+            this.footRight = foot;
         } else {
-            this.footLeft = foot
+            this.footLeft = foot;
         }
         return foot;
     }
 
     createLeg(legPosition) {
         var leg = new THREE.Mesh(new
-        THREE.CylinderGeometry(this.legRadius, this.legRadius, this.legHeight,
-                               50), this.legMaterial);
+        THREE.CylinderGeometry(
+            this.legRadius, this.legRadius, this.legHeight,
+            50
+        ), this.legMaterial);
         leg.position.y = this.footHeight;
         leg.geometry.applyMatrix(new
-        THREE.Matrix4().makeTranslation(0, this.legHeight / 2 , 0));
+        THREE.Matrix4().makeTranslation(
+            0, this.legHeight / 2 , 0
+        ));
         leg.castShadow = true;
         if (legPosition > 0) {
             this.legRight = leg;
@@ -243,11 +264,15 @@ class Robot extends THREE.Object3D {
 
     createShoulder(legPosition) {
         var shoulder = new THREE.Mesh(new
-        THREE.BoxGeometry(this.shoulderWidth, this.shoulderHeight,
-        this.shoulderDepth), this.shoulderMaterial);
+        THREE.BoxGeometry(
+            this.shoulderWidth, this.shoulderHeight,
+            this.shoulderDepth
+        ), this.shoulderMaterial);
         shoulder.geometry.applyMatrix(new
-        THREE.Matrix4().makeTranslation(0, this.shoulderHeight / 2 +
-        this.legHeight + this.footHeight, 0));
+        THREE.Matrix4().makeTranslation(
+            0, this.shoulderHeight / 2 +
+        this.legHeight + this.footHeight, 0
+        ));
         shoulder.castShadow = true;
         if (legPosition > 0) {
             this.shoulderRight = shoulder;
@@ -269,16 +294,16 @@ class Robot extends THREE.Object3D {
     }
 
     setLegHeight(newLegHeight) {
-        var requestedLegHeight = (1 + (newLegHeight / 100))
+        var requestedLegHeight = (1 + (newLegHeight / 100));
 
         if (requestedLegHeight >= 1 && requestedLegHeight <= 1.20) {
-            this.legScaleFactor = requestedLegHeight
-            this.legLeft.scale.y = this.legScaleFactor
-            this.legRight.scale.y = this.legScaleFactor
-            this.shoulderRight.position.y = this.legScaleFactor
-            this.shoulderLeft.position.y = this.legScaleFactor
+            this.legScaleFactor = requestedLegHeight;
+            this.legLeft.scale.y = this.legScaleFactor;
+            this.legRight.scale.y = this.legScaleFactor;
+            this.shoulderRight.position.y = this.legScaleFactor;
+            this.shoulderLeft.position.y = this.legScaleFactor;
             this.setBodyHeight(this.legMinHeight * this.legScaleFactor -
-                               this.legMinHeight)
+                               this.legMinHeight);
         }
     }
 
@@ -301,9 +326,9 @@ class Robot extends THREE.Object3D {
 
     moveRobotForward(value) {
         this.movementNode.position.x += value * this.lookAt[0];
-                                    // X component of lookAt vector
+        // X component of lookAt vector
         this.movementNode.position.z += value * this.lookAt[2];
-                                    // Z component of lookAt vector
+        // Z component of lookAt vector
     }
 
     updateLight() {
@@ -311,9 +336,11 @@ class Robot extends THREE.Object3D {
         this.head.getWorldPosition(worldLightPosition);
         worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
         worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
-        this.frontalLight.position.set(worldLightPosition.x,
-        worldLightPosition.y, worldLightPosition.z);
-        var target = new THREE.Object3D()
+        this.frontalLight.position.set(
+            worldLightPosition.x,
+            worldLightPosition.y, worldLightPosition.z
+        );
+        var target = new THREE.Object3D();
         target.position.x = this.frontalLight.position.x +
             40 * this.lookAt[0];
         target.position.y = this.frontalLight.position.y + this.lookAt[1] -
@@ -325,7 +352,7 @@ class Robot extends THREE.Object3D {
     }
 
     getCamera() {
-	return this.subjectiveCamera;
+        return this.subjectiveCamera;
     }
 
 

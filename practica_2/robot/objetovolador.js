@@ -1,14 +1,14 @@
 class ObjetoVolador extends THREE.Object3D {
     constructor(parameters) {
-	super();
-	this.sphere = null;
+        super();
+        this.sphere = null;
 	
-	// Quantitative attributes
-	this.radius = 5;
-	this.spawnXPos = 100 + randNum(75);
-	this.spawnYPos = 40;
-	// Select number between -100,100
-	this.spawnZPos = randNum(200) - 100;
+        // Quantitative attributes
+        this.radius = 5;
+        this.spawnXPos = 100 + randNum(75);
+        this.spawnYPos = 40;
+        // Select number between -100,100
+        this.spawnZPos = randNum(200) - 100;
 
     }
 
@@ -20,11 +20,11 @@ class ObjetoVolador extends THREE.Object3D {
 
     moveTowardsNegativeX() {
         this.sphere.position.x -= 1;
-	this.sphere.rotation.y += 0.1;
+        this.sphere.rotation.y += 0.1;
     }
 
     initialize() {
-	if (this.sphere.position.x < -100){
+        if (this.sphere.position.x < -100){
 	    // Select number between -100,100
             var newZ = Math.floor(randNum(200)) - 100;
             this.sphere.position.z = newZ;

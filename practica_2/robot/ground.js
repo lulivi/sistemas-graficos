@@ -11,7 +11,9 @@
 
 class Ground extends THREE.Object3D {
 
-    constructor (aWidth, aDeep, aMaterial, aBoxSize) {
+    constructor (
+        aWidth, aDeep, aMaterial, aBoxSize
+    ) {
         super();
         
         this.width = aWidth;
@@ -25,11 +27,14 @@ class Ground extends THREE.Object3D {
         this.box    = null;
         this.raycaster = new THREE.Raycaster ();  // To select boxes
         
-        this.ground = new THREE.Mesh (
-            new THREE.BoxGeometry (this.width, 0.2, this.deep, 1, 1, 1),
-            this.material);
+        this.ground = new THREE.Mesh (new THREE.BoxGeometry (
+            this.width, 0.2, this.deep, 1, 1, 1
+        ),
+                                      this.material);
         this.ground.applyMatrix (new THREE.Matrix4().makeTranslation
-                                 (0,-0.1,0));
+        (
+            0,-0.1,0
+        ));
         this.ground.receiveShadow = true;
         this.ground.autoUpdateMatrix = false;
         this.add (this.ground);
@@ -117,13 +122,16 @@ class Ground extends THREE.Object3D {
         var pointOnGround = this.getPointOnGround (event);
         if (pointOnGround !== null) {
             if (action === TheScene.NEW_BOX) {
-                this.box = new THREE.Mesh (
-                    new THREE.BoxGeometry (this.boxSize, this.boxSize,
-                                           this.boxSize), 
-                    new THREE.MeshPhongMaterial ({color: Math.floor
-                                                  (Math.random()*16777215)}));
+                this.box = new THREE.Mesh (new THREE.BoxGeometry (
+                    this.boxSize, this.boxSize,
+                    this.boxSize
+                ), 
+                                           new THREE.MeshPhongMaterial ({color: Math.floor
+                                           (Math.random()*16777215)}));
                 this.box.geometry.applyMatrix (new
-                THREE.Matrix4().makeTranslation (0, this.boxSize/2, 0));  
+                THREE.Matrix4().makeTranslation (
+                    0, this.boxSize/2, 0
+                ));  
                 this.box.position.x = pointOnGround.x;
                 this.box.position.y = 0;
                 this.box.position.z = pointOnGround.y;
@@ -181,7 +189,7 @@ class Ground extends THREE.Object3D {
             if (this.box !== null) {
                 // Chrome and other use wheelDelta, Firefox uses detail
                 this.box.rotation.y += (event.wheelDelta ?
-                                        event.wheelDelta/20 : -event.detail);
+                    event.wheelDelta/20 : -event.detail);
             }
             break;
         }
