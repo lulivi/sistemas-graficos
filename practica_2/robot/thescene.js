@@ -9,26 +9,31 @@ class TheScene extends THREE.Scene {
 
         // Attributes
 
-        this.ambientLight = null
-        this.spotLight = null
-        this.camera = null
-        this.trackballControls = null
-        this.crane = null
-        this.robot = null
-        this.ground = null
-        this.flyingObjects = null
-        this.spawnedFO = 0
-        this.spawnedFOArray = [-1,-1,-1]
-	this.endGame = false;
+        this.ambientLight = null;
+        this.spotLight = null;
+        this.camera = null;
+        this.trackballControls = null;
+        this.crane = null;
+        this.robot = null;
+        this.ground = null;
+        this.flyingObjects = null;
+        this.spawnedFO = 0;
+        this.spawnedFOArray = [
+            -1,
+            -1,
+            -1
+        ];
 
-        this.createLights()
-        this.createCamera(renderer)
-	this.firstPersonCamera = false;
-        this.axis = new THREE.AxisHelper(25)
-        this.add(this.axis)
-        this.model = this.createModel()
-        this.add(this.model)
-//	this.fog = new THREE.Fog(0xffffff, 70, 200)
+	this.endGame = false;
+        this.createLights();
+        this.createCamera(renderer);
+        this.firstPersonCamera = false;
+        this.axis = new THREE.AxisHelper(25);
+        this.add(this.axis);
+        this.model = this.createModel();
+        this.add(this.model);
+        //    this.fog = new THREE.Fog(0xffffff, 70, 200)
+
     }
 
     /// It creates the camera and adds it to the graph
@@ -36,11 +41,17 @@ class TheScene extends THREE.Scene {
      * @param renderer - The renderer associated with the camera
      */
     createCamera(renderer) {
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth /
+        this.camera = new THREE.PerspectiveCamera(
+            45, window.innerWidth /
                                                   window.innerHeight,
-                                                  0.1, 1000);
-        this.camera.position.set(80, 50, 80);
-        var look = new THREE.Vector3(0, 20, 0);
+            0.1, 1000
+        );
+        this.camera.position.set(
+            80, 50, 80
+        );
+        var look = new THREE.Vector3(
+            0, 20, 0
+        );
         this.camera.lookAt(look);
         this.trackballControls = new THREE.TrackballControls(this.camera,
                                                              renderer);
@@ -49,7 +60,7 @@ class TheScene extends THREE.Scene {
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
 
-	
+
         this.add(this.camera);
     }
 
@@ -61,11 +72,13 @@ class TheScene extends THREE.Scene {
 
         // add spotlight for the shadows
         this.spotLight = new THREE.SpotLight(0xffffff);
-        this.spotLight.position.set(100, 100, 30);
+        this.spotLight.position.set(
+            100, 100, 30
+        );
         this.spotLight.castShadow = true;
         // the shadow resolution
-        this.spotLight.shadow.mapSize.width = 2048
-        this.spotLight.shadow.mapSize.height = 2048
+        this.spotLight.shadow.mapSize.width = 2048;
+        this.spotLight.shadow.mapSize.height = 2048;
         this.add(this.spotLight);
     }
 
@@ -74,96 +87,98 @@ class TheScene extends THREE.Scene {
      * @return The model
      */
     createModel() {
-        var model = new THREE.Object3D()
-        var loader = new THREE.TextureLoader()
+        var model = new THREE.Object3D();
+        var loader = new THREE.TextureLoader();
 
         // Robot model
-        var robotTexture = loader.load('imgs/metal.jpg')
-        var legTexture = loader.load('imgs/leg.jpg')
+        var robotTexture = loader.load('imgs/metal.jpg');
+        var legTexture = loader.load('imgs/leg.jpg');
         this.robot = new Robot({
-            eyeMaterial: new THREE.MeshPhongMaterial({ color: "#000000",
+            eyeMaterial: new THREE.MeshPhongMaterial({ color: '#000000',
                                                        shininess: 70 }),
-            headMaterial: new THREE.MeshPhongMaterial({ color: "#888888",
+            headMaterial: new THREE.MeshPhongMaterial({ color: '#888888',
                                                         shininess: 70 }),
-            bodyMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8",
+            bodyMaterial: new THREE.MeshPhongMaterial({ color: '#e8e8e8',
                                                         shininess: 70 }),
-            footMaterial: new THREE.MeshPhongMaterial({ color: "#001284",
+            footMaterial: new THREE.MeshPhongMaterial({ color: '#001284',
                                                         shininess: 70 }),
-            legMaterial: new THREE.MeshPhongMaterial({ color: "#e8e8e8",
-            shininess: 70 , map: legTexture}),
+            legMaterial: new THREE.MeshPhongMaterial({ color: '#e8e8e8',
+                                                       shininess: 70 , map: legTexture}),
             shoulderMaterial: new THREE.MeshPhongMaterial({ color:
-            "#001284", shininess: 70 })
-        })
+            '#001284', shininess: 70 })
+        });
         // model.add (this.crane);
-        model.add(this.robot)
+        model.add(this.robot);
 
         // Ground model
-        var groundTexture = loader.load('imgs/rock.jpg')
-        this.ground = new Ground(500, 500, new THREE.MeshPhongMaterial({
-            map: groundTexture
-        }), 4)
-        model.add(this.ground)
+        var groundTexture = loader.load('imgs/rock.jpg');
+        this.ground = new Ground(
+            500, 500, new THREE.MeshPhongMaterial({
+                map: groundTexture
+            }), 4
+        );
+        model.add(this.ground);
 
         // Flying object
-	var ovoMaTexture = loader.load('imgs/ovoma.jpg')
-        this.flyingObjects = new Array(10)
+        var ovoMaTexture = loader.load('imgs/ovoma.jpg');
+        this.flyingObjects = new Array(10);
         for (var i = 0; i < 8; i++)
-            this.flyingObjects[i] = new OvoMa({ovoMaMaterial: new THREE.MeshPhongMaterial({color: "#ff0000", shininess: 70, map: ovoMaTexture})})
+            this.flyingObjects[i] = new OvoMa({ovoMaMaterial: new THREE.MeshPhongMaterial({color: '#ff0000', shininess: 70, map: ovoMaTexture})});
 
-	var ovoBuTexture = loader.load('imgs/ovobu.jpg')
-	for (var i = 8; i < 10; i++)
-            this.flyingObjects[i] = new OvoBu({ovoBuMaterial: new THREE.MeshPhongMaterial({color: "#00ff00", shininess: 70, map: ovoBuTexture})})
-        return model
+        var ovoBuTexture = loader.load('imgs/ovobu.jpg');
+        for (var i = 8; i < 10; i++)
+            this.flyingObjects[i] = new OvoBu({ovoBuMaterial: new THREE.MeshPhongMaterial({color: '#00ff00', shininess: 70, map: ovoBuTexture})});
+        return model;
     }
 
     flyingObjectsAgent() {
         // Primero hay que spawnear algún objeto, añadiéndolo al
         // modelo (this.model) y luego estos hay que moverlos y cuando
-	// lleguen a una posición determinada, borrarlos e instanciar
-	// unos nuevos
-	this.spawner(this.spawnedFO);
+        // lleguen a una posición determinada, borrarlos e instanciar
+        // unos nuevos
+        this.spawner(this.spawnedFO);
         this.mover();
-	this.remover();
+        this.remover();
     }
 
     spawner(FOindex) {
         if(FOindex < 3) {
-	    // Nos aseguramos de que el objeto que se genere no esté
-	    // ya en el juego
-	    do {
-		var lastGenerated = randNum(10);  
-		var found = this.spawnedFOArray.find(function(element) {
-		    return element == lastGenerated;
-		});
-	    } while(found !== undefined);
-	    
+        // Nos aseguramos de que el objeto que se genere no esté
+        // ya en el juego
+            do {
+                var lastGenerated = randNum(10);
+                var found = this.spawnedFOArray.find(function(element) {
+                    return element == lastGenerated;
+                });
+            } while(found !== undefined);
+
             this.spawnedFOArray[FOindex] =
                 lastGenerated;
-	    ++this.spawnedFO;
-	    this.flyingObjects[lastGenerated].initialize();
+            ++this.spawnedFO;
+            this.flyingObjects[lastGenerated].initialize();
             this.model.add(this.flyingObjects[lastGenerated]);
         }
     }
 
     mover() {
-	for(var i = 0; i < this.spawnedFO; ++i) {
-	    this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
-	}
-	
+        for(var i = 0; i < this.spawnedFO; ++i) {
+            this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
+        }
+
     }
     remover() {
-	for(var i = 0; i < this.spawnedFO; ++i) {
-	    if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-	       < -100) {
-		this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
-		--this.spawnedFO;
-		this.spawnedFOArray[i] = -1;
-		this.spawner(i);
-	    }
-	    
-	    //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-	//	       );
-	}
+        for(var i = 0; i < this.spawnedFO; ++i) {
+            if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+           < -100) {
+                this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
+                --this.spawnedFO;
+                this.spawnedFOArray[i] = -1;
+                this.spawner(i);
+            }
+
+        //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
+            //           );
+        }
     }
     // Public methods
 
@@ -221,8 +236,12 @@ class TheScene extends THREE.Scene {
         this.robot.setLegHeight(controls.robotLegScaleFactor);
         this.robot.setHeadTwist(controls.robotHeadTwist);
         this.robot.setBodySwing(controls.robotBodySwing);
+<<<<<<< HEAD
 	this.flyingObjectsAgent();
 	this.checkPosition();
+=======
+        this.flyingObjectsAgent();
+>>>>>>> 896d45ac7f424fb7a13c832f10755903944be774
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
@@ -245,17 +264,17 @@ class TheScene extends THREE.Scene {
      * @return The camera
      */
     getCamera() {
-	if (this.firstPersonCamera) {
-	    return this.robot.getCamera();
-	} else {
+        if (this.firstPersonCamera) {
+            return this.robot.getCamera();
+        } else {
             return this.camera;
-	}
+        }
     }
 
     swapCamera() {
-	this.firstPersonCamera ?
-	    this.firstPersonCamera = false :
-	    this.firstPersonCamera = true;
+        this.firstPersonCamera ?
+            this.firstPersonCamera = false :
+            this.firstPersonCamera = true;
     }
 
     /// It returns the camera controls
@@ -279,21 +298,21 @@ class TheScene extends THREE.Scene {
         var speed = 1;
         var rotationSpeed = 2;
         switch (key) {
-            case String.charCodeAt('W'): // W
-                this.robot.moveRobotForward(speed);
-                break;
-            case String.charCodeAt('A'): // A
-                this.robot.rotateRobot(rotationSpeed);
-                break;
-            case String.charCodeAt('S'): // S
-                this.robot.moveRobotForward(-speed);
-                break;
-            case String.charCodeAt('D'):
-                this.robot.rotateRobot(-rotationSpeed);
-                break;
-	    case String.charCodeAt('V'):
-	        this.swapCamera();
-	        break;
+        case String.charCodeAt('W'): // W
+            this.robot.moveRobotForward(speed);
+            break;
+        case String.charCodeAt('A'): // A
+            this.robot.rotateRobot(rotationSpeed);
+            break;
+        case String.charCodeAt('S'): // S
+            this.robot.moveRobotForward(-speed);
+            break;
+        case String.charCodeAt('D'):
+            this.robot.rotateRobot(-rotationSpeed);
+            break;
+        case String.charCodeAt('V'):
+            this.swapCamera();
+            break;
         }
     }
 }

@@ -5,30 +5,30 @@ var PlayerInfo = function() {
 
     var container = document.createElement('div');
     container.id = 'playerInfo';
-    container.style.cssText = 'height: 130px; font-size: 100%; background-color: #FFE1F0; border-width: 1%; border-style: solid;border-color: #FF96CA; display: inline-block; padding: 10px'
+    container.style.cssText = 'height: 130px; font-size: 100%; background-color: #FFE1F0; border-width: 1%; border-style: solid;border-color: #FF96CA; display: inline-block; padding: 10px';
 
     // Player Score
     var playerScoreDiv = document.createElement('div');
     playerScoreDiv.id = 'playerScoreDiv';
-    playerScoreDiv.style.cssText = 'height: 20%; width: 80px;'
+    playerScoreDiv.style.cssText = 'height: 20%; width: 80px;';
     container.appendChild(playerScoreDiv);
 
     var playerScoreValue = document.createElement('div');
     playerScoreValue.id = 'playerScoreValue';
-    playerScoreValue.style.cssText = 'font-family: Monospace; display: inline-block'
-    playerScoreDiv.appendChild(playerScoreValue)
+    playerScoreValue.style.cssText = 'font-family: Monospace; display: inline-block';
+    playerScoreDiv.appendChild(playerScoreValue);
 
     var playerScoreText = document.createElement('div');
     playerScoreText.id = 'playerScoreText';
-    playerScoreText.style.cssText = 'font-size: 70%; padding-left: 3%; display: inline-block; margin-bottom: 0px; padding-bottom: 0px;'
-    playerScoreText.innerHTML = 'puntos'
+    playerScoreText.style.cssText = 'font-size: 70%; padding-left: 3%; display: inline-block; margin-bottom: 0px; padding-bottom: 0px;';
+    playerScoreText.innerHTML = 'puntos';
     playerScoreDiv.appendChild(playerScoreText);
 
     // Energy bar
     var playerEnergyDiv = document.createElement('div');
     playerEnergyDiv.id = 'playerEnergyDiv';
     playerEnergyDiv.style.cssText ='height: 80%; bottom: 0;';
-    container.appendChild(playerEnergyDiv)
+    container.appendChild(playerEnergyDiv);
 
     // var playerEnergyText = document.createElement('div');
     // playerEnergyText.id = 'playerEnergyText';
@@ -38,13 +38,13 @@ var PlayerInfo = function() {
 
     var playerEnergyBar = document.createElement('div');
     playerEnergyBar.id = 'playerEnergyBar';
-    playerEnergyBar.style.cssText = 'height: 100%; width: 30px; background-color: #ddd; position:relative;'
-    playerEnergyDiv.appendChild(playerEnergyBar)
+    playerEnergyBar.style.cssText = 'height: 100%; width: 30px; background-color: #ddd; position:relative;';
+    playerEnergyDiv.appendChild(playerEnergyBar);
 
     var playerEnergyPercentage = document.createElement('div');
     playerEnergyPercentage.id = 'playerEnergyPercentage';
     playerEnergyPercentage.style.cssText = 'width: 100%; height: 100%;' +
-        'background-color: #4CAF50; display: inline-block; bottom:0; position: absolute; bottom:0;'
+        'background-color: #4CAF50; display: inline-block; bottom:0; position: absolute; bottom:0;';
     playerEnergyBar.appendChild(playerEnergyPercentage);
 
     // var playerEnergyPercentageText = document.createElement('div');
@@ -63,14 +63,13 @@ var PlayerInfo = function() {
             color = '#FF3232'; // Red
         }
         return color;
-    }
+    };
 
     return {
         REVISION: 11,
         domElement: container,
         updateEnergy : function(newPlayerEnergy) {
-            var currentEnergy = parseInt(
-                playerEnergyPercentage.style.height);
+            var currentEnergy = parseInt(playerEnergyPercentage.style.height);
 
             var id = setInterval(frame, 10);
             function frame() {
@@ -95,5 +94,5 @@ var PlayerInfo = function() {
             this.updateEnergy(newPlayerEnergy);
             this.updateScore(newPlayerScore);
         }
-    }
-}
+    };
+};

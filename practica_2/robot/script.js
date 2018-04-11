@@ -1,25 +1,25 @@
 /// Several functions, including the main
 
 /// The scene graph
-scene = null
+scene = null;
 
 /// The GUI information
-GUIcontrols = null
+GUIcontrols = null;
 
 /// The object for the statistics
-stats = null
+stats = null;
 
 /// A boolean to know if the left button of the mouse is down
-mouseDown = false
+mouseDown = false;
 
-pressedKey = null
+pressedKey = null;
 
 /// Player information GUI
-playerInfo = null
+playerInfo = null;
 
-playerHealth = 100
+playerHealth = 100;
 
-playerScore = 0
+playerScore = 0;
 
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
@@ -35,21 +35,27 @@ function createGUI(withStats) {
         this.robotLegScaleFactor = 0;
         this.robotHeadTwist = 0;
         this.robotBodySwing = 0;
-    }
+    };
 
     var gui = new dat.GUI();
     var axisLights = gui.addFolder('Axis and Lights');
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    axisLights.add(GUIcontrols, 'lightIntensity', 0, 1.0).name('Light' +
+    axisLights.add(
+        GUIcontrols, 'lightIntensity', 0, 1.0
+    ).name('Light' +
                                                                'intensity :');
 
     var robotControls = gui.addFolder('Robot Controls');
-    robotControls.add(GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0).name(
-        'Robot leg height :');
-    robotControls.add(GUIcontrols, 'robotHeadTwist', -80.0, 80.0).name(
-        'Robot head twist :');
-    robotControls.add(GUIcontrols, 'robotBodySwing',
-		      -45.0,30.0).name('Robot body swing :');
+    robotControls.add(
+        GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0
+    ).name('Robot leg height :');
+    robotControls.add(
+        GUIcontrols, 'robotHeadTwist', -80.0, 80.0
+    ).name('Robot head twist :');
+    robotControls.add(
+        GUIcontrols, 'robotBodySwing',
+              -45.0,30.0
+    ).name('Robot body swing :');
 
     // The method  listen()  allows the height attribute to be written,
     // not only read
@@ -75,7 +81,7 @@ function initStats() {
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
 
-    $("#Stats-output").append(stats.domElement);
+    $('#Stats-output').append(stats.domElement);
 
     return stats;
 }
@@ -87,7 +93,7 @@ function initPlayerInfo() {
     playerInfo.domElement.style.left = '0px';
     playerInfo.domElement.style.top = '100px';
 
-    $("#Player-info").append(playerInfo.domElement);
+    $('#Player-info').append(playerInfo.domElement);
 
     return playerInfo;
 }
@@ -97,8 +103,8 @@ function initPlayerInfo() {
  * @param str - The message
  */
 function setMessage(str) {
-    document.getElementById("Messages").innerHTML = "<h2>" + str +
-        "</h2>";
+    document.getElementById('Messages').innerHTML = '<h2>' + str +
+        '</h2>';
 }
 
 /// It processes the clic-down of the mouse
@@ -108,11 +114,11 @@ function setMessage(str) {
 function onMouseDown(event) {
     if (event.ctrlKey) {
         // The Trackballcontrol only works if Ctrl key is pressed
-        scene.getCameraControls().enabled = true
+        scene.getCameraControls().enabled = true;
     } else {
-        scene.getCameraControls().enabled = false
+        scene.getCameraControls().enabled = false;
         if (event.button === 0) { // Left button
-            mouseDown = true
+            mouseDown = true;
             switch (applicationMode) {
             case TheScene.ADDING_BOXES:
                 scene.addBox(event, TheScene.NEW_BOX);
@@ -125,7 +131,7 @@ function onMouseDown(event) {
                 break;
             }
         } else {
-            setMessage("");
+            setMessage('');
             applicationMode = TheScene.NO_ACTION;
         }
     }
@@ -229,7 +235,7 @@ function render() {
 function keyListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
     if (key == String.charCodeAt('V'))
-	scene.swapCamera();
+        scene.swapCamera();
 }
 
 /**
@@ -238,15 +244,19 @@ function keyListener(e) {
 function onKeyDown(event){
     var key = event.keyCode ? event.keyCode : event.which;
     switch (key) {
-        case String.charCodeAt('W'):
-        case String.charCodeAt('A'):
-        case String.charCodeAt('S'):
-        case String.charCodeAt('D'):
-            pressedKey = key;
+    case String.charCodeAt('W'):
+    case String.charCodeAt('A'):
+    case String.charCodeAt('S'):
+    case String.charCodeAt('D'):
+    case 37: // Left
+    case 38: // Up
+    case 39: // Right
+    case 40: // Down
+        pressedKey = key;
     }
 }
 
-function onKeyUp(event){
+function onKeyUp(){
     pressedKey = null;
 }
 
@@ -255,17 +265,31 @@ $(function() {
     // create a render and set the size
     renderer = createRenderer();
     // add the output of the renderer to the html element
-    $("#WebGL-output").append(renderer.domElement);
+    $('#WebGL-output').append(renderer.domElement);
     // liseners
-    window.addEventListener("resize", onWindowResize);
-    window.addEventListener("mousemove", onMouseMove, true);
-    window.addEventListener("mousedown", onMouseDown, true);
-    window.addEventListener("mouseup", onMouseUp, true);
-    window.addEventListener("mousewheel", onMouseWheel, true); // For
+    window.addEventListener('resize', onWindowResize);
+    window.addEventListener(
+        'mousemove', onMouseMove, true
+    );
+    window.addEventListener(
+        'mousedown', onMouseDown, true
+    );
+    window.addEventListener(
+        'mouseup', onMouseUp, true
+    );
+    window.addEventListener(
+        'mousewheel', onMouseWheel, true
+    ); // For
     // Chrome an others
-    window.addEventListener("DOMMouseScroll", onMouseWheel, true); // For Firefox
-    window.addEventListener("keydown", onKeyDown, false); // For Firefox
-    window.addEventListener("keyup", onKeyUp, false); // For Firefox
+    window.addEventListener(
+        'DOMMouseScroll', onMouseWheel, true
+    ); // For Firefox
+    window.addEventListener(
+        'keydown', onKeyDown, false
+    ); // For Firefox
+    window.addEventListener(
+        'keyup', onKeyUp, false
+    ); // For Firefox
     window.onkeydown = keyListener;
 
     // create a scene, that will hold all our elements such as objects,

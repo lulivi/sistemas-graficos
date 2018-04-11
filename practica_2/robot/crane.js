@@ -19,12 +19,12 @@ class Crane extends THREE.Object3D {
         // If there are no parameters, the default values are used
         
         this.craneHeight = (parameters.craneHeight === undefined ? 30 :
-                            parameters.craneHeight);
+            parameters.craneHeight);
         this.craneWidth  = (parameters.craneWidth === undefined ? 45 :
-                            parameters.craneWidth);
+            parameters.craneWidth);
         this.material    = (parameters.material === undefined ? new
-                            THREE.MeshPhongMaterial ({color: 0xd4af37, specular: 0xfbf804,
-                                                      shininess: 70}) : parameters.material);
+        THREE.MeshPhongMaterial ({color: 0xd4af37, specular: 0xfbf804,
+                                  shininess: 70}) : parameters.material);
         
         // With these variables, the posititon of the hook is set
         this.angle           = 0;
@@ -75,12 +75,15 @@ class Crane extends THREE.Object3D {
     
     /// It creates the base and adds the mast to the base
     createBase () {
-        var base = new THREE.Mesh (
-            new THREE.CylinderGeometry (this.craneWidth/10,
-                                        this.craneWidth/10, this.baseHookHeight, 16, 1), 
-            this.material);
-        base.geometry.applyMatrix (new THREE.Matrix4().makeTranslation (0,
-                                                                        this.baseHookHeight/2, 0));
+        var base = new THREE.Mesh (new THREE.CylinderGeometry (
+            this.craneWidth/10,
+            this.craneWidth/10, this.baseHookHeight, 16, 1
+        ), 
+                                   this.material);
+        base.geometry.applyMatrix (new THREE.Matrix4().makeTranslation (
+            0,
+            this.baseHookHeight/2, 0
+        ));
         base.castShadow = true;
         base.autoUpdateMatrix = false;
         base.add(this.createMast());
@@ -89,11 +92,14 @@ class Crane extends THREE.Object3D {
     
     /// It creates the mast and adds the jib to the mast
     createMast () {
-        var mast = new THREE.Mesh (
-            new THREE.CylinderGeometry (this.craneWidth/20,
-                                        this.craneWidth/20, this.craneHeight, 16, 8), this.material);
-        mast.geometry.applyMatrix (new THREE.Matrix4().makeTranslation (0,
-                                                                        this.craneHeight/2, 0));
+        var mast = new THREE.Mesh (new THREE.CylinderGeometry (
+            this.craneWidth/20,
+            this.craneWidth/20, this.craneHeight, 16, 8
+        ), this.material);
+        mast.geometry.applyMatrix (new THREE.Matrix4().makeTranslation (
+            0,
+            this.craneHeight/2, 0
+        ));
         mast.castShadow = true;
         mast.position.y = this.baseHookHeight;
         mast.autoUpdateMatrix = false;
@@ -105,13 +111,16 @@ class Crane extends THREE.Object3D {
     /// It creates the jib, and adds the trolley-string-hook group to
     /// the jib
     createJib () {
-        this.jib = new THREE.Mesh (
-            new THREE.BoxGeometry (this.craneWidth, this.craneWidth/10,
-                                   this.craneWidth/10),
-            this.material);
+        this.jib = new THREE.Mesh (new THREE.BoxGeometry (
+            this.craneWidth, this.craneWidth/10,
+            this.craneWidth/10
+        ),
+                                   this.material);
         this.jib.geometry.applyMatrix (new THREE.Matrix4().makeTranslation
-                                       (0.3*this.craneWidth,
-                                        this.craneWidth/20, 0));
+        (
+            0.3*this.craneWidth,
+            this.craneWidth/20, 0
+        ));
         this.jib.castShadow = true;
         this.jib.position.y = this.craneHeight;
         this.jib.rotation.y = this.angle ;
@@ -122,32 +131,41 @@ class Crane extends THREE.Object3D {
 
     /// It creates the trolley, string and hook
     createTrolleyStringHook () {
-        this.trolley = new THREE.Mesh (
-            new THREE.BoxGeometry (this.craneWidth/10, this.trolleyHeight,
-                                   this.craneWidth/10),
-            this.material);
+        this.trolley = new THREE.Mesh (new THREE.BoxGeometry (
+            this.craneWidth/10, this.trolleyHeight,
+            this.craneWidth/10
+        ),
+                                       this.material);
         this.trolley.geometry.applyMatrix (new
-                                           THREE.Matrix4().makeTranslation (0, this.trolleyHeight/2, 0));
+        THREE.Matrix4().makeTranslation (
+            0, this.trolleyHeight/2, 0
+        ));
         this.trolley.castShadow = true;
         this.trolley.position.y = -this.trolleyHeight;
         this.trolley.position.x = this.distanceMin;
         
-        this.string = new THREE.Mesh (
-            new THREE.CylinderGeometry (this.craneWidth/100,
-                                        this.craneWidth/100, 1), this.material);
+        this.string = new THREE.Mesh (new THREE.CylinderGeometry (
+            this.craneWidth/100,
+            this.craneWidth/100, 1
+        ), this.material);
         this.string.geometry.applyMatrix (new
-                                          THREE.Matrix4().makeTranslation (0, -0.5, 0));
+        THREE.Matrix4().makeTranslation (
+            0, -0.5, 0
+        ));
         this.string.castShadow = true;
         this.stringLength = this.computeStringLength();
         this.string.scale.y = this.stringLength;
         this.trolley.add (this.string);
         
-        this.hook = new THREE.Mesh (
-            new THREE.CylinderGeometry (this.craneWidth/40,
-                                        this.craneWidth/40, this.baseHookHeight, 16, 1),
-            this.material);
+        this.hook = new THREE.Mesh (new THREE.CylinderGeometry (
+            this.craneWidth/40,
+            this.craneWidth/40, this.baseHookHeight, 16, 1
+        ),
+                                    this.material);
         this.hook.geometry.applyMatrix (new
-                                        THREE.Matrix4().makeTranslation (0, -this.baseHookHeight/2, 0));
+        THREE.Matrix4().makeTranslation (
+            0, -this.baseHookHeight/2, 0
+        ));
         this.hook.castShadow = true;
         this.hook.position.y = -this.stringLength;
         this.trolley.add (this.hook);
@@ -187,7 +205,7 @@ class Crane extends THREE.Object3D {
     setHook (aHeight) {
         if (this.heightMin <= aHeight && aHeight <= this.heightMax) {
             this.height = aHeight;
-            this.stringLength = this.computeStringLength ()
+            this.stringLength = this.computeStringLength ();
             this.string.scale.y = this.stringLength;
             this.hook.position.y = -this.stringLength;
         }
@@ -208,7 +226,9 @@ class Crane extends THREE.Object3D {
      * @param aHeight - The distance of the hook from the bottom of the
      base
     */
-    setHookPosition (anAngle, aDistance, aHeight) {
+    setHookPosition (
+        anAngle, aDistance, aHeight
+    ) {
         this.setJib (anAngle);
         this.setTrolley (aDistance);
         this.setHook (aHeight);

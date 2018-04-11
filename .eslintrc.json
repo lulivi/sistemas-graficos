@@ -1,0 +1,43 @@
+{
+    "env": {
+        "browser": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "script"
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": ["error", 4, {
+            "CallExpression": {
+                "arguments": "first"
+            },
+            "ObjectExpression": "first",
+            "ArrayExpression": "first",
+            "VariableDeclarator": {
+                "var": 2,
+                "let": 2,
+                "const": 3
+            }
+        }],
+        "array-bracket-newline": ["error", {
+            "multiline": true,
+            "minItems": 2
+        }],
+        "array-element-newline": ["error", {
+            "multiline": true,
+            "minItems": 3
+        }],
+        "function-paren-newline": ["error", {
+            "minItems": 3
+        }],
+        "brace-style": ["error", "1tbs"],
+        "no-undef": 0,
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "max-len": ["error", {
+            "code": 80
+        }]
+    }
+}
