@@ -54,7 +54,7 @@ function createGUI(withStats) {
     ).name('Robot head twist :');
     robotControls.add(
         GUIcontrols, 'robotBodySwing',
-		      -45.0,30.0
+              -45.0,30.0
     ).name('Robot body swing :');
 
     // The method  listen()  allows the height attribute to be written,
@@ -248,11 +248,15 @@ function onKeyDown(event){
     case String.charCodeAt('A'):
     case String.charCodeAt('S'):
     case String.charCodeAt('D'):
+    case 37: // Left
+    case 38: // Up
+    case 39: // Right
+    case 40: // Down
         pressedKey = key;
     }
 }
 
-function onKeyUp(event){
+function onKeyUp(){
     pressedKey = null;
 }
 
