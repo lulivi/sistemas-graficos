@@ -234,8 +234,15 @@ function render() {
 // Attempt to create key listener
 function keyListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
-    if (key == String.charCodeAt('V'))
+
+    switch(key) {
+    case String.charCodeAt('V'):
         scene.swapCamera();
+        break;
+    case String.charCodeAt(' '):
+        scene.pauseGame();
+        break;
+    }
 }
 
 /**

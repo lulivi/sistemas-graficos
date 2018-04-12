@@ -300,6 +300,11 @@ class TheScene extends THREE.Scene {
             this.firstPersonCamera = true;
     }
 
+    pauseGame() {
+        alert('El juego está en pausa, pulse de nuevo la barra' +
+              'espaciadora para continuar');
+    }
+
     /// It returns the camera controls
     /**
      * @return The camera controls
