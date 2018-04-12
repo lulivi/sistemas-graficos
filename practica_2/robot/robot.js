@@ -134,7 +134,7 @@ class Robot extends THREE.Object3D {
 
         this.energy = 100;
         this.score = 0;
-        const MAX_POINTS = 5;
+        this.MAX_POINTS = 5;
     }
 
     // ***************

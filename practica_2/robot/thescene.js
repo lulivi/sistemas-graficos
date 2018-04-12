@@ -91,27 +91,42 @@ class TheScene extends THREE.Scene {
         var loader = new THREE.TextureLoader();
 
         // Robot model
-        var robotTexture = loader.load('imgs/metal.jpg');
+        var robotTexture = loader.load('imgs/body.jpg');
+        robotTexture.offset = new THREE.Vector2(0.265,0);
+        var headTexture = loader.load('imgs/head.jpg');
         var legTexture = loader.load('imgs/leg.jpg');
+        var rustyMetalTex = loader.load('imgs/rustymetal.jpg');
         this.robot = new Robot({
             eyeMaterial: new THREE.MeshPhongMaterial({ color: '#000000',
                                                        shininess: 70 }),
             headMaterial: new THREE.MeshPhongMaterial({ color: '#888888',
-                                                        shininess: 70 }),
+                                                        shininess: 70,
+                                                        map: headTexture}),
             bodyMaterial: new THREE.MeshPhongMaterial({ color: '#e8e8e8',
-                                                        shininess: 70 }),
+                                                        shininess: 70,
+                                                        map: robotTexture}),  
             footMaterial: new THREE.MeshPhongMaterial({ color: '#001284',
-                                                        shininess: 70 }),
+                                                        shininess: 70,
+                                                        map:
+                                                        rustyMetalTex}),
             legMaterial: new THREE.MeshPhongMaterial({ color: '#e8e8e8',
-                                                       shininess: 70 , map: legTexture}),
+                                                       shininess: 70 ,
+                                                       map: legTexture}),
             shoulderMaterial: new THREE.MeshPhongMaterial({ color:
-            '#001284', shininess: 70 })
+                                                            '#001284',
+                                                            shininess:
+                                                            70,
+                                                            map:
+                                                            rustyMetalTex})
         });
         // model.add (this.crane);
         model.add(this.robot);
 
         // Ground model
         var groundTexture = loader.load('imgs/rock.jpg');
+        groundTexture.wrapS = THREE.RepeatWrapping;
+        groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat = new THREE.Vector2(4,4);
         this.ground = new Ground(
             500, 500, new THREE.MeshPhongMaterial({
                 map: groundTexture
@@ -123,11 +138,21 @@ class TheScene extends THREE.Scene {
         var ovoMaTexture = loader.load('imgs/ovoma.jpg');
         this.flyingObjects = new Array(10);
         for (var i = 0; i < 8; i++)
-            this.flyingObjects[i] = new OvoMa({ovoMaMaterial: new THREE.MeshPhongMaterial({color: '#ff0000', shininess: 70, map: ovoMaTexture})});
+            this.flyingObjects[i] = new OvoMa({
+                ovoMaMaterial: new
+                THREE.MeshPhongMaterial({
+                    color: '#ff0000',
+                    shininess: 70,
+                    map: ovoMaTexture})});
+        
 
         var ovoBuTexture = loader.load('imgs/ovobu.jpg');
         for (i = 8; i < 10; i++)
-            this.flyingObjects[i] = new OvoBu({ovoBuMaterial: new THREE.MeshPhongMaterial({color: '#00ff00', shininess: 70, map: ovoBuTexture})});
+            this.flyingObjects[i] = new OvoBu({
+                ovoBuMaterial: new THREE.MeshPhongMaterial({
+                    color: '#00ff00',
+                    shininess: 70,
+                    map: ovoBuTexture})}); 
         return model;
     }
 
@@ -176,8 +201,6 @@ class TheScene extends THREE.Scene {
                 this.spawner(i);
             }
 
-        //console.log('object ' + i + ': ' +this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
-            //           );
         }
     }
     // Public methods
@@ -249,9 +272,12 @@ class TheScene extends THREE.Scene {
             this.robot.body.getWorldPosition(robotPosition);
             var posX = robotPosition.x;
             var posZ = robotPosition.z;
-            if(posX < -this.ground.width / 2 || posX > this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ > this.ground.deep / 2) {
+            if(posX < -this.ground.width / 2 || posX >
+        this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ
+        > this.ground.deep / 2) { 
                 this.endGame = true;
-                alert('Ooopsie wopsieeee you ran away from the fieeeelldd w.w You loosse o.o Im sowy');
+                alert('Ooopsie wopsieeee you ran away from the' +
+        'fieeeelldd w.w You loosse o.o Im sowy'); 
             }
         }
     }
