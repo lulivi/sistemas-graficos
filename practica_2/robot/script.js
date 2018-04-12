@@ -241,7 +241,7 @@ function keyListener(e) {
     }
 }
 
-function keyDownListener(e) {
+function keyUpListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
 
     switch(key) {
@@ -249,6 +249,10 @@ function keyDownListener(e) {
     case String.charCodeAt('A'):
     case String.charCodeAt('S'):
     case String.charCodeAt('D'):
+    case 37: // Left
+    case 38: // Up
+    case 39: // Right
+    case 40: // Down
         scene.robot.movementCost();
     }
 }
@@ -306,7 +310,7 @@ $(function() {
         'keyup', onKeyUp, false
     ); // For Firefox
     window.onkeydown = keyListener;
-    window.onkeyup = keyDownListener;
+    window.onkeyup = keyUpListener;
 
     // create a scene, that will hold all our elements such as objects,
     // cameras and lights.
