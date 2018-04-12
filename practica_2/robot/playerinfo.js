@@ -5,7 +5,10 @@ var PlayerInfo = function() {
 
     var container = document.createElement('div');
     container.id = 'playerInfo';
-    container.style.cssText = 'height: 130px; font-size: 100%; background-color: #FFE1F0; border-width: 1%; border-style: solid;border-color: #FF96CA; display: inline-block; padding: 10px';
+    container.style.cssText = 'height: 130px; font-size: 100%;' +
+        'background-color: #FFE1F0; border-width: 1%; border-style:' +
+        'solid;border-color: #FF96CA; display: inline-block; padding:' +
+        '10px'; 
 
     // Player Score
     var playerScoreDiv = document.createElement('div');
@@ -15,12 +18,14 @@ var PlayerInfo = function() {
 
     var playerScoreValue = document.createElement('div');
     playerScoreValue.id = 'playerScoreValue';
-    playerScoreValue.style.cssText = 'font-family: Monospace; display: inline-block';
+    playerScoreValue.style.cssText = 'font-family: Monospace;' +
+        'display: inline-block'; 
     playerScoreDiv.appendChild(playerScoreValue);
 
     var playerScoreText = document.createElement('div');
     playerScoreText.id = 'playerScoreText';
-    playerScoreText.style.cssText = 'font-size: 70%; padding-left: 3%; display: inline-block; margin-bottom: 0px; padding-bottom: 0px;';
+    playerScoreText.style.cssText = 'font-size: 70%; padding-left:' +
+    '3%; display: inline-block; margin-bottom: 0px; padding-bottom: 0px;'; 
     playerScoreText.innerHTML = 'puntos';
     playerScoreDiv.appendChild(playerScoreText);
 
@@ -32,24 +37,29 @@ var PlayerInfo = function() {
 
     // var playerEnergyText = document.createElement('div');
     // playerEnergyText.id = 'playerEnergyText';
-    // playerEnergyText.style.cssText = 'transform: translateY(+100%) rotate(-90deg); display: inline-block; left:0px; position:relative;';
+    // playerEnergyText.style.cssText = 'transform: translateY(+100%)
+    // rotate(-90deg); display: inline-block; left:0px;
+    // position:relative;'; 
     // playerEnergyText.innerHTML = 'Player Health';
     // playerEnergyDiv.appendChild(playerEnergyText);
 
     var playerEnergyBar = document.createElement('div');
     playerEnergyBar.id = 'playerEnergyBar';
-    playerEnergyBar.style.cssText = 'height: 100%; width: 30px; background-color: #ddd; position:relative;';
+    playerEnergyBar.style.cssText = 'height: 100%; width: 30px;' +
+        'background-color: #ddd; position:relative;';
     playerEnergyDiv.appendChild(playerEnergyBar);
 
     var playerEnergyPercentage = document.createElement('div');
     playerEnergyPercentage.id = 'playerEnergyPercentage';
     playerEnergyPercentage.style.cssText = 'width: 100%; height: 100%;' +
-        'background-color: #4CAF50; display: inline-block; bottom:0; position: absolute; bottom:0;';
+        'background-color: #4CAF50; display: inline-block; bottom:0;' +
+        'position: absolute; bottom:0;'; 
     playerEnergyBar.appendChild(playerEnergyPercentage);
 
     // var playerEnergyPercentageText = document.createElement('div');
     // playerEnergyPercentageText.id = 'playerEnergyPercentageText';
-    // playerEnergyPercentageText.style.cssText = 'top:50%; left:50%; transform: rotate(-90deg);';
+    // playerEnergyPercentageText.style.cssText = 'top:50%; left:50%;
+    // transform: rotate(-90deg);'; 
     // playerEnergyPercentageText.innerHTML = '50%';
     // playerEnergyBar.appendChild(playerEnergyPercentageText);
 
@@ -57,7 +67,7 @@ var PlayerInfo = function() {
         var color = null;
         if (energyPercentage > 66) {
             color = '#4CAF50'; // Green
-        } else if (33 < energyPercentage && energyPercentage < 66) {
+        } else if (33 < energyPercentage && energyPercentage <= 66) {
             color = '#FFFF32'; // Yellow
         } else {
             color = '#FF3232'; // Red
@@ -82,7 +92,8 @@ var PlayerInfo = function() {
                         --currentEnergy;
                     }
                     playerEnergyPercentage.style.height = currentEnergy + '%';
-                    playerEnergyPercentage.style.backgroundColor = energyPercentageColor(currentEnergy);
+                    playerEnergyPercentage.style.backgroundColor =
+                        energyPercentageColor(currentEnergy); 
                 }
             }
 

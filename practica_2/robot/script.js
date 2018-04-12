@@ -17,10 +17,6 @@ pressedKey = null;
 /// Player information GUI
 playerInfo = null;
 
-playerHealth = 100;
-
-playerScore = 0;
-
 /// The current mode of the application
 applicationMode = TheScene.NO_ACTION;
 
@@ -43,7 +39,7 @@ function createGUI(withStats) {
     axisLights.add(
         GUIcontrols, 'lightIntensity', 0, 1.0
     ).name('Light' +
-                                                               'intensity :');
+           'intensity :');
 
     var robotControls = gui.addFolder('Robot Controls');
     robotControls.add(
@@ -219,7 +215,7 @@ function render() {
     requestAnimationFrame(render);
 
     stats.update();
-    playerInfo.update(playerHealth, playerScore);
+    playerInfo.update(scene.robot.energy, scene.robot.score);
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
