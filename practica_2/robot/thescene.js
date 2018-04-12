@@ -261,7 +261,8 @@ class TheScene extends THREE.Scene {
         this.robot.setBodySwing(controls.robotBodySwing);
         this.flyingObjectsAgent();
         this.checkPosition();
-
+        this.checkEnergy();
+        
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
@@ -279,6 +280,12 @@ class TheScene extends THREE.Scene {
                 alert('Ooopsie wopsieeee you ran away from the' +
         'fieeeelldd w.w You loosse o.o Im sowy'); 
             }
+        }
+    }
+
+    checkEnergy() {
+        if(this.robot.energy <= 0) {
+            alert('GAME OVER');
         }
     }
 

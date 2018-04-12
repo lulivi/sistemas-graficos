@@ -241,7 +241,19 @@ function keyListener(e) {
         break;
     case String.charCodeAt(' '):
         scene.pauseGame();
-        break;
+        break;    
+    }
+}
+
+function keyDownListener(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
+
+    switch(key) {
+    case String.charCodeAt('W'):
+    case String.charCodeAt('A'):
+    case String.charCodeAt('S'):
+    case String.charCodeAt('D'):
+        scene.robot.movementCost();
     }
 }
 
@@ -298,6 +310,7 @@ $(function() {
         'keyup', onKeyUp, false
     ); // For Firefox
     window.onkeydown = keyListener;
+    window.onkeyup = keyDownListener;
 
     // create a scene, that will hold all our elements such as objects,
     // cameras and lights.

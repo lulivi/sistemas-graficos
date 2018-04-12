@@ -383,6 +383,12 @@ class Robot extends THREE.Object3D {
             this.energy = 100;
         }
     }
+
+    movementCost() {
+        if(this.energy > 0) {
+            this.energy -= 1;
+        }
+    }
 }
 
 
