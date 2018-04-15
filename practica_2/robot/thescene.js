@@ -25,6 +25,7 @@ class TheScene extends THREE.Scene {
         ];
 
         this.gameReset = false;
+        this.hardMode = false;
         this.createLights();
         this.createCamera(renderer);
         this.firstPersonCamera = false;
@@ -32,7 +33,11 @@ class TheScene extends THREE.Scene {
         this.add(this.axis);
         this.model = this.createModel();
         this.add(this.model);
-        //    this.fog = new THREE.Fog(0xffffff, 70, 200)
+        this.fog = new THREE.Fog(
+            0xffffff,
+            1000,
+            1000
+        );
 
     }
 
@@ -180,14 +185,15 @@ class TheScene extends THREE.Scene {
             this.spawnedFOArray[FOindex] =
                 lastGenerated;
             ++this.spawnedFO;
-            this.flyingObjects[lastGenerated].initialize();
+            this.flyingObjects[lastGenerated].initialize(this.hardMode);
             this.model.add(this.flyingObjects[lastGenerated]);
         }
     }
 
     mover() {
         for(var i = 0; i < this.spawnedFO; ++i) {
-            this.flyingObjects[this.spawnedFOArray[i]].moveTowardsNegativeX();
+            this.flyingObjects[
+                this.spawnedFOArray[i]].moveTowardsNegativeX(this.hardMode);
         }
 
     }
@@ -256,6 +262,7 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.axis.visible = controls.axis;
         this.spotLight.intensity = controls.lightIntensity;
+        this.hardMode = controls.hardMode;
         this.robot.setLegHeight(controls.robotLegScaleFactor);
         this.robot.setHeadTwist(controls.robotHeadTwist);
         this.robot.setBodySwing(controls.robotBodySwing);
@@ -264,6 +271,7 @@ class TheScene extends THREE.Scene {
         this.checkPosition();
         this.checkEnergy();
         this.collisionDetector();
+        this.fogAgent();
         
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
@@ -277,18 +285,28 @@ class TheScene extends THREE.Scene {
         if(posX < -this.ground.width / 2 || posX >
            this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ
            > this.ground.deep / 2) {
-            this.reset();
             alert('Ooopsie wopsieeee you ran away from the' +
                   'fieeeelldd w.w You loosse o.o I\'m sowy\nScore: '+
                   this.robot.score);
+            this.reset();
         }
         
     }
 
     checkEnergy() {
         if(this.robot.energy <= 0) {
-            this.reset();
             alert('GAME OVER\nPuntuación: ' + this.robot.score);
+            this.reset();
+        }
+    }
+
+    fogAgent() {
+        if(this.hardMode) {
+            this.fog.near = 100;
+            this.fog.far = 300;
+        } else {
+            this.fog.near = 1000;
+            this.fog.far = 1000;
         }
     }
 
@@ -375,7 +393,10 @@ class TheScene extends THREE.Scene {
     }
 
     moveRobot(key) {
-        var speed = 1;
+        var speed = null;
+        this.hardMode ?
+            speed = 3 :
+            speed = 1;
         var rotationSpeed = 2;
         switch (key) {
         case String.charCodeAt('W'): // Up
