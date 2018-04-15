@@ -1,6 +1,7 @@
 class OvoBu extends ObjetoVolador {
     constructor(parameters) {
         super();
+        this.isBad = false;
         this.material = new THREE.MeshPhongMaterial({
             color: 0x00ff00,
             specular: 0xff00ff,
