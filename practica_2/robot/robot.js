@@ -375,10 +375,10 @@ class Robot extends THREE.Object3D {
     }
 
     increaseEnergy() {
-        var points = Math.floor(Math.random() * Math.floor(MAX_POINTS));
+        var points = Math.floor(Math.random() * Math.floor(this.MAX_POINTS));
         this.score += points;
-        if(this.energy + MAX_POINTS - points <= 100){
-            this.energy += MAX_POINTS - points;
+        if(this.energy + this.MAX_POINTS - points <= 100){
+            this.energy += this.MAX_POINTS - points;
         } else {
             this.energy = 100;
         }
@@ -388,6 +388,17 @@ class Robot extends THREE.Object3D {
         if(this.energy > 0) {
             this.energy -= 1;
         }
+    }
+
+    reset() {
+        this.energy = 100;
+        this.movementNode.position.set(
+            0,
+            0,
+            0
+        );
+        this.movementNode.rotation.y = 0;
+        this.score = 0;
     }
 }
 

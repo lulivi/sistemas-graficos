@@ -2,6 +2,7 @@ class ObjetoVolador extends THREE.Object3D {
     constructor(parameters) {
         super();
         this.sphere = null;
+        this.hasCollided = false;
 	
         // Quantitative attributes
         this.radius = 5;
@@ -25,10 +26,15 @@ class ObjetoVolador extends THREE.Object3D {
 
     initialize() {
         if (this.sphere.position.x < -100){
-	    // Select number between -100,100
+            // Select number between -100,100
             var newZ = Math.floor(randNum(200)) - 100;
             this.sphere.position.z = newZ;
             this.sphere.position.x = 100 + randNum(75);
+            this.hasCollided = false;
         }
+    }
+
+    collision() {
+        this.hasCollided = true;
     }
 }

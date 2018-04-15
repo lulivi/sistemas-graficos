@@ -262,6 +262,7 @@ class TheScene extends THREE.Scene {
         this.flyingObjectsAgent();
         this.checkPosition();
         this.checkEnergy();
+        this.collisionDetector();
         
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
@@ -285,7 +286,8 @@ class TheScene extends THREE.Scene {
 
     checkEnergy() {
         if(this.robot.energy <= 0) {
-            alert('GAME OVER');
+            alert('GAME OVER\nPuntuación: ' + this.robot.score);
+            this.robot.reset();
         }
     }
 
@@ -312,6 +314,31 @@ class TheScene extends THREE.Scene {
               'espaciadora para continuar');
     }
 
+    collisionDetector() {
+        var headPosition = new THREE.Vector3();
+        this.robot.head.getWorldPosition(headPosition);
+        var FOPosition = new THREE.Vector3();
+        var distance = null;
+        var FORadius = this.flyingObjects[0].radius;
+        var headRadius = this.robot.headRadius;
+        for(var i = 0; i < this.spawnedFO; ++i) {
+            this.flyingObjects[
+                this.spawnedFOArray[i]].sphere.getWorldPosition(FOPosition); 
+            distance = headPosition.distanceTo(FOPosition);
+            if(distance < ( headRadius + FORadius)) {
+                if(!this.flyingObjects[
+                    this.spawnedFOArray[i]].hasCollided) {
+                    this.flyingObjects[this.spawnedFOArray[i]].collision();
+                    if(this.spawnedFOArray[i] <= 7)
+                        this.robot.reduceEnergy();
+                    else {
+                        this.robot.increaseEnergy();
+                    }
+                }
+                
+            }
+        }
+    }
     /// It returns the camera controls
     /**
      * @return The camera controls
