@@ -231,11 +231,7 @@ class Robot extends THREE.Object3D {
         foot.castShadow = true;
         foot.add(this.createLeg(legPosition));
         foot.add(this.createShoulder(legPosition));
-        if (legPosition > 0) {
-            this.footRight = foot;
-        } else {
-            this.footLeft = foot;
-        }
+        (legPosition > 0) ? this.footRight = foot : this.footLeft = foot;
         return foot;
     }
 
@@ -251,11 +247,7 @@ class Robot extends THREE.Object3D {
             0, this.legHeight / 2 , 0
         ));
         leg.castShadow = true;
-        if (legPosition > 0) {
-            this.legRight = leg;
-        } else {
-            this.legLeft = leg;
-        }
+        (legPosition > 0) ? this.legRight = leg : this.legLeft = leg;
         return leg;
     }
 
@@ -271,11 +263,9 @@ class Robot extends THREE.Object3D {
         this.legHeight + this.footHeight, 0
         ));
         shoulder.castShadow = true;
-        if (legPosition > 0) {
-            this.shoulderRight = shoulder;
-        } else {
+        (legPosition > 0) ?
+            this.shoulderRight = shoulder :
             this.shoulderLeft = shoulder;
-        }
         return shoulder;
     }
 
@@ -291,16 +281,15 @@ class Robot extends THREE.Object3D {
     }
 
     setLegHeight(newLegHeight) {
-        var requestedLegHeight = (1 + (newLegHeight / 100));
+        var scaleFactor = (newLegHeight / 100);
+        var legScaleFactor = (1 + scaleFactor);
 
-        if (requestedLegHeight >= 1 && requestedLegHeight <= 1.20) {
-            this.legScaleFactor = requestedLegHeight;
-            this.legLeft.scale.y = this.legScaleFactor;
-            this.legRight.scale.y = this.legScaleFactor;
-            this.shoulderRight.position.y = this.legScaleFactor;
-            this.shoulderLeft.position.y = this.legScaleFactor;
-            this.setBodyHeight(this.legMinHeight * this.legScaleFactor -
-                               this.legMinHeight);
+        if (legScaleFactor >= 1 && legScaleFactor <= 1.20) {
+            this.legLeft.scale.y = legScaleFactor;
+            this.legRight.scale.y = legScaleFactor;
+            this.shoulderRight.position.y = legScaleFactor;
+            this.shoulderLeft.position.y = legScaleFactor;
+            this.setBodyHeight(this.legMinHeight * scaleFactor);
         }
     }
 
