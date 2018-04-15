@@ -7,8 +7,8 @@ class ObjetoVolador extends THREE.Object3D {
 
         // Quantitative attributes
         this.radius = 5;
-        this.spawnXPos = 200 + randNum(75);
         this.spawnYPos = 40;
+        this.spawnXPos = 200 + randNum(100);
         // Select number between -100,100
         this.spawnZPos = randNum(200) - 100;
 
@@ -21,9 +21,7 @@ class ObjetoVolador extends THREE.Object3D {
     }
 
     moveTowardsNegativeX(hardMode) {
-        hardMode ?
-            this.sphere.position.x -= 3 :
-            this.sphere.position.x -= 1;
+        this.sphere.position.x -= (hardMode) ? 3 : 1;
         this.sphere.rotation.y += 0.1;
     }
 
@@ -34,10 +32,9 @@ class ObjetoVolador extends THREE.Object3D {
             this.sphere.position.z = newZ;
             this.sphere.position.x = 100 + randNum(75);
             this.hasCollided = false;
-            hardMode ?
-                this.sphere.position.y = 20 + randNum(40) :
-                this.sphere.position.y = this.spawnYPos;
-            
+            this.sphere.position.y = (hardMode) ?
+                5 + randNum(50) :
+                this.spawnYPos;
         }
     }
 
