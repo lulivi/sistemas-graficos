@@ -222,9 +222,8 @@ function render() {
     renderer.render(scene, scene.getCamera());
 
     if (pressedKey){
-        scene.moveRobot(pressedKey);
+        (!scene.gameReset) ? scene.moveRobot(pressedKey) : scene.toggleReset();
     }
-
 }
 
 // Attempt to create key listener
@@ -237,7 +236,7 @@ function keyListener(e) {
         break;
     case String.charCodeAt(' '):
         scene.pauseGame();
-        break;    
+        break;
     }
 }
 
@@ -262,6 +261,7 @@ function keyUpListener(e) {
  */
 function onKeyDown(event){
     var key = event.keyCode ? event.keyCode : event.which;
+
     switch (key) {
     case String.charCodeAt('W'):
     case String.charCodeAt('A'):
