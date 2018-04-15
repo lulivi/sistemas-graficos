@@ -223,13 +223,18 @@ function render() {
 
     renderer.render(scene, scene.getCamera());
 
+    if (scene.gameReset){
+        scene.toggleReset();
+        pressedKey = null;
+    }
+
     if (pressedKey){
-        (!scene.gameReset) ? scene.moveRobot(pressedKey) : scene.toggleReset();
+        scene.moveRobot(pressedKey);
     }
 }
 
 // Attempt to create key listener
-function keyListener(e) {
+function keyDownListener(e) {
     var key = e.keyCode ? e.keyCode : e.which;
 
     switch(key) {
@@ -311,7 +316,7 @@ $(function() {
     window.addEventListener(
         'keyup', onKeyUp, false
     ); // For Firefox
-    window.onkeydown = keyListener;
+    window.onkeydown = keyDownListener;
     window.onkeyup = keyUpListener;
 
     // create a scene, that will hold all our elements such as objects,
