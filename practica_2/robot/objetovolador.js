@@ -3,7 +3,8 @@ class ObjetoVolador extends THREE.Object3D {
         super();
         this.sphere = null;
         this.hasCollided = false;
-	
+        this.isBad = null;
+
         // Quantitative attributes
         this.radius = 5;
         this.spawnXPos = 100 + randNum(75);
@@ -34,7 +35,7 @@ class ObjetoVolador extends THREE.Object3D {
         }
     }
 
-    collision() {
-        this.hasCollided = true;
+    changeCollision() {
+        this.hasCollided = !this.hasCollided;
     }
 }
