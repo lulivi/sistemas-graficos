@@ -23,7 +23,8 @@ class TheScene extends THREE.Scene {
             -1,
             -1
         ];
-        
+
+        this.gameReset = false;
         this.createLights();
         this.createCamera(renderer);
         this.firstPersonCamera = false;
@@ -274,19 +275,19 @@ class TheScene extends THREE.Scene {
         var posZ = robotPosition.z;
         if(posX < -this.ground.width / 2 || posX >
            this.ground.width / 2 || posZ < -this.ground.deep / 2 || posZ
-           > this.ground.deep / 2) { 
+           > this.ground.deep / 2) {
+            this.reset();
             alert('Ooopsie wopsieeee you ran away from the' +
                   'fieeeelldd w.w You loosse o.o I\'m sowy\nScore: '+
                   this.robot.score);
-            this.robot.reset();
         }
         
     }
 
     checkEnergy() {
         if(this.robot.energy <= 0) {
+            this.reset();
             alert('GAME OVER\nPuntuación: ' + this.robot.score);
-            this.robot.reset();
         }
     }
 
@@ -311,6 +312,17 @@ class TheScene extends THREE.Scene {
     pauseGame() {
         alert('El juego está en pausa, pulse de nuevo la barra' +
               'espaciadora para continuar');
+    }
+
+    toggleReset() {
+        this.gameReset ?
+            this.gameReset = false :
+            this.gameReset = true;
+    }
+
+    reset() {
+        this.toggleReset();
+        this.robot.reset();
     }
 
     collisionDetector() {
