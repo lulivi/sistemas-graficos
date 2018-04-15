@@ -327,23 +327,6 @@ class Robot extends THREE.Object3D {
         this.frontalLight.castShadow = true;
         this.frontalLight.shadow.mapSize.width = 2048;
         this.frontalLight.shadow.mapSize.height = 2048;
-        /*        var worldLightPosition = new THREE.Vector3();
-        this.head.getWorldPosition(worldLightPosition);
-        worldLightPosition.x += this.lookAt[0] * (this.headRadius + 20);
-        worldLightPosition.z += this.lookAt[2] * (this.headRadius + 20);
-        this.frontalLight.position.set(
-            worldLightPosition.x,
-            worldLightPosition.y, worldLightPosition.z
-        );
-        var target = new THREE.Object3D();
-        target.position.x = this.frontalLight.position.x +
-            40 * this.lookAt[0];
-        target.position.y = this.frontalLight.position.y + this.lookAt[1] -
-            18;
-        target.position.z = this.frontalLight.position.z + 40 *
-        this.lookAt[2];
-        this.frontalLight.target = target;*/
-        //this.add(this.frontalLight.target);
     }
 
     getCamera() {
@@ -388,6 +371,11 @@ class Robot extends THREE.Object3D {
         );
         this.movementNode.rotation.y = 0;
         this.score = 0;
+        this.lookAt = [
+            1,
+            0,
+            0
+        ];
     }
 }
 
