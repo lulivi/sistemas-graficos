@@ -328,14 +328,20 @@ class TheScene extends THREE.Scene {
             if(distance < ( headRadius + FORadius)) {
                 if(!this.flyingObjects[
                     this.spawnedFOArray[i]].hasCollided) {
-                    this.flyingObjects[this.spawnedFOArray[i]].collision();
+                    this.flyingObjects[
+                        this.spawnedFOArray[i]].changeCollision();
                     if(this.spawnedFOArray[i] <= 7)
                         this.robot.reduceEnergy();
                     else {
                         this.robot.increaseEnergy();
                     }
                 }
-                
+            } else {
+                if(this.flyingObjects[
+                    this.spawnedFOArray[i]].hasCollided) {
+                    this.flyingObjects[
+                        this.spawnedFOArray[i]].changeCollision();
+                }
             }
         }
     }
