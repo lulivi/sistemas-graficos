@@ -329,6 +329,10 @@ class Robot extends THREE.Object3D {
         this.frontalLight.shadow.mapSize.height = 2048;
     }
 
+    turnFrontalLight(lightState){
+        this.frontalLight.intensity = (lightState) ? 1 : 0;
+    }
+
     getCamera() {
         return this.subjectiveCamera;
     }

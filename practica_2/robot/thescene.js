@@ -259,6 +259,7 @@ class TheScene extends THREE.Scene {
         this.robot.setLegHeight(controls.robotLegScaleFactor);
         this.robot.setHeadTwist(controls.robotHeadTwist);
         this.robot.setBodySwing(controls.robotBodySwing);
+        this.robot.turnFrontalLight(controls.robotFlashlightOn);
         this.flyingObjectsAgent();
         this.checkPosition();
         this.checkEnergy();

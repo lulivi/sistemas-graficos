@@ -31,6 +31,7 @@ function createGUI(withStats) {
         this.robotLegScaleFactor = 0;
         this.robotHeadTwist = 0;
         this.robotBodySwing = 0;
+        this.robotFlashlightOn = true;
     };
 
     var gui = new dat.GUI();
@@ -52,6 +53,7 @@ function createGUI(withStats) {
         GUIcontrols, 'robotBodySwing',
         -45.0,30.0
     ).name('Robot body swing :');
+    robotControls.add(GUIcontrols, 'robotFlashlightOn').name('Light on/off :');
 
     // The method  listen()  allows the height attribute to be written,
     // not only read
