@@ -360,7 +360,7 @@ class TheScene extends THREE.Scene {
                 if(!this.flyingObjects[this.spawnedFOArray[i]].hasCollided) {
                     this.flyingObjects[this.spawnedFOArray[i]].
                         changeCollision();
-                    if(this.spawnedFOArray[i].isBad()){
+                    if(this.flyingObjects[this.spawnedFOArray[i]].bad()){
                         this.robot.reduceEnergy();
                     } else {
                         this.robot.increaseEnergy();

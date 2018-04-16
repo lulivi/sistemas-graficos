@@ -42,7 +42,7 @@ class ObjetoVolador extends THREE.Object3D {
         this.hasCollided = !this.hasCollided;
     }
 
-    isBad() {
+    bad() {
         return this.isBad;
     }
 }
