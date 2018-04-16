@@ -109,7 +109,7 @@ class TheScene extends THREE.Scene {
                                                         map: headTexture}),
             bodyMaterial: new THREE.MeshPhongMaterial({ color: '#e8e8e8',
                                                         shininess: 70,
-                                                        map: robotTexture}),  
+                                                        map: robotTexture}),
             footMaterial: new THREE.MeshPhongMaterial({ color: '#001284',
                                                         shininess: 70,
                                                         map:
@@ -149,7 +149,7 @@ class TheScene extends THREE.Scene {
                     color: '#ff0000',
                     shininess: 70,
                     map: ovoMaTexture})});
-        
+
 
         var ovoBuTexture = loader.load('imgs/ovobu.jpg');
         for (i = 8; i < 10; i++)
@@ -157,7 +157,7 @@ class TheScene extends THREE.Scene {
                 ovoBuMaterial: new THREE.MeshPhongMaterial({
                     color: '#00ff00',
                     shininess: 70,
-                    map: ovoBuTexture})}); 
+                    map: ovoBuTexture})});
         return model;
     }
 
@@ -166,12 +166,12 @@ class TheScene extends THREE.Scene {
         // modelo (this.model) y luego estos hay que moverlos y cuando
         // lleguen a una posición determinada, borrarlos e instanciar
         // unos nuevos
-        this.spawner(this.spawnedFO);
-        this.mover();
-        this.remover();
+        this.flyingObjectSpawner(this.spawnedFO);
+        this.flyingObjectMover();
+        this.flyingObjectRemover();
     }
 
-    spawner(FOindex) {
+    flyingObjectSpawner(FOindex) {
         if(FOindex < 3) {
         // Nos aseguramos de que el objeto que se genere no esté
         // ya en el juego
@@ -190,21 +190,21 @@ class TheScene extends THREE.Scene {
         }
     }
 
-    mover() {
+    flyingObjectMover() {
         for(var i = 0; i < this.spawnedFO; ++i) {
             this.flyingObjects[
                 this.spawnedFOArray[i]].moveTowardsNegativeX(this.hardMode);
         }
 
     }
-    remover() {
+    flyingObjectRemover() {
         for(var i = 0; i < this.spawnedFO; ++i) {
             if(this.flyingObjects[this.spawnedFOArray[i]].sphere.position.x
            < -100) {
                 this.model.remove(this.flyingObjects[this.spawnedFOArray[i]]);
                 --this.spawnedFO;
                 this.spawnedFOArray[i] = -1;
-                this.spawner(i);
+                this.flyingObjectSpawner(i);
             }
 
         }
@@ -272,7 +272,7 @@ class TheScene extends THREE.Scene {
         this.checkEnergy();
         this.collisionDetector();
         this.fogAgent();
-        
+
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
@@ -290,7 +290,7 @@ class TheScene extends THREE.Scene {
                   this.robot.score);
             this.reset();
         }
-        
+
     }
 
     checkEnergy() {
@@ -351,18 +351,18 @@ class TheScene extends THREE.Scene {
         var distance = null;
         var FORadius = this.flyingObjects[0].radius;
         var headRadius = this.robot.headRadius;
+
         for(var i = 0; i < this.spawnedFO; ++i) {
             this.flyingObjects[
-                this.spawnedFOArray[i]].sphere.getWorldPosition(FOPosition); 
+                this.spawnedFOArray[i]].sphere.getWorldPosition(FOPosition);
             distance = headPosition.distanceTo(FOPosition);
             if(distance < ( headRadius + FORadius)) {
-                if(!this.flyingObjects[
-                    this.spawnedFOArray[i]].hasCollided) {
-                    this.flyingObjects[
-                        this.spawnedFOArray[i]].changeCollision();
-                    if(this.spawnedFOArray[i] <= 7)
+                if(!this.flyingObjects[this.spawnedFOArray[i]].hasCollided) {
+                    this.flyingObjects[this.spawnedFOArray[i]].
+                        changeCollision();
+                    if(this.spawnedFOArray[i].isBad()){
                         this.robot.reduceEnergy();
-                    else {
+                    } else {
                         this.robot.increaseEnergy();
                     }
                 }
@@ -394,10 +394,9 @@ class TheScene extends THREE.Scene {
 
     moveRobot(key) {
         var speed = null;
-        this.hardMode ?
-            speed = 3 :
-            speed = 1;
+        speed = (this.hardMode) ? 3 : 1;
         var rotationSpeed = 2;
+
         switch (key) {
         case String.charCodeAt('W'): // Up
         case 38: // Up
