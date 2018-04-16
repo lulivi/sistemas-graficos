@@ -36,6 +36,10 @@ function createGUI(withStats) {
     };
 
     var gui = new dat.GUI();
+
+    var gameControls = gui.addFolder('Game Controls');
+    gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
+
     var axisLights = gui.addFolder('Axis and Lights');
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
     axisLights.add(
@@ -55,7 +59,7 @@ function createGUI(withStats) {
         -45.0,30.0
     ).name('Robot body swing :');
     robotControls.add(GUIcontrols, 'robotFlashlightOn').name('Light on/off :');
-    robotControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
+
 
     // The method  listen()  allows the height attribute to be written,
     // not only read
@@ -63,7 +67,7 @@ function createGUI(withStats) {
     if(withStats) {
         stats = initStats();
     }
-        
+
     playerInfo = initPlayerInfo();
 }
 
