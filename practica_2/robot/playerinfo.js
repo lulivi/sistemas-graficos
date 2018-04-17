@@ -91,6 +91,8 @@ var PlayerInfo = function() {
                     '#FF0000';
             } else if (currentEnergy < newPlayerEnergy) {
                 playerEnergyValue.style.color = '#00FF00';
+                playerEnergyPercentage.style.backgroundColor =
+                    '#00FF00';
             }
 
             var id = setInterval(frame, 10);
