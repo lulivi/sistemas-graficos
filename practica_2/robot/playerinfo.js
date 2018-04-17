@@ -54,14 +54,6 @@ var PlayerInfo = function() {
     playerEnergyDiv.style.cssText ='height: 60%; bottom: 0;';
     container.appendChild(playerEnergyDiv);
 
-    // var playerEnergyText = document.createElement('div');
-    // playerEnergyText.id = 'playerEnergyText';
-    // playerEnergyText.style.cssText = 'transform: translateY(+100%)
-    // rotate(-90deg); display: inline-block; left:0px;
-    // position:relative;';
-    // playerEnergyText.innerHTML = 'Player Health';
-    // playerEnergyDiv.appendChild(playerEnergyText);
-
     var playerEnergyBar = document.createElement('div');
     playerEnergyBar.id = 'playerEnergyBar';
     playerEnergyBar.style.cssText = 'height: 100%; width: 30px;' +
@@ -74,13 +66,6 @@ var PlayerInfo = function() {
         'background-color: #4CAF50; display: inline-block; bottom:0;' +
         'position: absolute; bottom:0;';
     playerEnergyBar.appendChild(playerEnergyPercentage);
-
-    // var playerEnergyPercentageText = document.createElement('div');
-    // playerEnergyPercentageText.id = 'playerEnergyPercentageText';
-    // playerEnergyPercentageText.style.cssText = 'top:50%; left:50%;
-    // transform: rotate(-90deg);';
-    // playerEnergyPercentageText.innerHTML = '50%';
-    // playerEnergyBar.appendChild(playerEnergyPercentageText);
 
     var energyPercentageColor = function (energyPercentage) {
         var color = null;
