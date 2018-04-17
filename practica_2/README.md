@@ -1,1 +1,1 @@
-# Práctica 2: Robot
+# Practica 2
