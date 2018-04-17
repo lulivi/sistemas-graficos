@@ -1,8 +1,6 @@
 
 var PlayerInfo = function() {
 
-    var playerScore = 0;
-
     var container = document.createElement('div');
     container.id = 'playerInfo';
     container.style.cssText = 'height: 130px; font-size: 100%;' +
@@ -13,7 +11,7 @@ var PlayerInfo = function() {
     // Player Score
     var playerScoreDiv = document.createElement('div');
     playerScoreDiv.id = 'playerScoreDiv';
-    playerScoreDiv.style.cssText = 'height: 20%; width: 50px;';
+    playerScoreDiv.style.cssText = 'height: 20%; width: 80px;';
     container.appendChild(playerScoreDiv);
 
     var playerScoreValue = document.createElement('div');
@@ -94,6 +92,8 @@ var PlayerInfo = function() {
                     '#FF0000';
             } else if (currentEnergy < newPlayerEnergy) {
                 playerEnergyValue.style.color = '#00FF00';
+                playerEnergyPercentage.style.backgroundColor =
+                    '#00FF00';
             }
 
             var id = setInterval(frame, 10);
