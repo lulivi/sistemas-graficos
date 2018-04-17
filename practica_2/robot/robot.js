@@ -294,10 +294,8 @@ class Robot extends THREE.Object3D {
     }
 
     setBodySwing(bodySwingAngle) {
-        var oldY = this.swingNode.position.y;
         this.body.position.y = -this.bodyHeight + this.shoulderHeight;
         this.swingNode.rotation.z = bodySwingAngle * Math.PI / 180;
-        this.swingNode.position.y = oldY;
     }
 
     rotateRobot(value){
