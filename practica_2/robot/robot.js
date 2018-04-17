@@ -123,10 +123,6 @@ class Robot extends THREE.Object3D {
         // **************
 
         this.add(this.createMovementNode());
-        // this.add(this.createSwingNode())
-        // this.add(this.createFoot(this.legLeftPosition))
-        // this.add(this.createFoot(this.legRightPosition))
-
 
         // ****************
         // ROBOT ATTRIBUTES
@@ -199,7 +195,6 @@ class Robot extends THREE.Object3D {
         this.eye.castShadow = true;
         // "Miner" Light
         this.createLight();
-        this.eye.add(this.frontalLight);
         // Subjective Camera
         this.createCamera();
         return this.eye;
@@ -316,6 +311,10 @@ class Robot extends THREE.Object3D {
         // X component of lookAt vector
         this.movementNode.position.z += value * this.lookAt[2];
         // Z component of lookAt vector
+        this.updateBoundingBox();
+    }
+
+    updateBoundingBox() {
         var min = this.body.getWorldPosition();
         var max = min;
         min.x -= this.bodyRadius;
@@ -325,7 +324,6 @@ class Robot extends THREE.Object3D {
         max.y += this.bodyHeight / 2;
         max.z += this.bodyRadius;
         this.body.geometry.boundingBox.set(min,max);
-            
     }
 
     createLight() {
@@ -338,6 +336,7 @@ class Robot extends THREE.Object3D {
         this.frontalLight.castShadow = true;
         this.frontalLight.shadow.mapSize.width = 2048;
         this.frontalLight.shadow.mapSize.height = 2048;
+        this.eye.add(this.frontalLight);
     }
 
     turnFrontalLight(lightState){
