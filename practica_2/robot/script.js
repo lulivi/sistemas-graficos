@@ -122,82 +122,16 @@ function onMouseDown(event) {
         scene.getCameraControls().enabled = true;
     } else {
         scene.getCameraControls().enabled = false;
-        if (event.button === 0) { // Left button
-            mouseDown = true;
-            switch (applicationMode) {
-            case TheScene.ADDING_BOXES:
-                scene.addBox(event, TheScene.NEW_BOX);
-                break;
-            case TheScene.MOVING_BOXES:
-                scene.moveBox(event, TheScene.SELECT_BOX);
-                break;
-            default:
-                applicationMode = TheScene.NO_ACTION;
-                break;
-            }
-        } else {
-            setMessage('');
-            applicationMode = TheScene.NO_ACTION;
-        }
     }
 }
 
-/// It processes the drag of the mouse
-/**
- * @param event - Mouse information
- */
-function onMouseMove(event) {
-    if (mouseDown) {
-        switch (applicationMode) {
-        case TheScene.ADDING_BOXES:
-        case TheScene.MOVING_BOXES:
-            scene.moveBox(event, TheScene.MOVE_BOX);
-            break;
-        default:
-            applicationMode = TheScene.NO_ACTION;
-            break;
-        }
-    }
-}
 
-/// It processes the clic-up of the mouse
-/**
- * @param event - Mouse information
- */
-function onMouseUp(event) {
-    if (mouseDown) {
-        switch (applicationMode) {
-        case TheScene.ADDING_BOXES:
-            scene.addBox(event, TheScene.END_ACTION);
-            break;
-        case TheScene.MOVING_BOXES:
-            scene.moveBox(event, TheScene.END_ACTION);
-            break;
-        default:
-            applicationMode = TheScene.NO_ACTION;
-            break;
-        }
-        mouseDown = false;
-    }
-}
-
-/// It processes the wheel rolling of the mouse
-/**
- * @param event - Mouse information
- */
 function onMouseWheel(event) {
     if (event.ctrlKey) {
         // The Trackballcontrol only works if Ctrl key is pressed
         scene.getCameraControls().enabled = true;
     } else {
         scene.getCameraControls().enabled = false;
-        if (mouseDown) {
-            switch (applicationMode) {
-            case TheScene.MOVING_BOXES:
-                scene.moveBox(event, TheScene.ROTATE_BOX);
-                break;
-            }
-        }
     }
 }
 
@@ -302,13 +236,7 @@ $(function() {
     // liseners
     window.addEventListener('resize', onWindowResize);
     window.addEventListener(
-        'mousemove', onMouseMove, true
-    );
-    window.addEventListener(
         'mousedown', onMouseDown, true
-    );
-    window.addEventListener(
-        'mouseup', onMouseUp, true
     );
     window.addEventListener(
         'mousewheel', onMouseWheel, true

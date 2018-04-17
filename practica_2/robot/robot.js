@@ -326,7 +326,7 @@ class Robot extends THREE.Object3D {
 
     createLight() {
         var target = new THREE.Object3D();
-        target.position.x = 100;
+        target.position.x = 115;
         target.position.y = -30;
         this.frontalLight.position.x += 15;
         this.frontalLight.target = target;
