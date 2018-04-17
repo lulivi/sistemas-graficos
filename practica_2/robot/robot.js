@@ -165,6 +165,7 @@ class Robot extends THREE.Object3D {
             0, this.bodyHeight / 2, 0
         ));
         this.body.castShadow = true;
+        this.body.geometry.computeBoundingBox();
         this.body.add(this.createHead());
         return this.body;
     }
@@ -315,6 +316,16 @@ class Robot extends THREE.Object3D {
         // X component of lookAt vector
         this.movementNode.position.z += value * this.lookAt[2];
         // Z component of lookAt vector
+        var min = this.body.getWorldPosition();
+        var max = min;
+        min.x -= this.bodyRadius;
+        min.y -= this.bodyHeight / 2;
+        min.z -= this.bodyRadius;
+        max.x += this.bodyRadius;
+        max.y += this.bodyHeight / 2;
+        max.z += this.bodyRadius;
+        this.body.geometry.boundingBox.set(min,max);
+            
     }
 
     createLight() {

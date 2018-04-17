@@ -272,7 +272,7 @@ class TheScene extends THREE.Scene {
         this.checkEnergy();
         this.collisionDetector();
         this.fogAgent();
-
+        
         // this.crane.setHookPosition (controls.rotation,
         // controls.distance, controls.height);
     }
@@ -351,12 +351,14 @@ class TheScene extends THREE.Scene {
         var distance = null;
         var FORadius = this.flyingObjects[0].radius;
         var headRadius = this.robot.headRadius;
-
         for(var i = 0; i < this.spawnedFO; ++i) {
             this.flyingObjects[
                 this.spawnedFOArray[i]].sphere.getWorldPosition(FOPosition);
             distance = headPosition.distanceTo(FOPosition);
-            if(distance < ( headRadius + FORadius)) {
+            if(distance < ( headRadius + FORadius) || 
+               this.robot.body.geometry.boundingBox.
+                   distanceToPoint(FOPosition)
+            < FORadius)  {
                 if(!this.flyingObjects[this.spawnedFOArray[i]].hasCollided) {
                     this.flyingObjects[this.spawnedFOArray[i]].
                         changeCollision();
