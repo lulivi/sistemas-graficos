@@ -68,9 +68,10 @@ class Tank extends THREE.Object3D{
         this.turretHeight = 7;
 
         // Track ni idea de como cojones hacerla, quizás un cilindro estirado y
-        // a tomar porculo y pasamos de ruedas
-        // TODO: https://threejs.org/docs/index.html#api/geometries/RingGeometry
         this.track = null;
+        this.trackRadius = 1;
+        this.trackHeight = 2;
+        this.trackScaleX = 25;
 
         // Body
         this.body = null;
@@ -148,13 +149,20 @@ class Tank extends THREE.Object3D{
         return this.hatch;
     }
 
-    /// It sets the track
     // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /// It sets the track
     /**
      * @param trackPosition - Position (left/right) of the track
      */
     createTrack(trackPosition){
-        // TODO: rellenar el metodo
+        var trackGeometry = new THREE.CylinderGeometry(
+            this.trackRadius,
+            this.trackRadius,
+            this.hatchHeight,
+            50
+        );
+        this.track = new THREE.Mesh(trackGeometry, this.trackMaterial);
+        return this.track;
     }
 
     // TODO: createWheel() ?????
