@@ -47,6 +47,17 @@ class Tank extends THREE.Object3D{
         // PARTS
         // *********
 
+        // Body
+        this.body = null;
+        this.bodySide = 25;
+        this.bodyHeight = 10;
+        this.bodyFront = 15;
+
+        // Turret
+        this.turret = null;
+        this.turretRadius = 15;
+        this.turretHeight = 7;
+
         // Barrel
         this.barrel = null;
         this.barrelHeight = 30;
@@ -57,27 +68,19 @@ class Tank extends THREE.Object3D{
         this.hatchRadius = 2;
         this.hatchHeight = 1;
 
+        // Track ni idea de como cojones hacerla, quizás un cilindro estirado y
+        this.trackLeft = null;
+        this.trackRight = null;
+        this.trackRadius = 1;
+        this.trackHeight = 2;
+        this.trackScaleX = 25;
+        this.rightTrackPosition = this.bodyFront / 2;
+        this.leftTrackPosition = - this.rightTrackPosition;
+
         // Wheel
         this.wheel = null;
         this.wheelRadius = 1;
         this.wheelHeight = 2;
-
-        // Turret
-        this.turret = null;
-        this.turretRadius = 15;
-        this.turretHeight = 7;
-
-        // Track ni idea de como cojones hacerla, quizás un cilindro estirado y
-        this.track = null;
-        this.trackRadius = 1;
-        this.trackHeight = 2;
-        this.trackScaleX = 25;
-
-        // Body
-        this.body = null;
-        this.bodyWidth = 25;
-        this.bodyHeight = 10;
-        this.bodyDepth = 15;
 
         // Extra nodes
         this.movementNode = null;
@@ -97,9 +100,9 @@ class Tank extends THREE.Object3D{
     // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
     createBody(){
         var bodyGeometry = new THREE.BoxGeometry(
-            this.bodyWidth,
+            this.bodySide,
             this.bodyHeight,
-            this.bodyDepth
+            this.bodyFront
         );
         this.body = new THREE.Mesh(bodyGeometry, this.bodyMaterial);
         this.body.add(createTurret());
@@ -107,6 +110,27 @@ class Tank extends THREE.Object3D{
         this.body.add(createTrack(this.rightTrackPosition));
         return this.body;
     }
+
+    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /// It sets the track
+    /**
+     * @param trackPosition - Position (left/right) of the track
+     */
+    createTrack(trackPosition){
+        var trackGeometry = new THREE.CylinderGeometry(
+            this.trackRadius,
+            this.trackRadius,
+            this.hatchHeight,
+            50
+        );
+        var track = new THREE.Mesh(trackGeometry, this.trackMaterial);
+        track.position.y += this.trackRadius / 2;
+        track.position.z += trackPosition;
+        (trackPosition > 0) ? this.trackRight = track : this.trackLeft = track;
+        return track;
+    }
+
+    // TODO: createWheel() ?????
 
     /// It creates the turret
     // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
@@ -149,21 +173,4 @@ class Tank extends THREE.Object3D{
         return this.hatch;
     }
 
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
-    /// It sets the track
-    /**
-     * @param trackPosition - Position (left/right) of the track
-     */
-    createTrack(trackPosition){
-        var trackGeometry = new THREE.CylinderGeometry(
-            this.trackRadius,
-            this.trackRadius,
-            this.hatchHeight,
-            50
-        );
-        this.track = new THREE.Mesh(trackGeometry, this.trackMaterial);
-        return this.track;
-    }
-
-    // TODO: createWheel() ?????
 }
