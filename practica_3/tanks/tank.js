@@ -1,7 +1,8 @@
+'use strict';
 
 class Tank extends THREE.Object3D{
 
-    constructor(){
+    constructor(parameters){
         super();
 
         // *********
@@ -50,13 +51,13 @@ class Tank extends THREE.Object3D{
         // Body
         this.body = null;
         this.bodySide = 25;
-        this.bodyHeight = 10;
-        this.bodyFront = 15;
+        this.bodyHeight = 7;
+        this.bodyFront = 17;
 
         // Turret
         this.turret = null;
-        this.turretRadius = 15;
-        this.turretHeight = 7;
+        this.turretRadius = 7;
+        this.turretHeight = 4;
 
         // Barrel
         this.barrel = null;
@@ -65,7 +66,7 @@ class Tank extends THREE.Object3D{
 
         // Hatch
         this.hatch = null;
-        this.hatchRadius = 2;
+        this.hatchRadius = 4;
         this.hatchHeight = 1;
 
         // Track ni idea de como cojones hacerla, quizás un cilindro estirado y
@@ -73,7 +74,7 @@ class Tank extends THREE.Object3D{
         this.trackRight = null;
         this.trackRadius = 1;
         this.trackHeight = 2;
-        this.trackScaleX = 25;
+        this.trackScaleX = 10;
         this.rightTrackPosition = this.bodyFront / 2;
         this.leftTrackPosition = - this.rightTrackPosition;
 
@@ -85,14 +86,18 @@ class Tank extends THREE.Object3D{
         // Extra nodes
         this.movementNode = null;
 
-        this.add(createMovementNode());
+        this.add(this.createMovementNode());
     }
+
+    //*\/*\/*\/*\/*\/*
+    // MODEL CREATION
+    //*\/*\/*\/*\/*\/*
 
     /// It creates the movement node
     // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
     createMovementNode(){
         this.movementNode = new THREE.Object3D();
-        this.movementNode.add(createBody());
+        this.movementNode.add(this.createBody());
         return this.movementNode;
     }
 
@@ -105,9 +110,10 @@ class Tank extends THREE.Object3D{
             this.bodyFront
         );
         this.body = new THREE.Mesh(bodyGeometry, this.bodyMaterial);
-        this.body.add(createTurret());
-        this.body.add(createTrack(this.leftTrackPosition));
-        this.body.add(createTrack(this.rightTrackPosition));
+        this.body.add(this.createTurret());
+        this.body.add(this.createTrack(this.leftTrackPosition));
+        this.body.add(this.createTrack(this.rightTrackPosition));
+        this.body.position.y = this.bodyHeight / 2 + this.trackRadius;
         return this.body;
     }
 
@@ -124,8 +130,10 @@ class Tank extends THREE.Object3D{
             50
         );
         var track = new THREE.Mesh(trackGeometry, this.trackMaterial);
-        track.position.y += this.trackRadius / 2;
-        track.position.z += trackPosition;
+        track.position.z = trackPosition;
+        track.position.y = -this.bodyHeight / 2;
+        track.rotation.x = 90 * Math.PI / 180;
+        track.scale.x = this.trackScaleX;
         (trackPosition > 0) ? this.trackRight = track : this.trackLeft = track;
         return track;
     }
@@ -142,8 +150,10 @@ class Tank extends THREE.Object3D{
             50
         );
         this.turret = new THREE.Mesh(turretGeometry, this.turretMaterial);
-        this.turret.add(createBarrel());
-        this.turret.add(createHatch());
+        this.turret.add(this.createBarrel());
+        this.turret.add(this.createHatch());
+        this.turret.position.y = this.turretHeight / 2 + this.bodyHeight / 2;
+        this.turret.position.x = -this.bodySide / 5;
         return this.turret;
     }
 
@@ -157,6 +167,9 @@ class Tank extends THREE.Object3D{
             50
         );
         this.barrel = new THREE.Mesh(barrelGeometry, this.barrelMaterial);
+        this.barrel.rotation.z = 90 * Math.PI / 180;
+        // Move barrel to z-y plane + turretRadius
+        this.barrel.position.x = this.barrelHeight / 2 + this.turretRadius;
         return this.barrel;
     }
 
@@ -170,7 +183,28 @@ class Tank extends THREE.Object3D{
             50
         );
         this.hatch = new THREE.Mesh(hatchGeometry, this.hatchMaterial);
+        // right on the turret
+        this.hatch.position.y += this.hatchHeight / 2 + this.turretHeight / 2;
         return this.hatch;
     }
 
+    //*\/*\/*\/*\/*\/*\/*
+    // MOVEMENT FUNCTIONS
+    //*\/*\/*\/*\/*\/*\/*
+
+    // TODO: todo
+    /// Move tank forward (+/-)
+    moveForward(){
+    }
+
+    // TODO: todo
+    /// Rotate tank (left/right)
+    rotate(){
+    }
+
+    // TODO: todo
+    /// Return tank camera
+    getCamera(){
+
+    }
 }
