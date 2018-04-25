@@ -1,24 +1,26 @@
+'use strict';
+
 /// Several functions, including the main
 
 /// The scene graph
-scene = null;
+var scene = null;
 
 /// The GUI information
-GUIcontrols = null;
+var GUIcontrols = null;
 
 /// The object for the statistics
-stats = null;
+var stats = null;
 
-/// A boolean to know if the left button of the mouse is down
-mouseDown = false;
-
-pressedKey = null;
+/// The pressed key
+var pressedKey = null;
 
 /// Player information GUI
-playerInfo = null;
+var playerInfo = null;
 
 /// The current mode of the application
-applicationMode = TheScene.NO_ACTION;
+var applicationMode = TheScene.NO_ACTION;
+
+var renderer = null;
 
 /// It creates the GUI and, optionally, adds statistic information
 /**
@@ -68,7 +70,7 @@ function createGUI(withStats) {
         stats = initStats();
     }
 
-    playerInfo = initPlayerInfo();
+    // playerInfo = initPlayerInfo();
 }
 
 /// It adds statistics information to a previously created Div
@@ -146,7 +148,7 @@ function onWindowResize() {
  * @return The renderer
  */
 function createRenderer() {
-    var renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
@@ -158,7 +160,7 @@ function render() {
     requestAnimationFrame(render);
 
     stats.update();
-    playerInfo.update(scene.robot.energy, scene.robot.score);
+    // playerInfo.update(scene.robot.energy, scene.robot.score);
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
@@ -170,7 +172,7 @@ function render() {
     }
 
     if (pressedKey){
-        scene.moveRobot(pressedKey);
+        scene.moveTank(pressedKey);
     }
 }
 
@@ -200,7 +202,7 @@ function keyUpListener(e) {
     case 38: // Up
     case 39: // Right
     case 40: // Down
-        scene.robot.movementCost();
+        // scene.robot.movementCost();
     }
 }
 
