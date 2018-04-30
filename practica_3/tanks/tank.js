@@ -1,5 +1,6 @@
 'use strict';
 
+
 class Tank extends THREE.Object3D{
 
     constructor(parameters){
@@ -36,9 +37,9 @@ class Tank extends THREE.Object3D{
         this.turretMaterial = (parameters.turretMaterial === undefined ?
             this.material : parameters.turretMaterial);
 
-        // track material
-        this.trackMaterial = (parameters.trackMaterial === undefined ?
-            this.material : parameters.trackMaterial);
+        // wheel material
+        this.wheelMaterial = (parameters.wheelMaterial === undefined ?
+            this.material : parameters.wheelMaterial);
 
         // body material
         this.bodyMaterial = (parameters.bodyMaterial === undefined ?
@@ -61,7 +62,7 @@ class Tank extends THREE.Object3D{
 
         // Barrel
         this.barrel = null;
-        this.barrelHeight = 30;
+        this.barrelHeight = 15;
         this.barrelRadius = 1;
 
         // Hatch
@@ -69,19 +70,13 @@ class Tank extends THREE.Object3D{
         this.hatchRadius = 4;
         this.hatchHeight = 1;
 
-        // Track ni idea de como cojones hacerla, quizás un cilindro estirado y
-        this.trackLeft = null;
-        this.trackRight = null;
-        this.trackRadius = 1;
-        this.trackHeight = 2;
-        this.trackScaleX = 10;
-        this.rightTrackPosition = this.bodyFront / 2;
-        this.leftTrackPosition = - this.rightTrackPosition;
-
-        // Wheel
-        this.wheel = null;
-        this.wheelRadius = 1;
+        // Wheels
+        this.wheelsArrayLeft = null;
+        this.wheelsArrayRight = null;
+        this.wheelRadius = this.hatchRadius / 1.5;
         this.wheelHeight = 2;
+        this.rightWheelsPosition = this.bodyFront / 2;
+        this.leftWheelsPosition = - this.rightWheelsPosition;
 
         // Extra nodes
         this.movementNode = null;
@@ -93,16 +88,20 @@ class Tank extends THREE.Object3D{
     // MODEL CREATION
     //*\/*\/*\/*\/*\/*
 
-    /// It creates the movement node
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /**
+     * It creates the movement node
+     * @return {THREE.Object3D} Movement node
+     */
     createMovementNode(){
         this.movementNode = new THREE.Object3D();
         this.movementNode.add(this.createBody());
         return this.movementNode;
     }
 
-    /// It creates the body
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /**
+     * It creates the body
+     * @return {THREE.Mesh} Body mesh
+     */
     createBody(){
         var bodyGeometry = new THREE.BoxGeometry(
             this.bodySide,
@@ -111,37 +110,67 @@ class Tank extends THREE.Object3D{
         );
         this.body = new THREE.Mesh(bodyGeometry, this.bodyMaterial);
         this.body.add(this.createTurret());
-        this.body.add(this.createTrack(this.leftTrackPosition));
-        this.body.add(this.createTrack(this.rightTrackPosition));
-        this.body.position.y = this.bodyHeight / 2 + this.trackRadius;
+        this.body.add(this.createWheelArray(this.leftWheelsPosition));
+        this.body.add(this.createWheelArray(this.rightWheelsPosition));
+        this.body.position.y = this.bodyHeight / 2 + this.wheelRadius;
         return this.body;
     }
 
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
-    /// It sets the track
     /**
-     * @param trackPosition - Position (left/right) of the track
+     * Create one side wheels
+     * @param wheelZPosition {Number} Z axis offset
+     * @return {THREE.Object3D} Wheel array node
      */
-    createTrack(trackPosition){
-        var trackGeometry = new THREE.CylinderGeometry(
-            this.trackRadius,
-            this.trackRadius,
-            this.hatchHeight,
-            50
-        );
-        var track = new THREE.Mesh(trackGeometry, this.trackMaterial);
-        track.position.z = trackPosition;
-        track.position.y = -this.bodyHeight / 2;
-        track.rotation.x = 90 * Math.PI / 180;
-        track.scale.x = this.trackScaleX;
-        (trackPosition > 0) ? this.trackRight = track : this.trackLeft = track;
-        return track;
+    createWheelArray(wheelZPosition){
+        var wheelsArray = new Array();
+        var wheelsArrayNode = new THREE.Object3D();
+
+        var frontWheel = this.createWheel(9, wheelZPosition);
+        wheelsArray.push(frontWheel);
+        wheelsArrayNode.add(frontWheel);
+
+        var middleWheel = this.createWheel(-3.5, wheelZPosition);
+        wheelsArray.push(middleWheel);
+        wheelsArrayNode.add(middleWheel);
+
+        var backWheel = this.createWheel(-9, wheelZPosition);
+        wheelsArray.push(backWheel);
+        wheelsArrayNode.add(backWheel);
+
+        (wheelZPosition > 0) ?
+            this.wheelsArrayRight = wheelsArray :
+            this.wheelsArrayLeft = wheelsArray;
+
+        return wheelsArrayNode;
     }
 
-    // TODO: createWheel() ?????
+    /**
+     * Create a wheel and return it
+     * @param wheelXPosition {Number} X axis offset
+     * @param wheelZPosition {Number} Z axis offset
+     * @return {THREE.Mesh} Wheel mesh
+     */
+    createWheel(wheelXPosition, wheelZPosition){
+        var wheelGeometry = new THREE.CylinderGeometry(
+            this.wheelRadius,
+            this.wheelRadius,
+            this.wheelHeight,
+            50
+        );
+        wheelGeometry.
+            applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI / 2));
+        var wheel = new THREE.Mesh(wheelGeometry, this.wheelMaterial);
+        wheel.position.z = wheelZPosition;
+        wheel.position.x = wheelXPosition;
+        wheel.position.y = -this.bodyHeight / 2;
+        // wheel.rotation.x = 90 * Math.PI / 180;
+        return wheel;
+    }
 
-    /// It creates the turret
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /**
+     * It creates the turret
+     * @return {THREE.Mesh} Turret mesh
+     */
     createTurret(){
         var turretGeometry = new THREE.CylinderGeometry(
             this.turretRadius,
@@ -157,8 +186,10 @@ class Tank extends THREE.Object3D{
         return this.turret;
     }
 
-    /// It creates the barrel
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /**
+     * It creates the barrel
+     * @return {THREE.Mesh} Barrel mesh
+     */
     createBarrel(){
         var barrelGeometry = new THREE.CylinderGeometry(
             this.barrelRadius,
@@ -173,8 +204,10 @@ class Tank extends THREE.Object3D{
         return this.barrel;
     }
 
-    /// It creates the hatch
-    // TODO: añadir transformaciones, escalados y rotaciones si fuera necesario
+    /**
+     * Create the hatch
+     * @return {THREE.Mesh} Hatch mesh
+     */
     createHatch(){
         var hatchGeometry = new THREE.CylinderGeometry(
             this.hatchRadius,
@@ -189,6 +222,61 @@ class Tank extends THREE.Object3D{
     }
 
     //*\/*\/*\/*\/*\/*\/*
+    // ATTRIBUTES FUNCTIONS
+    //*\/*\/*\/*\/*\/*\/*
+
+    /**
+     * Rotate the turret to its default position
+     */
+    setTurretDefaultRotation(){
+        this.turret.rotation.y = 0;
+    }
+
+    /**
+     * Rotate the turret <degrees> degrees
+     * @param degrees {Number} Degrees of the rotation
+     */
+    setTurretRotation(degrees){
+        this.turret.rotation.y = degrees * Math.PI / 180;
+    }
+
+    /**
+     * Increment the turret rotation in <degrees> degrees
+     * @param degrees {Number} Degrees of the rotation
+     */
+    rotateTurret(degrees){
+        this.turret.rotation.y += degrees * Math.PI / 180;
+    }
+
+    /**
+     * Rotate one side wheels array <degrees> degrees
+     * @param rightWheels {Boolean} Right array of wheels
+     * @param degrees {Number} Degrees of the rotation
+     */
+    setWheelsRotation(rightWheels, degrees){
+        var wheelsArray = (rightWheels) ?
+            this.wheelsArrayRight :
+            this.wheelsArrayLeft;
+        wheelsArray.forEach(function(item){
+            item.rotation.z = degrees * Math.PI / 180;
+        });
+    }
+
+    /**
+     * Increment rotation angle of one side wheels array <degrees> degrees
+     * @param rightWheels {Boolean} Right array of wheels
+     * @param degrees {Number} Degrees of the rotation
+     */
+    rotateWheels(rightWheels, degrees){
+        var wheelsArray = (rightWheels) ?
+            this.wheelsArrayRight :
+            this.wheelsArrayLeft;
+        wheelsArray.forEach(function(item){
+            item.rotation.z += degrees * Math.PI / 180;
+        });
+    }
+
+    //*\/*\/*\/*\/*\/*\/*
     // MOVEMENT FUNCTIONS
     //*\/*\/*\/*\/*\/*\/*
 
@@ -197,7 +285,8 @@ class Tank extends THREE.Object3D{
     moveForward(){
     }
 
-    // TODO: todo
+    // TODO: coordinar avance con giro de ruedas utilizando
+    // this.wheelsArray[Left/Right]
     /// Rotate tank (left/right)
     rotate(){
     }
@@ -205,6 +294,5 @@ class Tank extends THREE.Object3D{
     // TODO: todo
     /// Return tank camera
     getCamera(){
-
     }
 }
