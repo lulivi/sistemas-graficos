@@ -114,6 +114,8 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.axis.visible = controls.axis;
         this.spotLight.intensity = controls.lightIntensity;
+        this.tank.setTurretRotation(controls.tankTurretRotation);
+        this.tank.setBarrelSwingPointRotation(controls.tankBarrelRotation);
     }
 
     /// It returns the camera
