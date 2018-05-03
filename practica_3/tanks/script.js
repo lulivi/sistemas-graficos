@@ -22,18 +22,16 @@ var applicationMode = TheScene.NO_ACTION;
 
 var renderer = null;
 
-/// It creates the GUI and, optionally, adds statistic information
 /**
+ * It creates the GUI and, optionally, adds statistic information
  * @param withStats - A boolean to show the statictics or not
  */
 function createGUI(withStats) {
     GUIcontrols = new function() {
         this.axis = false;
         this.lightIntensity = 0.3;
-        this.robotLegScaleFactor = 0;
-        this.robotHeadTwist = 0;
-        this.robotBodySwing = 0;
-        this.robotFlashlightOn = true;
+        this.tankTurretRotation = 0;
+        this.tankBarrelRotation = 0;
         this.hardMode = false;
     };
 
@@ -42,25 +40,19 @@ function createGUI(withStats) {
     var gameControls = gui.addFolder('Game Controls');
     gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
 
+    var tankControls = gui.addFolder('Tank Controls');
+    tankControls.add(
+        GUIcontrols, 'tankTurretRotation', -180.0, 180.0
+    ).name('Turret Rotation :');
+    tankControls.add(
+        GUIcontrols, 'tankBarrelRotation', 0.0, 30.0
+    ).name('Barrel Rotation :');
+
     var axisLights = gui.addFolder('Axis and Lights');
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
     axisLights.add(
         GUIcontrols, 'lightIntensity', 0, 1.0
-    ).name('Light' +
-           'intensity :');
-
-    var robotControls = gui.addFolder('Robot Controls');
-    robotControls.add(
-        GUIcontrols, 'robotLegScaleFactor', 0.0, 20.0
-    ).name('Robot leg height :');
-    robotControls.add(
-        GUIcontrols, 'robotHeadTwist', -80.0, 80.0
-    ).name('Robot head twist :');
-    robotControls.add(
-        GUIcontrols, 'robotBodySwing',
-        -45.0,30.0
-    ).name('Robot body swing :');
-    robotControls.add(GUIcontrols, 'robotFlashlightOn').name('Light on/off :');
+    ).name('Light intensity :');
 
 
     // The method  listen()  allows the height attribute to be written,
@@ -73,8 +65,8 @@ function createGUI(withStats) {
     // playerInfo = initPlayerInfo();
 }
 
-/// It adds statistics information to a previously created Div
 /**
+ * It adds statistics information to a previously created Div
  * @return The statistics object
  */
 function initStats() {
@@ -105,8 +97,8 @@ function initPlayerInfo() {
     return playerInfo;
 }
 
-/// It shows a feed-back message for the user
 /**
+ * It shows a feed-back message for the user
  * @param str - The message
  */
 function setMessage(str) {
@@ -114,8 +106,8 @@ function setMessage(str) {
         '</h2>';
 }
 
-/// It processes the clic-down of the mouse
 /**
+ * It processes the clic-down of the mouse
  * @param event - Mouse information
  */
 function onMouseDown(event) {
@@ -127,7 +119,10 @@ function onMouseDown(event) {
     }
 }
 
-
+/**
+ * It processes the mouse wheel rotation
+ * @param event - Mouse information
+ */
 function onMouseWheel(event) {
     if (event.ctrlKey) {
         // The Trackballcontrol only works if Ctrl key is pressed
@@ -137,14 +132,16 @@ function onMouseWheel(event) {
     }
 }
 
-/// It processes the window size changes
+/**
+ * It processes the window size changes
+ */
 function onWindowResize() {
     scene.setCameraAspect(window.innerWidth / window.innerHeight);
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-/// It creates and configures the WebGL renderer
 /**
+ * It creates and configures the WebGL renderer
  * @return The renderer
  */
 function createRenderer() {
@@ -155,7 +152,9 @@ function createRenderer() {
     return renderer;
 }
 
-/// It renders every frame
+/**
+ * It renders every frame
+ */
 function render() {
     requestAnimationFrame(render);
 
@@ -176,60 +175,73 @@ function render() {
     }
 }
 
-// Attempt to create key listener
-function keyDownListener(e) {
-    var key = e.keyCode ? e.keyCode : e.which;
+/**
+ * Key down listener
+ * @param event - The key event
+ */
+function keyDownListener(event) {
+    var key = (event.keyCode) ? event.keyCode : event.which;
 
     switch(key) {
-    case String.charCodeAt('V'):
+    case String('V').charCodeAt():
         scene.swapCamera();
         break;
-    case String.charCodeAt(' '):
+    case String(' ').charCodeAt():
         scene.pauseGame();
         break;
     }
 }
 
-function keyUpListener(e) {
-    var key = e.keyCode ? e.keyCode : e.which;
+/**
+ * Key up listener
+ * @param event - The key event
+ */
+function keyUpListener(event) {
+    var key = (event.keyCode) ? event.keyCode : event.which;
 
     switch(key) {
-    case String.charCodeAt('W'):
-    case String.charCodeAt('A'):
-    case String.charCodeAt('S'):
-    case String.charCodeAt('D'):
-    case 37: // Left
-    case 38: // Up
-    case 39: // Right
-    case 40: // Down
+    case String('W').charCodeAt():
+    case String('A').charCodeAt():
+    case String('S').charCodeAt():
+    case String('D').charCodeAt():
+    case 37: // Left arrow
+    case 38: // Up arrow
+    case 39: // Right arrow
+    case 40: // Down arrow
         // scene.robot.movementCost();
     }
 }
 
 /**
- * @param event - mouse/keyboard event
+ * Runs code while a key is pressed
+ * @param event - keyboard event
  */
 function onKeyDown(event){
-    var key = event.keyCode ? event.keyCode : event.which;
+    var key = (event.keyCode) ? event.keyCode : event.which;
 
     switch (key) {
-    case String.charCodeAt('W'):
-    case String.charCodeAt('A'):
-    case String.charCodeAt('S'):
-    case String.charCodeAt('D'):
-    case 37: // Left
-    case 38: // Up
-    case 39: // Right
-    case 40: // Down
+    case String('W').charCodeAt():
+    case String('A').charCodeAt():
+    case String('S').charCodeAt():
+    case String('D').charCodeAt():
+    case 37: // Left arrow
+    case 38: // Up arrow
+    case 39: // Right arrow
+    case 40: // Down arrow
         pressedKey = key;
     }
 }
 
+/**
+ * Runs code while a key is released
+ */
 function onKeyUp(){
     pressedKey = null;
 }
 
-/// The main function
+/**
+ * The main function
+ */
 $(function() {
     // create a render and set the size
     renderer = createRenderer();
