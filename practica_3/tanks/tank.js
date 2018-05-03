@@ -21,6 +21,11 @@ class Tank extends THREE.Object3D{
         this.barrelMaterial = (parameters.barrelMaterial === undefined ?
             this.material : parameters.barrelMaterial);
 
+        // barrel swing point material
+        this.barrelSwingPointMaterial =
+            (parameters.barrelSwingPointMaterial === undefined ?
+                this.material : parameters.barrelSwingPointMaterial);
+
         // hatch material
         this.hatchMaterial = (parameters.hatchMaterial === undefined ?
             this.material : parameters.hatchMaterial);
@@ -60,6 +65,10 @@ class Tank extends THREE.Object3D{
         this.turretRadius = 7;
         this.turretHeight = 4;
 
+        // Barrel swing point
+        this.barrelSwingPoint = null;
+        this.barrelSwingPointRadius = 1;
+
         // Barrel
         this.barrel = null;
         this.barrelHeight = 15;
@@ -68,7 +77,7 @@ class Tank extends THREE.Object3D{
         // Hatch
         this.hatch = null;
         this.hatchRadius = 4;
-        this.hatchHeight = 1;
+        this.hatchHeight = this.barrelRadius;
 
         // Wheels
         this.wheelsArrayLeft = null;
@@ -117,7 +126,8 @@ class Tank extends THREE.Object3D{
     }
 
     /**
-     * Create one side wheels
+     * Create one side wheels. Wheels array will help when rotating all side
+     * wheels at once (simulating movement).
      * @param wheelZPosition {Number} Z axis offset
      * @return {THREE.Object3D} Wheel array node
      */
@@ -179,11 +189,25 @@ class Tank extends THREE.Object3D{
             50
         );
         this.turret = new THREE.Mesh(turretGeometry, this.turretMaterial);
-        this.turret.add(this.createBarrel());
+        this.turret.add(this.createBarrelSwingPoint());
         this.turret.add(this.createHatch());
         this.turret.position.y = this.turretHeight / 2 + this.bodyHeight / 2;
         this.turret.position.x = -this.bodySide / 5;
         return this.turret;
+    }
+
+    createBarrelSwingPoint(){
+        var barrelSwingPoint = new THREE.SphereGeometry(
+            this.barrelSwingPointRadius,
+            32,
+            32
+        );
+        this.barrelSwingPoint = new THREE.Mesh(barrelSwingPoint,
+                                               this.barrelSwingPointMaterial);
+        this.barrelSwingPoint.position.x = this.barrelSwingPointRadius / 2 +
+                                           this.turretRadius;
+        this.barrelSwingPoint.add(this.createBarrel());
+        return this.barrelSwingPoint;
     }
 
     /**
@@ -199,8 +223,8 @@ class Tank extends THREE.Object3D{
         );
         this.barrel = new THREE.Mesh(barrelGeometry, this.barrelMaterial);
         this.barrel.rotation.z = 90 * Math.PI / 180;
-        // Move barrel to z-y plane + turretRadius
-        this.barrel.position.x = this.barrelHeight / 2 + this.turretRadius;
+        // Move barrel to z-y plane
+        this.barrel.position.x = this.barrelHeight / 2;
         return this.barrel;
     }
 
@@ -224,6 +248,40 @@ class Tank extends THREE.Object3D{
     //*\/*\/*\/*\/*\/*\/*
     // ATTRIBUTES FUNCTIONS
     //*\/*\/*\/*\/*\/*\/*
+
+    /**
+     * Rotate the barrel to its default position
+     */
+    setBarrelSwingPointDefaultRotation(){
+        this.barrelSwingPoint.rotation.z = 0;
+    }
+
+    /**
+     * Rotate the barrel <degrees> degrees
+     * @param degrees {Number} Degrees of the rotation
+     */
+    setBarrelSwingPointRotation(degrees){
+        if(30 >= degrees && degrees >= 0){
+            this.barrelSwingPoint.rotation.z = degrees * Math.PI / 180;
+        }
+    }
+
+    /**
+     * Increment the barrel rotation in <degrees> degrees
+     * @param degrees {Number} Degrees of the rotation
+     */
+    rotateBarrelSwingPoint(degrees){
+        var requestedDegrees = degrees + (this.barrelSwingPoint.rotation.z *
+                                          180 / Math.PI);
+        if(30 >= requestedDegrees && requestedDegrees >= 0){
+            this.barrelSwingPoint.rotation.z = requestedDegrees * Math.PI / 180;
+        } else if(requestedDegrees > 30){
+            this.barrelSwingPoint.rotation.z = 30 * Math.PI / 180;
+        } else {
+            this.barrelSwingPoint.rotation.z = 0;
+        }
+    }
+
 
     /**
      * Rotate the turret to its default position
