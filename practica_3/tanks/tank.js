@@ -196,6 +196,10 @@ class Tank extends THREE.Object3D{
         return this.turret;
     }
 
+    /**
+     * It creates the barrel swing node
+     * @return {THREE.Mesh} Barrel swing node mesh
+     */
     createBarrelSwingPoint(){
         var barrelSwingPoint = new THREE.SphereGeometry(
             this.barrelSwingPointRadius,
