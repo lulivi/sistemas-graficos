@@ -115,7 +115,6 @@ class TheScene extends THREE.Scene {
         this.axis.visible = controls.axis;
         this.spotLight.intensity = controls.lightIntensity;
         this.tank.setTurretRotation(controls.tankTurretRotation);
-        this.tank.setBarrelSwingPointRotation(controls.tankBarrelRotation);
     }
 
     /// It returns the camera
@@ -169,23 +168,23 @@ class TheScene extends THREE.Scene {
         var rotationSpeed = 2;
 
         switch (key) {
-        case String.charCodeAt('W'): // Up
+        case String('W').charCodeAt(): // Up
         case 38: // Up
             this.tank.moveForward(speed);
             break;
-        case String.charCodeAt('A'): // Left
+        case String('A').charCodeAt(): // Left
         case 37: // Left
             this.tank.rotate(rotationSpeed);
             break;
-        case String.charCodeAt('S'): // Down
+        case String('S').charCodeAt(): // Down
         case 40: // Down
             this.tank.moveForward(-speed);
             break;
-        case String.charCodeAt('D'): // Right
+        case String('D').charCodeAt(): // Right
         case 39: // Right
             this.tank.rotate(-rotationSpeed);
             break;
-        case String.charCodeAt('V'):
+        case String('V').charCodeAt():
             this.swapCamera();
             break;
         }
