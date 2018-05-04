@@ -44,9 +44,6 @@ function createGUI(withStats) {
     tankControls.add(
         GUIcontrols, 'tankTurretRotation', -180.0, 180.0
     ).name('Turret Rotation :');
-    tankControls.add(
-        GUIcontrols, 'tankBarrelRotation', 0.0, 30.0
-    ).name('Barrel Rotation :');
 
     var axisLights = gui.addFolder('Axis and Lights');
     axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
