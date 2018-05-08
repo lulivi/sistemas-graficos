@@ -18,38 +18,121 @@ var pressedKey = null;
 var playerInfo = null;
 
 /// The current mode of the application
-var applicationMode = TheScene.NO_ACTION;
+var gameMode = null;
 
 var renderer = null;
+
+function startGame(){
+    createGUI(true);
+    toggleMainMenu();
+    render();
+}
+
+function createMenu(btnArray){
+    // Obtain the div in which we will locate the menu
+    var fullScreenMenuContainer = $('#fullScreenMenuContainer')
+        .css({
+            'height': '100%',
+            'width': '100%',
+            'position': 'fixed',
+            'z-index': '1',
+            'top': '0',
+            'left': '0',
+            'background-color': 'rgba(0,0,0, 0.9)',
+        }).hide();
+    var centerMenuContainer = $('<div>')
+        .attr('id', 'centerMenuContainer')
+        // Add the basic css to center it
+        .css({
+            'display': 'flex',
+            'width': '20%',
+            'margin': 'auto',
+            'min-height': '100vh',
+        });
+    fullScreenMenuContainer.append(centerMenuContainer);
+
+    // Create a form which will be our options menu
+    var menu = $('<form>')
+        .attr('name', 'simpleMenu')
+        .css({
+            'color': 'lightgrey',
+            'text-align': 'center',
+            'margin': 'auto',
+            'padding': '5%',
+            'width': '80%',
+        });
+    // Append as a child the form menu
+    centerMenuContainer.append(menu);
+
+    // Add a label with "Options:"
+    menu.append($('<label>').text('Options:'));
+
+    // Create common style values
+    var buttonAttr = {
+        'type': 'button',
+        'align': 'middle',
+        'class': 'optionButton'
+    };
+
+    // Create each button
+    btnArray.forEach(function(currentBtn){
+        // Create a button
+        var button = $('<input>')
+            .attr(buttonAttr)
+            // Add the two different values for each button
+            .attr({
+                'value': currentBtn.name,
+                'onclick':currentBtn.func,
+            })
+            // Add width style
+            .css('width', '100%');
+        // Add an endline
+        menu.append('<br>');
+        // Add the input button
+        menu.append(button);
+    });
+}
+
+function createMainMenu(){
+    createMenu([
+        {name: '1 Jugador', func: 'startGame()'},
+        {name: '1 vs 1', func: 'startGame()'},
+        {name: 'Opciones', func: ''},
+    ]);
+}
+
+function toggleMainMenu(){
+    $('#fullScreenMenuContainer').toggle();
+}
 
 /**
  * It creates the GUI and, optionally, adds statistic information
  * @param withStats - A boolean to show the statictics or not
  */
 function createGUI(withStats) {
-    GUIcontrols = new function() {
-        this.axis = false;
-        this.lightIntensity = 0.3;
-        this.tankTurretRotation = 0;
-        this.tankBarrelRotation = 0;
-        this.hardMode = false;
-    };
-
-    var gui = new dat.GUI();
-
-    var gameControls = gui.addFolder('Game Controls');
-    gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
-
-    var tankControls = gui.addFolder('Tank Controls');
-    tankControls.add(
-        GUIcontrols, 'tankTurretRotation', -180.0, 180.0
-    ).name('Turret Rotation :');
-
-    var axisLights = gui.addFolder('Axis and Lights');
-    axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    axisLights.add(
-        GUIcontrols, 'lightIntensity', 0, 1.0
-    ).name('Light intensity :');
+    // GUIcontrols = new function() {
+    //     this.axis = false;
+    //     this.lightIntensity = 0.3;
+    //     this.tankTurretRotation = 0;
+    //     this.tankBarrelRotation = 0;
+    //     this.hardMode = false;
+    // };
+    //
+    // var gui = new dat.GUI();
+    //
+    // var gameControls = gui.addFolder('Game Controls');
+    // gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
+    //
+    // var tankControls = gui.addFolder('Tank Controls');
+    // tankControls.add(
+    //     GUIcontrols, 'tankTurretRotation', -180.0, 180.0
+    // ).name('Turret Rotation :');
+    //
+    // var axisLights = gui.addFolder('Axis and Lights');
+    // axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
+    // axisLights.add(
+    //     GUIcontrols, 'lightIntensity', 0, 1.0
+    // ).name('Light intensity :');
 
 
     // The method  listen()  allows the height attribute to be written,
@@ -240,10 +323,20 @@ function onKeyUp(){
  * The main function
  */
 $(function() {
+    // Add basic css
+    $('html body').css({
+        'padding': '0',
+        'margin': '0',
+        'box-sizing': 'border-box'
+    });
+    $('*').css('box-sizing', 'inherit');
+
     // create a render and set the size
     renderer = createRenderer();
+
     // add the output of the renderer to the html element
     $('#WebGL-output').append(renderer.domElement);
+
     // liseners
     window.addEventListener('resize', onWindowResize);
     window.addEventListener(
@@ -269,7 +362,6 @@ $(function() {
     // cameras and lights.
     scene = new TheScene(renderer.domElement);
 
-    createGUI(true);
-
-    render();
+    createMainMenu();
+    toggleMainMenu();
 });
