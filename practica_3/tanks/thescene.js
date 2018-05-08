@@ -69,7 +69,7 @@ class TheScene extends THREE.Scene {
         this.add(this.ambientLight);
 
         // add spotlight for the shadows
-        this.spotLight = new THREE.SpotLight(0xffffff);
+        this.spotLight = new THREE.SpotLight(0xffffff, 0.5);
         this.spotLight.position.set(
             100, 100, 30
         );
@@ -112,9 +112,9 @@ class TheScene extends THREE.Scene {
      * @controls - The GUI information
      */
     animate(controls) {
-        this.axis.visible = controls.axis;
-        this.spotLight.intensity = controls.lightIntensity;
-        this.tank.setTurretRotation(controls.tankTurretRotation);
+        // this.axis.visible = controls.axis;
+        // this.spotLight.intensity = controls.lightIntensity;
+        // this.tank.setTurretRotation(controls.tankTurretRotation);
     }
 
     /// It returns the camera
