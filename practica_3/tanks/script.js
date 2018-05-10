@@ -15,94 +15,123 @@ var stats = null;
 var pressedKey = null;
 
 /// Player information GUI
-var playerInfo = null;
+// var playerInfo = null;
 
 /// The current mode of the application
-var gameMode = null;
+// var gameMode = null;
 
 var renderer = null;
 
+var menusArray = new Array();
+
+const MENU = {
+    MAIN: 0,
+    MAIN_OPTIONS: 1,
+    IN_GAME_OPTIONS: 2,
+};
+
+function hideMenu(){
+    $('#fullScreenMenuContainer').hide();
+}
+
 function startGame(){
     createGUI(true);
-    toggleMainMenu();
+    hideMenu();
     render();
 }
 
-function createMenu(btnArray){
-    // Obtain the div in which we will locate the menu
-    var fullScreenMenuContainer = $('#fullScreenMenuContainer')
-        .css({
-            'height': '100%',
-            'width': '100%',
-            'position': 'fixed',
-            'z-index': '1',
-            'top': '0',
-            'left': '0',
-            'background-color': 'rgba(0,0,0, 0.9)',
-        }).hide();
-    var centerMenuContainer = $('<div>')
-        .attr('id', 'centerMenuContainer')
-        // Add the basic css to center it
-        .css({
-            'display': 'flex',
-            'width': '20%',
-            'margin': 'auto',
-            'min-height': '100vh',
-        });
-    fullScreenMenuContainer.append(centerMenuContainer);
-
-    // Create a form which will be our options menu
-    var menu = $('<form>')
-        .attr('name', 'simpleMenu')
-        .css({
-            'color': 'lightgrey',
-            'text-align': 'center',
-            'margin': 'auto',
-            'padding': '5%',
-            'width': '80%',
-        });
-    // Append as a child the form menu
-    centerMenuContainer.append(menu);
-
-    // Add a label with "Options:"
-    menu.append($('<label>').text('Options:'));
-
-    // Create common style values
-    var buttonAttr = {
-        'type': 'button',
-        'align': 'middle',
-        'class': 'optionButton'
-    };
-
-    // Create each button
-    btnArray.forEach(function(currentBtn){
-        // Create a button
-        var button = $('<input>')
-            .attr(buttonAttr)
-            // Add the two different values for each button
-            .attr({
-                'value': currentBtn.name,
-                'onclick':currentBtn.func,
-            })
-            // Add width style
-            .css('width', '100%');
-        // Add an endline
-        menu.append('<br>');
-        // Add the input button
-        menu.append(button);
+function showMenu(menuId){
+    $('#fullScreenMenuContainer').show();
+    menusArray.forEach(function(currMenu, index){
+        if(index != menuId)
+            currMenu.hide();
+        else
+            currMenu.show();
     });
 }
 
-function createMainMenu(){
-    createMenu([
-        {name: '1 Jugador', func: 'startGame()'},
-        {name: '1 vs 1', func: 'startGame()'},
-        {name: 'Opciones', func: ''},
-    ]);
-}
+/**
+ * Create every menu in the game
+ */
+function createMenus(){
+    // Get the div element which will contain the menus
+    var fullScreenMenuContainer = $('#fullScreenMenuContainer')
+        // Add basic classes for color and opacity
+        .attr('class', 'w3-container w3-opacity-min w3-black')
+        // force full-screen and above every element in html
+        .css({
+            'height': '100vh',
+            'width': '100vw',
+            'position': 'fixed',
+            'z-index': '1',
+            'top': '0',
+        }).hide();
 
-function toggleMainMenu(){
-    $('#fullScreenMenuContainer').toggle();
+    // Create the menus with each heading and buttons
+    var menus = [
+        {
+            headingText: 'Menú principal',
+            buttonsArray: [
+                {name: '1 Jugador', func: 'startGame()'},
+                {name: '1 vs 1', func: 'startGame()'},
+                {name: 'Opciones', func: 'showMenu(MENU.MAIN_OPTIONS)'},
+            ],
+        },
+        {
+            headingText: 'Opciones',
+            buttonsArray: [
+                {name: 'Velocidad', func: ''},
+                {name: 'Nosequé', func: ''},
+                {name: 'Menú principal', func:'showMenu(MENU.MAIN)'},
+            ],
+        },
+        {
+            headingText: 'Menú de pausa',
+            buttonsArray: [
+                {name: 'Reanudar', func:'hideMenu()'},
+                {name: 'Velocidad 2', func: ''},
+                {name: 'Nosequé 2', func: ''},
+                {name: 'Menú principal', func:'showMenu(MENU.MAIN)'},
+            ],
+        },
+    ];
+
+    // For each menu, add it to the html
+    menus.forEach(function(currMenuContents){
+        // Menu itself
+        var currMenu = $('<form>')
+            .attr(
+                'class',
+                'menu w3-container w3-text-light-grey w3-center '+
+                    'w3-display-middle w3-quarter',
+            );
+        fullScreenMenuContainer.append(currMenu);
+
+        // Add a label with the current menu heading
+        currMenu.append(
+            $('<label>')
+                .text(currMenuContents.headingText)
+                .attr('class', 'w3-xxlarge w3-margin-bottom w3-panel ' +
+                    'w3-block w3-round-large w3-teal')
+        );
+
+        // Add the buttons to de menu
+        currMenuContents.buttonsArray.forEach(function(currButton){
+            currMenu.append(
+                $('<input>')
+                    .attr({
+                        'value': currButton.name,
+                        'onclick':currButton.func,
+                        'type': 'button',
+                        'class': 'w3-button w3-block w3-round-large ' +
+                            'w3-hover-teal',
+                    })
+            );
+        });
+
+        // Add the current menu to an array for future show/hide
+        menusArray.push(currMenu);
+    });
 }
 
 /**
@@ -182,8 +211,7 @@ function initPlayerInfo() {
  * @param str - The message
  */
 function setMessage(str) {
-    document.getElementById('Messages').innerHTML = '<h2>' + str +
-        '</h2>';
+    $('#Messages').text('<h2>' + str + '</h2>');
 }
 
 /**
@@ -268,6 +296,7 @@ function keyDownListener(event) {
         break;
     case String(' ').charCodeAt():
         scene.pauseGame();
+        // showMenu(MENU.IN_GAME_OPTIONS);
         break;
     }
 }
@@ -323,14 +352,6 @@ function onKeyUp(){
  * The main function
  */
 $(function() {
-    // Add basic css
-    $('html body').css({
-        'padding': '0',
-        'margin': '0',
-        'box-sizing': 'border-box'
-    });
-    $('*').css('box-sizing', 'inherit');
-
     // create a render and set the size
     renderer = createRenderer();
 
@@ -362,6 +383,6 @@ $(function() {
     // cameras and lights.
     scene = new TheScene(renderer.domElement);
 
-    createMainMenu();
-    toggleMainMenu();
+    createMenus();
+    showMenu(MENU.MAIN);
 });
