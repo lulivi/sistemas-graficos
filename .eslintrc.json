@@ -20,17 +20,8 @@
                 "const": 3
             }
         }],
-        "array-bracket-newline": ["error", {
-            "multiline": true,
-            "minItems": 2
-        }],
-        "array-element-newline": ["error", {
-            "multiline": true,
-            "minItems": 3
-        }],
-        "function-paren-newline": ["error", {
-            "minItems": 3
-        }],
+        "array-bracket-newline": ["error", "consistent"],
+        "function-paren-newline": ["error", "consistent"],
         "brace-style": ["error", "1tbs"],
         "no-undef": 0,
         "linebreak-style": ["error", "unix"],
