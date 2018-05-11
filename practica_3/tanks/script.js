@@ -299,14 +299,14 @@ function render() {
 function keyDownListener(event) {
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    switch(key) {
-    case String('V').charCodeAt():
+    switch(String.fromCharCode(key)) {
+    case 'V':
         scene.swapCamera();
         break;
-    case String(' ').charCodeAt():
+    case ' ':
 
         var visibleMenus = false;
-        menusArray.forEach(function(currMenu, index){
+        menusArray.forEach(function(currMenu){
             if(currMenu.is(':visible'))
                 visibleMenus = true;
         });

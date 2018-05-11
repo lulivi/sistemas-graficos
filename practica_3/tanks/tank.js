@@ -87,7 +87,10 @@ class Tank extends THREE.Object3D{
             0,
             0
         ];
-        
+
+        // First person camera
+        this.subjectiveCamera = null;
+
         this.add(this.createMovementNode());
     }
 
@@ -191,7 +194,23 @@ class Tank extends THREE.Object3D{
         this.turret.add(this.createHatch());
         this.turret.position.y = this.turretHeight / 2 + this.bodyHeight / 2;
         this.turret.position.x = -this.bodySide / 5;
+        this.createCamera();
         return this.turret;
+    }
+
+    
+    createCamera() {
+        this.subjectiveCamera =
+        new THREE.PerspectiveCamera(
+            45,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
+        this.subjectiveCamera.position.x += 1;
+        this.subjectiveCamera.position.y += 4;
+        this.turret.add(this.subjectiveCamera);
     }
 
     /**
@@ -288,8 +307,6 @@ class Tank extends THREE.Object3D{
     // MOVEMENT FUNCTIONS
     //*\/*\/*\/*\/*\/*\/*
 
-    // TODO: todo
-    /// Move tank forward (+/-)
     moveForward(speed){
         // X component of lookAt vector
         this.movementNode.position.x += speed * this.lookAt[0];
@@ -309,5 +326,6 @@ class Tank extends THREE.Object3D{
     // TODO: todo
     /// Return tank camera
     getCamera(){
+        return this.subjectiveCamera;
     }
 }
