@@ -291,7 +291,10 @@ class Tank extends THREE.Object3D{
     // TODO: todo
     /// Move tank forward (+/-)
     moveForward(speed){
-        this.movementNode.position.x +=speed;
+        // X component of lookAt vector
+        this.movementNode.position.x += speed * this.lookAt[0];
+        // Z component of lookAt vector
+        this.movementNode.position.z += speed * this.lookAt[2];
     }
 
     // TODO: coordinar avance con giro de ruedas utilizando
@@ -299,6 +302,8 @@ class Tank extends THREE.Object3D{
     /// Rotate tank (left/right)
     rotate(rotationSpeed){
         this.movementNode.rotation.y += rotationSpeed;
+        this.lookAt[0] = Math.cos(this.movementNode.rotation.y);
+        this.lookAt[2] = -Math.sin(this.movementNode.rotation.y);
     }
 
     // TODO: todo
