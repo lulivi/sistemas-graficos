@@ -34,11 +34,10 @@ const MENU = {
 
 function hideMenu(){
     $('#fullScreenMenuContainer').hide();
-    console.log('pausado: ' + pause); 
     if(pause) {
         pause = false;
+        render();
     }
-    console.log(pause);
 }
 
 function startGame(){
@@ -315,6 +314,8 @@ function keyDownListener(event) {
         if(!visibleMenus) {
             showMenu(MENU.IN_GAME_OPTIONS);
             pause = pause? false : true;
+        } else{
+            hideMenu(MENU.IN_GAME_OPTIONS);
         }
         console.log(pause);
         break;
