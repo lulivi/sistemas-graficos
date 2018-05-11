@@ -81,6 +81,13 @@ class Tank extends THREE.Object3D{
         // Extra nodes
         this.movementNode = null;
 
+        // Look-at vector for tank movement
+        this.lookAt = [
+            1,
+            0,
+            0
+        ];
+        
         this.add(this.createMovementNode());
     }
 
@@ -245,8 +252,8 @@ class Tank extends THREE.Object3D{
      * Increment the turret rotation in <degrees> degrees
      * @param degrees {Number} Degrees of the rotation
      */
-    rotateTurret(degrees){
-        this.turret.rotation.y += degrees * Math.PI / 180;
+    rotateTurret(rotationSpeed){
+        this.turret.rotation.y += rotationSpeed;
     }
 
     /**
@@ -283,13 +290,15 @@ class Tank extends THREE.Object3D{
 
     // TODO: todo
     /// Move tank forward (+/-)
-    moveForward(){
+    moveForward(speed){
+        this.movementNode.position.x +=speed;
     }
 
     // TODO: coordinar avance con giro de ruedas utilizando
     // this.wheelsArray[Left/Right]
     /// Rotate tank (left/right)
-    rotate(){
+    rotate(rotationSpeed){
+        this.movementNode.rotation.y += rotationSpeed;
     }
 
     // TODO: todo

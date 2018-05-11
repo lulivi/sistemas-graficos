@@ -13,6 +13,8 @@ var stats = null;
 
 /// The pressed key
 var pressedKey = null;
+/// Currently pressed keys
+var pressedKeysArray = new Array();
 
 /// Player information GUI
 // var playerInfo = null;
@@ -288,9 +290,6 @@ function render() {
         pressedKey = null;
     }
 
-    if (pressedKey){
-        scene.moveTank(pressedKey);
-    }
 }
 
 /**
@@ -317,7 +316,6 @@ function keyDownListener(event) {
         } else{
             hideMenu(MENU.IN_GAME_OPTIONS);
         }
-        console.log(pause);
         break;
     }
 }
@@ -334,11 +332,13 @@ function keyUpListener(event) {
     case String('A').charCodeAt():
     case String('S').charCodeAt():
     case String('D').charCodeAt():
+    case String('Q').charCodeAt():
+    case String('E').charCodeAt():
     case 37: // Left arrow
     case 38: // Up arrow
     case 39: // Right arrow
     case 40: // Down arrow
-        // scene.robot.movementCost();
+        pressedKeysArray.splice(pressedKeysArray.indexOf(key),1);
     }
 }
 
@@ -354,11 +354,16 @@ function onKeyDown(event){
     case String('A').charCodeAt():
     case String('S').charCodeAt():
     case String('D').charCodeAt():
+    case String('Q').charCodeAt():
+    case String('E').charCodeAt():
     case 37: // Left arrow
     case 38: // Up arrow
     case 39: // Right arrow
     case 40: // Down arrow
         pressedKey = key;
+        if(pressedKeysArray.indexOf(pressedKey) == -1) {
+            pressedKeysArray.push(pressedKey);
+        }
     }
 }
 

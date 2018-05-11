@@ -112,7 +112,7 @@ class TheScene extends THREE.Scene {
      * @controls - The GUI information
      */
     animate(controls) {
-        this.tank.rotation.y +=0.01;
+        this.moveTank();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);
@@ -166,31 +166,32 @@ class TheScene extends THREE.Scene {
         this.camera.updateProjectionMatrix();
     }
 
-    moveTank(key) {
+    moveTank() {
         var speed = 1;
-        var rotationSpeed = 2;
-
-        switch (key) {
-        case String('W').charCodeAt(): // Up
-        case 38: // Up
-            this.tank.moveForward(speed);
-            break;
-        case String('A').charCodeAt(): // Left
-        case 37: // Left
-            this.tank.rotate(rotationSpeed);
-            break;
-        case String('S').charCodeAt(): // Down
-        case 40: // Down
-            this.tank.moveForward(-speed);
-            break;
-        case String('D').charCodeAt(): // Right
-        case 39: // Right
-            this.tank.rotate(-rotationSpeed);
-            break;
-        case String('V').charCodeAt():
-            this.swapCamera();
-            break;
-        }
+        var rotationSpeed = Math.PI*2/180;
+        let self = this;
+        pressedKeysArray.forEach(function(item) {
+            switch (String.fromCharCode(item)) {
+            case 'W': // Up
+                self.tank.moveForward(speed);
+                break;
+            case 'A': // Left
+                self.tank.rotate(rotationSpeed);
+                break;
+            case 'S': // Down
+                self.tank.moveForward(-speed);
+                break;
+            case 'D': // Right
+                self.tank.rotate(-rotationSpeed);
+                break;
+            case 'Q': // turn left turret
+                self.tank.rotateTurret(rotationSpeed);
+                break;
+            case 'E': // turn right turret
+                self.tank.rotateTurret(-rotationSpeed);
+                break;
+            }
+        });
     }
 }
 
