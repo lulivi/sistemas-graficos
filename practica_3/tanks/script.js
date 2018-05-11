@@ -34,6 +34,11 @@ const MENU = {
 
 function hideMenu(){
     $('#fullScreenMenuContainer').hide();
+    console.log('pausado: ' + pause); 
+    if(pause) {
+        pause = false;
+    }
+    console.log(pause);
 }
 
 function startGame(){
@@ -123,7 +128,7 @@ function createMenus(){
                 $('<input>')
                     .attr({
                         'value': currButton.name,
-                        'onclick':currButton.func,
+                        'onmouseup':currButton.func,
                         'type': 'button',
                         'class': 'w3-button w3-block w3-round-large ' +
                             'w3-hover-teal',
@@ -275,8 +280,10 @@ function render() {
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
-    renderer.render(scene, scene.getCamera());
-
+    if(!pause){
+        renderer.render(scene, scene.getCamera());
+    }
+    
     if (scene.gameReset){
         scene.toggleReset();
         pressedKey = null;
@@ -299,8 +306,17 @@ function keyDownListener(event) {
         scene.swapCamera();
         break;
     case String(' ').charCodeAt():
-        showMenu(MENU.IN_GAME_OPTIONS);
-        pause = pause? false : true;
+
+        var visibleMenus = false;
+        menusArray.forEach(function(currMenu, index){
+            if(currMenu.is(':visible'))
+                visibleMenus = true;
+        });
+        if(!visibleMenus) {
+            showMenu(MENU.IN_GAME_OPTIONS);
+            pause = pause? false : true;
+        }
+        console.log(pause);
         break;
     }
 }
