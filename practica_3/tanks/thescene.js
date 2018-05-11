@@ -17,6 +17,8 @@ class TheScene extends THREE.Scene {
         this.trackballControls = null;
         this.tank = null;
         this.ground = null;
+        // Test projectile
+        this.projectile = null;
 
         this.gameReset = false;
         this.hardMode = false;
@@ -104,6 +106,8 @@ class TheScene extends THREE.Scene {
         );
         model.add(this.ground);
 
+        this.projectile = new Projectile();
+        model.add(this.projectile.heart);
         return model;
     }
 
@@ -113,6 +117,7 @@ class TheScene extends THREE.Scene {
      */
     animate(controls) {
         this.moveTank();
+        this.projectile.animateHeart();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);
