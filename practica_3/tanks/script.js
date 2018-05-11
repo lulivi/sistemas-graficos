@@ -24,6 +24,8 @@ var renderer = null;
 
 var menusArray = new Array();
 
+var pause = false;
+
 const MENU = {
     MAIN: 0,
     MAIN_OPTIONS: 1,
@@ -264,8 +266,10 @@ function createRenderer() {
  * It renders every frame
  */
 function render() {
-    requestAnimationFrame(render);
-
+    if(!pause) {
+        requestAnimationFrame(render);
+    }
+    
     stats.update();
     // playerInfo.update(scene.robot.energy, scene.robot.score);
     scene.getCameraControls().update();
@@ -295,8 +299,8 @@ function keyDownListener(event) {
         scene.swapCamera();
         break;
     case String(' ').charCodeAt():
-        scene.pauseGame();
-        // showMenu(MENU.IN_GAME_OPTIONS);
+        showMenu(MENU.IN_GAME_OPTIONS);
+        pause = pause? false : true;
         break;
     }
 }

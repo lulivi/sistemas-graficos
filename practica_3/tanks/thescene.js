@@ -93,16 +93,16 @@ class TheScene extends THREE.Scene {
         model.add(this.tank);
 
         // Ground model
-        // var groundTexture = loader.load('imgs/rock.jpg');
-        // groundTexture.wrapS = THREE.RepeatWrapping;
-        // groundTexture.wrapT = THREE.RepeatWrapping;
-        // groundTexture.repeat = new THREE.Vector2(4,4);
-        // this.ground = new Ground(
-        //     500, 500, new THREE.MeshPhongMaterial({
-        //         map: groundTexture
-        //     }), 4
-        // );
-        // model.add(this.ground);
+        var groundTexture = loader.load('imgs/rock.jpg');
+        groundTexture.wrapS = THREE.RepeatWrapping;
+        groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat = new THREE.Vector2(4,4);
+        this.ground = new Ground(
+            500, 500, new THREE.MeshPhongMaterial({
+                map: groundTexture
+            }), 4
+        );
+        model.add(this.ground);
 
         return model;
     }
@@ -112,6 +112,7 @@ class TheScene extends THREE.Scene {
      * @controls - The GUI information
      */
     animate(controls) {
+        this.tank.rotation.y +=0.01;
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);
@@ -133,10 +134,12 @@ class TheScene extends THREE.Scene {
         this.firstPersonCamera = !this.firstPersonCamera;
     }
 
+    /*
     pauseGame() {
         alert('El juego está en pausa, pulse de nuevo la barra' +
               'espaciadora para continuar');
     }
+    */
 
     toggleReset() {
         this.gameReset = !this.gameReset;
