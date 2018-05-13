@@ -31,7 +31,8 @@ var pause = false;
 const MENU = {
     MAIN: 0,
     MAIN_OPTIONS: 1,
-    IN_GAME_OPTIONS: 2,
+    PAUSE_GAME: 2,
+    PAUSE_GAME_OPTIONS: 3,
 };
 
 function hideMenu(){
@@ -82,6 +83,7 @@ function createMenus(){
             buttonsArray: [
                 {name: '1 Jugador', func: 'startGame()'},
                 {name: '1 vs 1', func: 'startGame()'},
+                {name: 'Instrucciones', func: ''},
                 {name: 'Opciones', func: 'showMenu(MENU.MAIN_OPTIONS)'},
             ],
         },
@@ -90,16 +92,27 @@ function createMenus(){
             buttonsArray: [
                 {name: 'Velocidad', func: ''},
                 {name: 'Nosequé', func: ''},
+                {name: 'un puñao de cosas', func: ''},
+                {name: 'pin pan pun', func: ''},
+                {name: 'Atrás', func:'showMenu(MENU.MAIN)'},
+            ],
+        },
+        {
+            headingText: 'Pausa',
+            buttonsArray: [
+                {name: 'Reanudar', func:'hideMenu()'},
+                {name: 'Instrucciones', func: ''},
+                {name: 'Opciones In-Game',
+                 func: 'showMenu(MENU.PAUSE_GAME_OPTIONS)'},
                 {name: 'Menú principal', func:'showMenu(MENU.MAIN)'},
             ],
         },
         {
-            headingText: 'Menú de pausa',
+            headingText: 'Opciones In-Game',
             buttonsArray: [
-                {name: 'Reanudar', func:'hideMenu()'},
-                {name: 'Velocidad 2', func: ''},
-                {name: 'Nosequé 2', func: ''},
-                {name: 'Menú principal', func:'showMenu(MENU.MAIN)'},
+                {name: 'Velocidad', func: ''},
+                {name: 'Nosequé', func: ''},
+                {name: 'Atrás', func:'showMenu(MENU.PAUSE_GAME)'},
             ],
         },
     ];
@@ -311,10 +324,10 @@ function keyDownListener(event) {
                 visibleMenus = true;
         });
         if(!visibleMenus) {
-            showMenu(MENU.IN_GAME_OPTIONS);
+            showMenu(MENU.PAUSE_GAME);
             pause = pause? false : true;
         } else{
-            hideMenu(MENU.IN_GAME_OPTIONS);
+            hideMenu(MENU.PAUSE_GAME);
         }
         break;
     }
