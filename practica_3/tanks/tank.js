@@ -192,25 +192,28 @@ class Tank extends THREE.Object3D{
         this.turret = new THREE.Mesh(turretGeometry, this.turretMaterial);
         this.turret.add(this.createBarrel());
         this.turret.add(this.createHatch());
+        this.turret.add(this.createCamera());
         this.turret.position.y = this.turretHeight / 2 + this.bodyHeight / 2;
         this.turret.position.x = -this.bodySide / 5;
-        this.createCamera();
         return this.turret;
     }
 
-    
+    /**
+     * It creates the first person camera
+     * @return {THREE.PerspectiveCamera} The camera object
+     */
     createCamera() {
         this.subjectiveCamera =
-        new THREE.PerspectiveCamera(
-            45,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
+            new THREE.PerspectiveCamera(
+                45,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000
+            );
         this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
         this.subjectiveCamera.position.x += 1;
         this.subjectiveCamera.position.y += 4;
-        this.turret.add(this.subjectiveCamera);
+        return this.subjectiveCamera;
     }
 
     /**
@@ -307,6 +310,10 @@ class Tank extends THREE.Object3D{
     // MOVEMENT FUNCTIONS
     //*\/*\/*\/*\/*\/*\/*
 
+    /**
+     * Change x-z position
+     * @param speed {Number} - Space to displace
+     */
     moveForward(speed){
         // X component of lookAt vector
         this.movementNode.position.x += speed * this.lookAt[0];
@@ -314,6 +321,10 @@ class Tank extends THREE.Object3D{
         this.movementNode.position.z += speed * this.lookAt[2];
     }
 
+    /**
+     * Change x-z position
+     * @param rotationSpeed {Number}
+     */
     // TODO: coordinar avance con giro de ruedas utilizando
     // this.wheelsArray[Left/Right]
     /// Rotate tank (left/right)
