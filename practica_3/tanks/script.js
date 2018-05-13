@@ -31,8 +31,10 @@ var pause = false;
 const MENU = {
     MAIN: 0,
     MAIN_OPTIONS: 1,
-    PAUSE_GAME: 2,
-    PAUSE_GAME_OPTIONS: 3,
+    MAIN_INSTR: 2,
+    PAUSE: 3,
+    PAUSE_OPT: 4,
+    PAUSE_INSTR: 5,
 };
 
 function hideMenu(){
@@ -83,7 +85,7 @@ function createMenus(){
             buttonsArray: [
                 {name: '1 Jugador', func: 'startGame()'},
                 {name: '1 vs 1', func: 'startGame()'},
-                {name: 'Instrucciones', func: ''},
+                {name: 'Instrucciones', func: 'showMenu(MENU.MAIN_INSTR)'},
                 {name: 'Opciones', func: 'showMenu(MENU.MAIN_OPTIONS)'},
             ],
         },
@@ -98,13 +100,23 @@ function createMenus(){
             ],
         },
         {
+            headingText: 'Instrucciones',
+            image: {
+                src: '/home/luvo/Downloads/kitten.jpg',
+                title: 'Instrucciones',
+                alt: 'Instrucciones',
+            },
+            buttonsArray: [
+                {name: 'Atrás', func: 'showMenu(MENU.MAIN)'},
+            ],
+        },
+        {
             headingText: 'Pausa',
             buttonsArray: [
                 {name: 'Reanudar', func:'hideMenu()'},
-                {name: 'Instrucciones', func: ''},
-                {name: 'Opciones In-Game',
-                 func: 'showMenu(MENU.PAUSE_GAME_OPTIONS)'},
-                {name: 'Menú principal', func:'showMenu(MENU.MAIN)'},
+                {name: 'Instrucciones', func: 'showMenu(MENU.PAUSE_INSTR)'},
+                {name: 'Opciones rápidas', func: 'showMenu(MENU.PAUSE_OPT)'},
+                {name: 'Menú principal', func:'init3D()'},
             ],
         },
         {
@@ -112,7 +124,18 @@ function createMenus(){
             buttonsArray: [
                 {name: 'Velocidad', func: ''},
                 {name: 'Nosequé', func: ''},
-                {name: 'Atrás', func:'showMenu(MENU.PAUSE_GAME)'},
+                {name: 'Atrás', func:'showMenu(MENU.PAUSE)'},
+            ],
+        },
+        {
+            headingText: 'Instrucciones',
+            image: {
+                src: '/home/luvo/Downloads/kitten.jpg',
+                title: 'Instrucciones',
+                alt: 'Instrucciones',
+            },
+            buttonsArray: [
+                {name: 'Atrás', func: 'showMenu(MENU.PAUSE)'},
             ],
         },
     ];
@@ -121,10 +144,9 @@ function createMenus(){
     menus.forEach(function(currMenuContents){
         // Menu itself
         var currMenu = $('<form>')
-            .attr(
-                'class',
-                'menu w3-container w3-text-light-grey w3-center '+
-                    'w3-display-middle w3-quarter',
+            .addClass(
+                'menu w3-container w3-text-light-grey w3-center ' +
+                'w3-display-middle w3-quarter'
             );
         fullScreenMenuContainer.append(currMenu);
 
@@ -132,9 +154,22 @@ function createMenus(){
         currMenu.append(
             $('<label>')
                 .text(currMenuContents.headingText)
-                .attr('class', 'w3-xxlarge w3-margin-bottom w3-panel ' +
-                    'w3-block w3-round-large w3-teal')
+                .addClass(
+                    'w3-xxlarge w3-margin-bottom w3-panel w3-block ' +
+                    'w3-round-large w3-teal'
+                )
         );
+
+        if(currMenuContents.image !== undefined)
+            currMenu.append(
+                $('<img>')
+                    .attr({
+                        'src': currMenuContents.image.src,
+                        'title': currMenuContents.image.title,
+                        'alt': currMenuContents.image.alt,
+                    }).width('100%')
+                    .addClass('w3-margin-bottom w3-round-large')
+            );
 
         // Add the buttons to de menu
         currMenuContents.buttonsArray.forEach(function(currButton){
@@ -143,10 +178,10 @@ function createMenus(){
                     .attr({
                         'value': currButton.name,
                         'onmouseup':currButton.func,
-                        'type': 'button',
-                        'class': 'w3-button w3-block w3-round-large ' +
-                            'w3-hover-teal',
-                    })
+                        'type': 'button'
+                    }).addClass(
+                        'w3-button w3-block w3-round-large w3-hover-teal'
+                    )
             );
         });
 
@@ -285,9 +320,9 @@ function createRenderer() {
  * It renders every frame
  */
 function render() {
-    if(!pause) {
-        requestAnimationFrame(render);
-    }
+    if(pause) return;
+
+    requestAnimationFrame(render);
 
     stats.update();
     // playerInfo.update(scene.robot.energy, scene.robot.score);
@@ -312,22 +347,21 @@ function render() {
 function keyDownListener(event) {
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    switch(String.fromCharCode(key)) {
-    case 'V':
+    switch(key){
+    case String('V').charCodeAt():
         scene.swapCamera();
         break;
-    case ' ':
-
+    case 27: // Esc key
         var visibleMenus = false;
         menusArray.forEach(function(currMenu){
             if(currMenu.is(':visible'))
                 visibleMenus = true;
         });
         if(!visibleMenus) {
-            showMenu(MENU.PAUSE_GAME);
-            pause = pause? false : true;
+            showMenu(MENU.PAUSE);
+            pause = !pause;
         } else{
-            hideMenu(MENU.PAUSE_GAME);
+            hideMenu(MENU.PAUSE);
         }
         break;
     }
