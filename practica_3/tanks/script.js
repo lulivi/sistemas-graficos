@@ -102,7 +102,7 @@ function createMenus(){
         {
             headingText: 'Instrucciones',
             image: {
-                src: '/home/luvo/Downloads/kitten.jpg',
+                src: '../tanks/imgs/Instrucciones.png',
                 title: 'Instrucciones',
                 alt: 'Instrucciones',
             },
