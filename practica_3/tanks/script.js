@@ -78,7 +78,7 @@ function createMenus(){
     // Create the menus with each heading and buttons
     var menus = [
         {
-            headingText: 'Menú principal',
+            headingText: 'Tanks n\' Ducks',
             buttonsArray: [
                 {name: '1 Jugador', func: 'startGame()'},
                 {name: '1 vs 1', func: 'startGame()'},
@@ -275,7 +275,7 @@ function render() {
     if(!pause) {
         requestAnimationFrame(render);
     }
-    
+
     stats.update();
     // playerInfo.update(scene.robot.energy, scene.robot.score);
     scene.getCameraControls().update();
@@ -284,7 +284,7 @@ function render() {
     if(!pause){
         renderer.render(scene, scene.getCamera());
     }
-    
+
     if (scene.gameReset){
         scene.toggleReset();
         pressedKey = null;
