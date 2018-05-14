@@ -28,6 +28,8 @@ var menusArray = new Array();
 
 var pause = false;
 
+var firstTime = true;
+
 const MENU = {
     MAIN: 0,
     MAIN_OPTIONS: 1,
@@ -46,8 +48,13 @@ function hideMenu(){
 }
 
 function startGame(){
-    createGUI(true);
+    if(firstTime) {
+        createGUI(true);
+        firstTime = false;
+    } //else
+    //        createGUI(false);
     hideMenu();
+    $('#Stats-output').show();
     render();
 }
 
@@ -190,6 +197,13 @@ function createMenus(){
     });
 }
 
+function init3D() {
+    scene = new TheScene(renderer.domElement);
+    renderer.clear(false,true,true);
+    $('#Stats-output').hide();
+    showMenu(MENU.MAIN);
+}
+
 /**
  * It creates the GUI and, optionally, adds statistic information
  * @param withStats - A boolean to show the statictics or not
@@ -329,10 +343,8 @@ function render() {
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
-    if(!pause){
-        renderer.render(scene, scene.getCamera());
-    }
-
+    renderer.render(scene, scene.getCamera());
+    
     if (scene.gameReset){
         scene.toggleReset();
         pressedKey = null;
