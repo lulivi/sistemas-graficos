@@ -12,9 +12,9 @@ class Tank extends THREE.Object3D{
 
         this.material = (parameters.material === undefined ? new
         THREE.MeshPhongMaterial({
-            color: 0xd4af37,
-            specular: 0xfbf804,
-            shininess: 70
+            color: 0x00ff00,
+            specular: 0x00ff00,
+            shininess: 40
         }) : parameters.material);
 
         // barrel material
@@ -297,12 +297,17 @@ class Tank extends THREE.Object3D{
      * @param rightWheels {Boolean} Right array of wheels
      * @param degrees {Number} Degrees of the rotation
      */
-    rotateWheels(rightWheels, degrees){
+    rotateWheels(rightWheels, speed){
         var wheelsArray = (rightWheels) ?
             this.wheelsArrayRight :
             this.wheelsArrayLeft;
+
+        /*var speed;
+        speed = (direction == 'forward')?
+            3 :
+            -3;*/
         wheelsArray.forEach(function(item){
-            item.rotation.z += degrees * Math.PI / 180;
+            item.rotation.z += -speed * 5 * Math.PI / 180;
         });
     }
 
@@ -319,19 +324,31 @@ class Tank extends THREE.Object3D{
         this.movementNode.position.x += speed * this.lookAt[0];
         // Z component of lookAt vector
         this.movementNode.position.z += speed * this.lookAt[2];
+        // Rotation of wheels
+        this.rotateWheels(true, speed);
+        this.rotateWheels(false, speed);
     }
 
     /**
      * Change x-z position
      * @param rotationSpeed {Number}
+     * @param speed {Number}
      */
     // TODO: coordinar avance con giro de ruedas utilizando
     // this.wheelsArray[Left/Right]
     /// Rotate tank (left/right)
-    rotate(rotationSpeed){
+    rotate(rotationSpeed, speed){
+        speed /=2;
         this.movementNode.rotation.y += rotationSpeed;
         this.lookAt[0] = Math.cos(this.movementNode.rotation.y);
         this.lookAt[2] = -Math.sin(this.movementNode.rotation.y);
+        if (rotationSpeed > 0) { // giro izquierda
+            this.rotateWheels(true, speed);
+            this.rotateWheels(false, -speed);
+        } else if (rotationSpeed < 0) {
+            this.rotateWheels(false, speed);
+            this.rotateWheels(true, -speed);
+        }
     }
 
     // TODO: todo

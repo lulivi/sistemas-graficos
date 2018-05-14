@@ -57,8 +57,6 @@ class Projectile extends THREE.Object3D {
             if(this.count <= 0)
                 this.growMode = true;
         }
-        console.log(this.heart.scale.y);
-        
     }
 
     

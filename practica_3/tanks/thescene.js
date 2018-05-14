@@ -91,7 +91,18 @@ class TheScene extends THREE.Scene {
         var loader = new THREE.TextureLoader();
 
         // Tank model
-        this.tank = new Tank({});
+        var tankTexture = loader.load('imgs/metal1.jpg');
+        
+        this.tank = new Tank(
+            {material: new THREE.MeshPhongMaterial(
+                {
+                    color: '#00ff00',
+                    shininess: 70,
+                    map: tankTexture
+                }
+            )
+            }
+        );
         model.add(this.tank);
 
         // Ground model
@@ -181,13 +192,13 @@ class TheScene extends THREE.Scene {
                 self.tank.moveForward(speed);
                 break;
             case 'A': // Left
-                self.tank.rotate(rotationSpeed);
+                self.tank.rotate(rotationSpeed, speed);
                 break;
             case 'S': // Down
                 self.tank.moveForward(-speed);
                 break;
             case 'D': // Right
-                self.tank.rotate(-rotationSpeed);
+                self.tank.rotate(-rotationSpeed, speed);
                 break;
             case 'Q': // turn left turret
                 self.tank.rotateTurret(rotationSpeed);
