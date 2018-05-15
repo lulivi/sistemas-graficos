@@ -429,6 +429,12 @@ function onKeyDown(event){
         if(pressedKeysArray.indexOf(pressedKey) == -1) {
             pressedKeysArray.push(pressedKey);
         }
+        break;
+    case String(' ').charCodeAt():
+        if(!visibleMenu)
+            scene.tank.shoot();
+        break;
+    
     }
 }
 

@@ -1,14 +1,21 @@
 'use strict';
 
 class Projectile extends THREE.Object3D {
-    constructor(){
+    constructor(parameters){
         super();
         this.count = 0;
-        this.heart = this.createHeart();
+        this.lookAt = null;
+        this.heart = this.createHeart(
+            parameters.position,
+            parameters.vector
+        );
         this.growMode = true;
+        this.speed = 2;
+
+        
     }
 
-    createHeart(){
+    createHeart(position, vector){
 
         var heart = new THREE.Object3D();
         var mtlLoader = new THREE.MTLLoader();
@@ -23,7 +30,9 @@ class Projectile extends THREE.Object3D {
             objLoader.load('heart.obj', 
                            
                            function (object) {
+                               object.position.x = position.x;
                                object.position.y = 7;
+                               object.position.z = position.z;
                                object.scale.y = 0.1;
                                object.scale.x = 0.1;
                                object.scale.z = 0.1;
@@ -34,7 +43,9 @@ class Projectile extends THREE.Object3D {
                            });
         });
 
-        
+        this.lookAt = vector;
+
+        console.log('Position: x:' + position.x + ' z:' + position.z + ' Vector: ' + this.lookAt); 
         return heart;
     }
     
@@ -57,6 +68,11 @@ class Projectile extends THREE.Object3D {
             if(this.count <= 0)
                 this.growMode = true;
         }
+
+        // X component of lookAt vector
+        this.heart.position.x += this.speed * this.lookAt[0];
+        // Z component of lookAt vector
+        this.heart.position.z += this.speed * this.lookAt[2];        
     }
 
     

@@ -120,7 +120,12 @@ class TheScene extends THREE.Scene {
         model.add(this.ground);
 
         // Testing models
-        this.projectile = new Projectile();
+        this.projectile = new Projectile(
+            {
+                position: {x: 0, z: 0},
+                vector: [0,0,0]
+            }
+        );
         model.add(this.projectile.heart);
         this.duck = new Duck();
         model.add(this.duck.duck);
@@ -135,6 +140,9 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         this.projectile.animateHeart();
+        this.tank.bulletsArray.forEach(function(bullet){
+            bullet.animateHeart();
+        });
         //this.duck.animateDuck();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;

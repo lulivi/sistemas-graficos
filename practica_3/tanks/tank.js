@@ -88,6 +88,17 @@ class Tank extends THREE.Object3D{
             0
         ];
 
+        // Shooting
+        // Look-at vector for turret. Used for shooting
+        this.turretLookAt = [
+            1,
+            0,
+            0
+        ];
+
+        this.bulletsArray = new Array();
+
+        
         // First person camera
         this.subjectiveCamera = null;
 
@@ -276,6 +287,9 @@ class Tank extends THREE.Object3D{
      */
     rotateTurret(rotationSpeed){
         this.turret.rotation.y += rotationSpeed;
+        
+        this.turretLookAt[0] = Math.cos(this.turret.rotation.y);
+        this.turretLookAt[2] = -Math.sin(this.turret.rotation.y);
     }
 
     /**
@@ -334,8 +348,6 @@ class Tank extends THREE.Object3D{
      * @param rotationSpeed {Number}
      * @param speed {Number}
      */
-    // TODO: coordinar avance con giro de ruedas utilizando
-    // this.wheelsArray[Left/Right]
     /// Rotate tank (left/right)
     rotate(rotationSpeed, speed){
         speed /=2;
@@ -351,9 +363,25 @@ class Tank extends THREE.Object3D{
         }
     }
 
-    // TODO: todo
     /// Return tank camera
     getCamera(){
         return this.subjectiveCamera;
+    }
+
+    /**
+     * Shoots a projectile
+     */
+    shoot() {
+        this.bulletsArray.push(
+            new Projectile(
+                {
+                    position: {
+                        x: this.turret.getWorldPosition().x,
+                        z: this.turret.getWorldPosition().z
+                    },
+                    vector: this.turretLookAt + this.lookAt
+                }
+            )
+        );
     }
 }
