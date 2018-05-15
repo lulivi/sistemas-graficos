@@ -16,8 +16,14 @@ class Projectile extends THREE.Object3D {
     }
 
     createHeart(position, vector){
-
+        this.lookAt = vector;
+        
         var heart = new THREE.Object3D();
+        heart.rotation.y = Math.PI * 90 / 180;
+        heart.position.x = position.x;
+        heart.position.y = 7;
+        heart.position.z = position.z;
+        
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setBaseUrl('obj/heart/');
         mtlLoader.setPath('obj/heart/');
@@ -30,22 +36,18 @@ class Projectile extends THREE.Object3D {
             objLoader.load('heart.obj', 
                            
                            function (object) {
-                               object.position.x = position.x;
-                               object.position.y = 7;
-                               object.position.z = position.z;
+
+                               
                                object.scale.y = 0.1;
                                object.scale.x = 0.1;
                                object.scale.z = 0.1;
                                object.castShadow = true;
 
                                heart.add(object);
-                               
                            });
         });
-
-        this.lookAt = vector;
-
-        console.log('Position: x:' + position.x + ' z:' + position.z + ' Vector: ' + this.lookAt); 
+        console.log('Position: x:' + heart.getWorldPosition().x + ' z:' + heart.getWorldPosition().z + ' Vector: ' + this.lookAt); 
+        
         return heart;
     }
     

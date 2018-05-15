@@ -201,6 +201,7 @@ class TheScene extends THREE.Scene {
         var speed = 1;
         var rotationSpeed = Math.PI*2/180;
         let self = this;
+        self.tank.reduceCooldown();
         pressedKeysArray.forEach(function(item) {
             switch (String.fromCharCode(item)) {
             case 'W': // Up
@@ -220,6 +221,11 @@ class TheScene extends THREE.Scene {
                 break;
             case 'E': // turn right turret
                 self.tank.rotateTurret(-rotationSpeed);
+                break;
+            case ' ':
+                if (self.tank.cooldown <= 0) {
+                    self.tank.shoot();
+                }
                 break;
             }
         });

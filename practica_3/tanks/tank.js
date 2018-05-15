@@ -59,6 +59,7 @@ class Tank extends THREE.Object3D{
         this.turret = null;
         this.turretRadius = 7;
         this.turretHeight = 4;
+        this.bulletSpawnPoint = null;
 
         // Barrel
         this.barrel = null;
@@ -97,6 +98,7 @@ class Tank extends THREE.Object3D{
         ];
 
         this.bulletsArray = new Array();
+        this.cooldown = null;
 
         
         // First person camera
@@ -204,6 +206,7 @@ class Tank extends THREE.Object3D{
         this.turret.add(this.createBarrel());
         this.turret.add(this.createHatch());
         this.turret.add(this.createCamera());
+        this.turret.add(this.createBulletSpawnPoint());
         this.turret.position.y = this.turretHeight / 2 + this.bodyHeight / 2;
         this.turret.position.x = -this.bodySide / 5;
         return this.turret;
@@ -225,6 +228,15 @@ class Tank extends THREE.Object3D{
         this.subjectiveCamera.position.x += 1;
         this.subjectiveCamera.position.y += 4;
         return this.subjectiveCamera;
+    }
+
+    /**
+     * Creates spawn point for bullets
+     */
+    createBulletSpawnPoint() {
+        this.bulletSpawnPoint = new THREE.Object3D();
+        this.bulletSpawnPoint.position.x += 20;
+        return this.bulletSpawnPoint;
     }
 
     /**
@@ -382,16 +394,23 @@ class Tank extends THREE.Object3D{
      * Shoots a projectile
      */
     shoot() {
-        this.bulletsArray.push(
-            new Projectile(
-                {
-                    position: {
-                        x: this.turret.getWorldPosition().x,
-                        z: this.turret.getWorldPosition().z
-                    },
-                    vector: this.turretLookAt
-                }
-            )
+        var array = this.turretLookAt;
+        var bullet = new Projectile(
+            {
+                position: {
+                    x: this.bulletSpawnPoint.getWorldPosition().x,
+                    z: this.bulletSpawnPoint.getWorldPosition().z
+                },
+                vector: array
+            }
         );
+        
+        this.bulletsArray.push(bullet);
+        this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
+        this.cooldown = 180;
+    }
+
+    reduceCooldown() {
+        this.cooldown -=1;
     }
 }

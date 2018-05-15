@@ -398,7 +398,8 @@ function keyUpListener(event) {
     case String('S').charCodeAt():
     case String('D').charCodeAt():
     case String('Q').charCodeAt():
-    case String('E').charCodeAt():
+    case String('E').charCodeAt():        
+    case String(' ').charCodeAt():
     case 37: // Left arrow
     case 38: // Up arrow
     case 39: // Right arrow
@@ -421,6 +422,7 @@ function onKeyDown(event){
     case String('D').charCodeAt():
     case String('Q').charCodeAt():
     case String('E').charCodeAt():
+    case String(' ').charCodeAt():
     case 37: // Left arrow
     case 38: // Up arrow
     case 39: // Right arrow
@@ -430,11 +432,6 @@ function onKeyDown(event){
             pressedKeysArray.push(pressedKey);
         }
         break;
-    case String(' ').charCodeAt():
-        if(!visibleMenu)
-            scene.tank.shoot();
-        break;
-    
     }
 }
 
