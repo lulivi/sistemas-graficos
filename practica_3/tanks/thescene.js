@@ -19,6 +19,8 @@ class TheScene extends THREE.Scene {
         this.ground = null;
         // Test projectile
         this.projectile = null;
+        // Test duck
+        this.duck = null;
 
         this.gameReset = false;
         this.hardMode = false;
@@ -117,8 +119,12 @@ class TheScene extends THREE.Scene {
         );
         model.add(this.ground);
 
+        // Testing models
         this.projectile = new Projectile();
         model.add(this.projectile.heart);
+        this.duck = new Duck();
+        model.add(this.duck.duck);
+        
         return model;
     }
 
@@ -129,6 +135,7 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         this.projectile.animateHeart();
+        this.duck.animateDuck();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);

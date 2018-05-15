@@ -1,0 +1,41 @@
+ 
+  var mtlLoader = new THREE.MTLLoader();
+  mtlLoader.setPath( 'Duck/' );
+  mtlLoader.setTexturePath( 'Duck/' );
+  mtlLoader.load( 'duck.mtl', function( materials ) {
+      materials.preload();
+      var objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials( materials );
+      
+      objLoader.setPath( 'Duck/' );
+      objLoader.load( 'duck.obj', function ( object ) {
+
+        // Le ajustáis el tamaño a vuestro gusto
+        object.scale.set (6, 6, 6);
+        
+        // Ahora recorremos el subgrafo encabezado por   object   para asignar 
+        // materiales manualmente y recalcular normales
+        
+        object.traverse (function (child) {
+          if (child instanceof THREE.Mesh) {
+            // Asignación manual de material basándonos en que material y fragmento
+            // de geometría tiene el mismo nombre
+            child.material = materials.materials[child.name];
+            // No se quiere que se vea la geometría facetada
+            child.material.flatShading = false;
+            
+            // Se recalculan las normales
+            var geom = new THREE.Geometry().fromBufferGeometry(child.geometry);
+            geom.computeFaceNormals();
+            geom.mergeVertices();
+            geom.computeVertexNormals();
+            geom.normalsNeedUpdate =true;
+            child.geometry = geom.clone();
+          }
+        });
+
+        // Y añadis   object   a la escena o al padre que corresponda
+  
+      });
+  });
+      
