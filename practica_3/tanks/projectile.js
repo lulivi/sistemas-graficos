@@ -4,9 +4,10 @@ class Projectile extends THREE.Object3D {
     constructor(parameters){
         super();
         this.count = 0;
-        this.lookAt = null;
+        this.lookAt = [0,0,0];
         this.heart = this.createHeart(
             parameters.position,
+            parameters.rotation,
             parameters.vector
         );
         this.growMode = true;
@@ -15,11 +16,12 @@ class Projectile extends THREE.Object3D {
         
     }
 
-    createHeart(position, vector){
-        this.lookAt = vector;
+    createHeart(position, rotation, vector){
+        for(var i = 0; i < 3; i++)
+            this.lookAt[i] = vector[i];
         
         var heart = new THREE.Object3D();
-        heart.rotation.y = Math.PI * 90 / 180;
+        heart.rotation.y = rotation.y + Math.PI * 90 / 180;
         heart.position.x = position.x;
         heart.position.y = 7;
         heart.position.z = position.z;
@@ -46,8 +48,6 @@ class Projectile extends THREE.Object3D {
                                heart.add(object);
                            });
         });
-        console.log('Position: x:' + heart.getWorldPosition().x + ' z:' + heart.getWorldPosition().z + ' Vector: ' + this.lookAt); 
-        
         return heart;
     }
     

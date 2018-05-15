@@ -123,6 +123,7 @@ class TheScene extends THREE.Scene {
         this.projectile = new Projectile(
             {
                 position: {x: 0, z: 0},
+                rotation: {y: 0},
                 vector: [0,0,0]
             }
         );

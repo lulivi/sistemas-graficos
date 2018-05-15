@@ -401,6 +401,9 @@ class Tank extends THREE.Object3D{
                     x: this.bulletSpawnPoint.getWorldPosition().x,
                     z: this.bulletSpawnPoint.getWorldPosition().z
                 },
+                rotation: {
+                    y: this.turret.rotation.y + this.movementNode.rotation.y
+                },
                 vector: array
             }
         );
