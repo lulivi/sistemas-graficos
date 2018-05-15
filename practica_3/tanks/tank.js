@@ -288,8 +288,12 @@ class Tank extends THREE.Object3D{
     rotateTurret(rotationSpeed){
         this.turret.rotation.y += rotationSpeed;
         
-        this.turretLookAt[0] = Math.cos(this.turret.rotation.y);
-        this.turretLookAt[2] = -Math.sin(this.turret.rotation.y);
+        this.turretLookAt[0] = Math.cos(
+            this.turret.rotation.y + this.movementNode.rotation.y
+        );
+        this.turretLookAt[2] = -Math.sin(
+            this.turret.rotation.y + this.movementNode.rotation.y
+        );
     }
 
     /**
@@ -354,6 +358,12 @@ class Tank extends THREE.Object3D{
         this.movementNode.rotation.y += rotationSpeed;
         this.lookAt[0] = Math.cos(this.movementNode.rotation.y);
         this.lookAt[2] = -Math.sin(this.movementNode.rotation.y);
+        this.turretLookAt[0] = Math.cos(
+            this.turret.rotation.y + this.movementNode.rotation.y
+        );
+        this.turretLookAt[2] = -Math.sin(
+            this.turret.rotation.y + this.movementNode.rotation.y
+        );
         if (rotationSpeed > 0) { // giro izquierda
             this.rotateWheels(true, speed);
             this.rotateWheels(false, -speed);
@@ -379,7 +389,7 @@ class Tank extends THREE.Object3D{
                         x: this.turret.getWorldPosition().x,
                         z: this.turret.getWorldPosition().z
                     },
-                    vector: this.turretLookAt + this.lookAt
+                    vector: this.turretLookAt
                 }
             )
         );
