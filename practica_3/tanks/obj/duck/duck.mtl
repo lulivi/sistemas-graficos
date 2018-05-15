@@ -11,6 +11,6 @@ newmtl duck_body
 
 newmtl duck_eye
   Ka 0 0 0
-  Kd 1 0 0
+  Kd 0 0 0
   Ks 0 0 0
   illum 2

@@ -16,33 +16,56 @@ class Duck extends THREE.Object3D {
     }
 
     createDuck(){
-/*
         var duck = new THREE.Object3D();
+
+        // /*
         var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setBaseUrl('obj/');
-        mtlLoader.setPath('obj/');
-        mtlLoader.load('duck.mtl', function (materials) {
-            
+        mtlLoader.setPath( 'obj/duck/' );
+        mtlLoader.setTexturePath( 'obj/duck/' );
+        mtlLoader.load( 'duck.mtl', function( materials ) {
             materials.preload();
             var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials(materials);
-            objLoader.setPath('obj/');
-            objLoader.load('duck.obj', 
-                           
-                           function (object) {
-                               object.position.y = 0.5;
-                               object.scale.y = 100;
-                               object.scale.x = 100;
-                               object.scale.z = 100;
-                               object.castShadow = true;
+            objLoader.setMaterials( materials );
+            
+            objLoader.setPath( 'obj/duck/' );
+            objLoader.load( 'duck.obj', function ( object ) {
+                
+                object.scale.set (100, 100, 100);
+                object.position.z = 50;
+                object.position.y = 30;
+                object.rotation.y = 90* Math.PI / 180; 
 
-                               duck.add(object);
-                               
-                           });
+                // Ahora recorremos el subgrafo encabezado por object  
+                // para asignar materiales manualmente y recalcular normales
+                
+                object.traverse (function (child) {
+                    if (child instanceof THREE.Mesh) {
+                        // Asignación manual de material basándonos en que
+                        // material y fragmento
+                        // de geometría tiene el mismo nombre
+                        child.material = materials.materials[child.name];
+                        // No se quiere que se vea la geometría facetada
+                        child.material.flatShading = false;
+                        
+                        // Se recalculan las normales
+                        var geom = new THREE.Geometry().fromBufferGeometry(
+                            child.geometry
+                        );
+                        geom.computeFaceNormals();
+                        geom.mergeVertices();
+                        geom.computeVertexNormals();
+                        geom.normalsNeedUpdate =true;
+                        child.geometry = geom.clone();
+                    }
+                });
+                
+
+                duck.add(object);
+            });
         });
-        return duck;*/
+        // */
         
-        var duck = new THREE.Object3D();
+        /*
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setBaseUrl('obj/duck/');
         mtlLoader.setPath('obj/duck/');
@@ -66,7 +89,7 @@ class Duck extends THREE.Object3D {
                                
                            });
         });
-
+        */
         
         return duck;
     }

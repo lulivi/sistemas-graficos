@@ -135,7 +135,7 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         this.projectile.animateHeart();
-        this.duck.animateDuck();
+        //this.duck.animateDuck();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);
