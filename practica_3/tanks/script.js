@@ -30,6 +30,10 @@ var pause = false;
 
 var firstTime = true;
 
+var visibleMenu = false;
+
+
+
 const MENU = {
     MAIN: 0,
     MAIN_OPTIONS: 1,
@@ -43,8 +47,8 @@ function hideMenu(){
     $('#fullScreenMenuContainer').hide();
     if(pause) {
         pause = false;
-        render();
     }
+    visibleMenu = false;
 }
 
 function startGame(){
@@ -66,6 +70,7 @@ function showMenu(menuId){
         else
             currMenu.show();
     });
+    visibleMenu = true;
 }
 
 /**
@@ -120,10 +125,10 @@ function createMenus(){
         {
             headingText: 'Pausa',
             buttonsArray: [
-                {name: 'Reanudar', func:'hideMenu()'},
+                {name: 'Reanudar', func:'toggleRender()'},
                 {name: 'Instrucciones', func: 'showMenu(MENU.PAUSE_INSTR)'},
                 {name: 'Opciones rápidas', func: 'showMenu(MENU.PAUSE_OPT)'},
-                {name: 'Menú principal', func:'init3D()'},
+                {name: 'Menú principal', func:'restartScene()'},
             ],
         },
         {
@@ -197,7 +202,7 @@ function createMenus(){
     });
 }
 
-function init3D() {
+function restartScene() {
     scene = new TheScene(renderer.domElement);
     renderer.clear(false,true,true);
     $('#Stats-output').hide();
@@ -334,22 +339,34 @@ function createRenderer() {
  * It renders every frame
  */
 function render() {
-    if(pause) return;
+    if(!pause){
+        requestAnimationFrame(render);
 
-    requestAnimationFrame(render);
+        stats.update();
+        // playerInfo.update(scene.robot.energy, scene.robot.score);
+        scene.getCameraControls().update();
+        scene.animate(GUIcontrols);
 
-    stats.update();
-    // playerInfo.update(scene.robot.energy, scene.robot.score);
-    scene.getCameraControls().update();
-    scene.animate(GUIcontrols);
+        renderer.render(scene, scene.getCamera());
 
-    renderer.render(scene, scene.getCamera());
-    
-    if (scene.gameReset){
-        scene.toggleReset();
-        pressedKey = null;
+        if (scene.gameReset){
+            scene.toggleReset();
+            pressedKey = null;
+        }
     }
 
+}
+
+function toggleRender(){
+    if (visibleMenu) {
+        hideMenu();
+        pause = false;
+        visibleMenu = false;
+        requestAnimationFrame(render);
+    } else {
+        showMenu(MENU.PAUSE);
+        pause = true;
+    }
 }
 
 /**
@@ -364,18 +381,7 @@ function keyDownListener(event) {
         scene.swapCamera();
         break;
     case 27: // Esc key
-        var visibleMenus = false;
-        menusArray.forEach(function(currMenu){
-            if(currMenu.is(':visible'))
-                visibleMenus = true;
-        });
-        if(!visibleMenus) {
-            showMenu(MENU.PAUSE);
-            pause = !pause;
-        } else{
-            hideMenu(MENU.PAUSE);
-        }
-        break;
+        toggleRender();
     }
 }
 
