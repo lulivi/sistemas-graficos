@@ -392,13 +392,15 @@ function createMenus(){
 
 /**
 
+########  ######## ##    ## ########  ######## ########
+##     ## ##       ###   ## ##     ## ##       ##     ##
+##     ## ##       ####  ## ##     ## ##       ##     ##
+########  ######   ## ## ## ##     ## ######   ########
+##   ##   ##       ##  #### ##     ## ##       ##   ##
+##    ##  ##       ##   ### ##     ## ##       ##    ##
+##     ## ######## ##    ## ########  ######## ##     ##
 
-    } else {
-    }
-}
-
-/**
-
+**/
 
 /**
  * It creates and configures the WebGL renderer
@@ -416,33 +418,23 @@ function createRenderer() {
  * It renders every frame
  */
 function render() {
-    if(!pause){
-        requestAnimationFrame(render);
 
-        stats.update();
-        // playerInfo.update(scene.robot.energy, scene.robot.score);
-        scene.getCameraControls().update();
-        scene.animate(GUIcontrols);
+    // If we are in pause, dont request another animation frame
+    if (pause)
+        return;
 
-        renderer.render(scene, scene.getCamera());
+    requestAnimationFrame(render);
 
-        if (scene.gameReset){
-            scene.toggleReset();
-            pressedKey = null;
-        }
-    }
+    stats.update();
+    // playerInfo.update(scene.robot.energy, scene.robot.score);
+    scene.getCameraControls().update();
+    scene.animate(GUIcontrols);
 
-}
+    renderer.render(scene, scene.getCamera());
 
-function toggleRender(){
-    if (visibleMenu) {
-        hideMenu();
-        pause = false;
-        visibleMenu = false;
-        requestAnimationFrame(render);
-    } else {
-        showMenu(MENU.PAUSE);
-        pause = true;
+    if (scene.gameReset){
+        scene.toggleReset();
+        pressedKey = null;
     }
 }
 
