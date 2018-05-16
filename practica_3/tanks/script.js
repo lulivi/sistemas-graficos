@@ -77,16 +77,111 @@ function hideMenu(){
     }
     visibleMenu = false;
 }
+/**
+
+ ######      ###    ##     ## ########
+##    ##    ## ##   ###   ### ##
+##         ##   ##  #### #### ##
+##   #### ##     ## ## ### ## ######
+##    ##  ######### ##     ## ##
+##    ##  ##     ## ##     ## ##
+ ######   ##     ## ##     ## ########
+
+ ######   ######  ######## ##    ## ########
+##    ## ##    ## ##       ###   ## ##
+##       ##       ##       ####  ## ##
+ ######  ##       ######   ## ## ## ######
+      ## ##       ##       ##  #### ##
+##    ## ##    ## ##       ##   ### ##
+ ######   ######  ######## ##    ## ########
+
+ #######  ######## ##     ## ######## ########
+##     ##    ##    ##     ## ##       ##     ##
+##     ##    ##    ##     ## ##       ##     ##
+##     ##    ##    ######### ######   ########
+##     ##    ##    ##     ## ##       ##   ##
+##     ##    ##    ##     ## ##       ##    ##
+ #######     ##    ##     ## ######## ##     ##
+
+**/
 
 function startGame(){
-    if(firstTime) {
-        createGUI(true);
+    if (firstTime) {
         firstTime = false;
-    } //else
-    //        createGUI(false);
-    hideMenu();
+        createGUI(true);
+        render();
+    } else {
+        requestAnimationFrame(render);
+    }
+    toggleMenu(currentMenu);
     $('#Stats-output').show();
-    render();
+}
+
+function restartScene() {
+    scene = new TheScene(renderer.domElement);
+    renderer.clear(false,true,true);
+    $('#Stats-output').hide();
+    toggleMenu(Menu.MAIN);
+}
+
+/**
+ * It creates the GUI and, optionally, adds statistic information
+ * @param withStats - A boolean to show the statictics or not
+ */
+function createGUI(withStats) {
+    // GUIcontrols = new function() {
+    //     this.axis = false;
+    //     this.lightIntensity = 0.3;
+    //     this.tankTurretRotation = 0;
+    //     this.tankBarrelRotation = 0;
+    //     this.hardMode = false;
+    // };
+    //
+    // var gui = new dat.GUI();
+    //
+    // var gameControls = gui.addFolder('Game Controls');
+    // gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
+    //
+    // var tankControls = gui.addFolder('Tank Controls');
+    // tankControls.add(
+    //     GUIcontrols, 'tankTurretRotation', -180.0, 180.0
+    // ).name('Turret Rotation :');
+    //
+    // var axisLights = gui.addFolder('Axis and Lights');
+    // axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
+    // axisLights.add(
+    //     GUIcontrols, 'lightIntensity', 0, 1.0
+    // ).name('Light intensity :');
+
+
+    // The method  listen()  allows the height attribute to be written,
+    // not only read
+
+    if(withStats) {
+        stats = initStats();
+    }
+
+    // playerInfo = initPlayerInfo();
+}
+
+/**
+ * It adds statistics information to a previously created Div
+ * @return The statistics object
+ */
+function initStats() {
+
+    var stats = new Stats();
+
+    stats.setMode(0); // 0: fps, 1: ms
+
+    // Align top-left
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+
+    $('#Stats-output').append(stats.domElement);
+
+    return stats;
 }
 
 function showMenu(menuId){
@@ -98,6 +193,27 @@ function showMenu(menuId){
             currMenu.show();
     });
     visibleMenu = true;
+function initPlayerInfo() {
+    var playerInfo = new PlayerInfo();
+
+    playerInfo.domElement.style.position = 'absolute';
+    playerInfo.domElement.style.left = '0px';
+    playerInfo.domElement.style.top = '100px';
+
+    $('#Player-info').append(playerInfo.domElement);
+
+    return playerInfo;
+}
+
+/**
+ * It shows a feed-back message for the user
+ * @param str - The message
+ */
+function setMessage(str) {
+    $('#Messages').text('<h2>' + str + '</h2>');
+}
+
+
 }
 
 /**
@@ -229,92 +345,8 @@ function createMenus(){
     });
 }
 
-function restartScene() {
-    scene = new TheScene(renderer.domElement);
-    renderer.clear(false,true,true);
-    $('#Stats-output').hide();
-    showMenu(MENU.MAIN);
-}
-
 /**
- * It creates the GUI and, optionally, adds statistic information
- * @param withStats - A boolean to show the statictics or not
- */
-function createGUI(withStats) {
-    // GUIcontrols = new function() {
-    //     this.axis = false;
-    //     this.lightIntensity = 0.3;
-    //     this.tankTurretRotation = 0;
-    //     this.tankBarrelRotation = 0;
-    //     this.hardMode = false;
-    // };
-    //
-    // var gui = new dat.GUI();
-    //
-    // var gameControls = gui.addFolder('Game Controls');
-    // gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
-    //
-    // var tankControls = gui.addFolder('Tank Controls');
-    // tankControls.add(
-    //     GUIcontrols, 'tankTurretRotation', -180.0, 180.0
-    // ).name('Turret Rotation :');
-    //
-    // var axisLights = gui.addFolder('Axis and Lights');
-    // axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    // axisLights.add(
-    //     GUIcontrols, 'lightIntensity', 0, 1.0
-    // ).name('Light intensity :');
 
-
-    // The method  listen()  allows the height attribute to be written,
-    // not only read
-
-    if(withStats) {
-        stats = initStats();
-    }
-
-    // playerInfo = initPlayerInfo();
-}
-
-/**
- * It adds statistics information to a previously created Div
- * @return The statistics object
- */
-function initStats() {
-
-    var stats = new Stats();
-
-    stats.setMode(0); // 0: fps, 1: ms
-
-    // Align top-left
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0px';
-    stats.domElement.style.top = '0px';
-
-    $('#Stats-output').append(stats.domElement);
-
-    return stats;
-}
-
-function initPlayerInfo() {
-    var playerInfo = new PlayerInfo();
-
-    playerInfo.domElement.style.position = 'absolute';
-    playerInfo.domElement.style.left = '0px';
-    playerInfo.domElement.style.top = '100px';
-
-    $('#Player-info').append(playerInfo.domElement);
-
-    return playerInfo;
-}
-
-/**
- * It shows a feed-back message for the user
- * @param str - The message
- */
-function setMessage(str) {
-    $('#Messages').text('<h2>' + str + '</h2>');
-}
 
     } else {
     }
