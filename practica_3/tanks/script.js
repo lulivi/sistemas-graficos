@@ -2,37 +2,64 @@
 
 /// Several functions, including the main
 
-/// The scene graph
+/**
+ * Scene graph
+ */
 var scene = null;
 
-/// The GUI information
+/**
+ * The GUI information
+ */
 var GUIcontrols = null;
 
-/// The object for the statistics
+/**
+ * The object for the statistics
+ */
 var stats = null;
 
-/// The pressed key
+/**
+ * The pressed key
+ */
 var pressedKey = null;
-/// Currently pressed keys
+/**
+ * Currently pressed keys
+ */
 var pressedKeysArray = new Array();
 
-/// Player information GUI
+/**
+ * Player information GUI
+ */
 // var playerInfo = null;
 
-/// The current mode of the application
+/**
+ * The current mode of the application
+ */
 // var gameMode = null;
 
+/**
+ * Renderer
+ */
 var renderer = null;
 
+/**
+ * Array of menus to show/hide them
+ */
 var menusArray = new Array();
 
+/**
+ * If the game is in pause
+ */
 var pause = false;
 
+/**
+* If we are in-game (pause menu, or the game itself)
+*/
+var inGame = false;
+
+/**
+ * If it is the irst time the function startGame is executed
+ */
 var firstTime = true;
-
-var visibleMenu = false;
-
-
 
 const MENU = {
     MAIN: 0,
