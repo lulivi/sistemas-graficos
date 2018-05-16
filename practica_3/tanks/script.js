@@ -61,22 +61,27 @@ var inGame = false;
  */
 var firstTime = true;
 
-const MENU = {
+/**
+ * @enum
+ */
+const Menu = {
     MAIN: 0,
-    MAIN_OPTIONS: 1,
-    MAIN_INSTR: 2,
+    MAIN_OPT: 1,
+    INSTR: 2,
     PAUSE: 3,
     PAUSE_OPT: 4,
-    PAUSE_INSTR: 5,
 };
 
-function hideMenu(){
-    $('#fullScreenMenuContainer').hide();
-    if(pause) {
-        pause = false;
-    }
-    visibleMenu = false;
-}
+/**
+ * Current visible menu
+ */
+var currentMenu = null;
+
+/**
+ * Last visible menu
+ */
+var previousMenu = null;
+
 /**
 
  ######      ###    ##     ## ########
@@ -184,15 +189,6 @@ function initStats() {
     return stats;
 }
 
-function showMenu(menuId){
-    $('#fullScreenMenuContainer').show();
-    menusArray.forEach(function(currMenu, index){
-        if(index != menuId)
-            currMenu.hide();
-        else
-            currMenu.show();
-    });
-    visibleMenu = true;
 function initPlayerInfo() {
     var playerInfo = new PlayerInfo();
 
@@ -214,6 +210,66 @@ function setMessage(str) {
 }
 
 
+/**
+
+##     ## ######## ##    ## ##     ##  ######
+###   ### ##       ###   ## ##     ## ##    ##
+#### #### ##       ####  ## ##     ## ##
+## ### ## ######   ## ## ## ##     ##  ######
+##     ## ##       ##  #### ##     ##       ##
+##     ## ##       ##   ### ##     ## ##    ##
+##     ## ######## ##    ##  #######   ######
+
+**/
+
+/**
+ * Manage menu changes (hide/show) and the consecuences of the changes
+ *
+ * @param {Menu} menuId - menusArray index
+ */
+function toggleMenu(menuId = Menu.MAIN) {
+    // Hide current menu
+    if (menuId === currentMenu) {
+        // Hide current menu
+        menusArray[menuId].hide();
+        $('#fullScreenMenuContainer').hide();
+        // Update current and previous menu vars
+        previousMenu = currentMenu;
+        currentMenu = null;
+    // Show other menu and hide current one
+    } else if (0 <= menuId || menuId < menusArray.length) {
+        // If the current menu isn't null, hide it!
+        if (currentMenu !== null)
+            menusArray[currentMenu].hide();
+        $('#fullScreenMenuContainer').show();
+        // Show the new menu (menuId)
+        menusArray[menuId].show();
+        // Update current and previous menu vars
+        previousMenu = currentMenu;
+        currentMenu = menuId;
+    }
+
+    // If we come from the main menu, we are in game
+    if (previousMenu === Menu.MAIN) {
+        inGame = true;
+        pause = false;
+    }
+
+    // If we are in the main menu, we are not in game
+    if (currentMenu === Menu.MAIN) {
+        inGame = false;
+    }
+
+    // If we came from pause menu and we are in game, restart rendering!
+    if (previousMenu === Menu.PAUSE && currentMenu === null) {
+        pause = false;
+        requestAnimationFrame(render);
+    }
+
+    // If we are on pause menu and came from the game, it is paused
+    if (currentMenu === Menu.PAUSE && previousMenu === null) {
+        pause = true;
+    }
 }
 
 /**
@@ -238,20 +294,20 @@ function createMenus(){
         {
             headingText: 'Tanks n\' Ducks',
             buttonsArray: [
-                {name: '1 Jugador', func: 'startGame()'},
-                {name: '1 vs 1', func: 'startGame()'},
-                {name: 'Instrucciones', func: 'showMenu(MENU.MAIN_INSTR)'},
-                {name: 'Opciones', func: 'showMenu(MENU.MAIN_OPTIONS)'},
+                {text: '1 Jugador', func: 'startGame()'},
+                {text: '1 vs 1', func: 'startGame()'},
+                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTR)'},
+                {text: 'Opciones', func: 'toggleMenu(Menu.MAIN_OPT)'},
             ],
         },
         {
             headingText: 'Opciones',
             buttonsArray: [
-                {name: 'Velocidad', func: ''},
-                {name: 'Nosequé', func: ''},
-                {name: 'un puñao de cosas', func: ''},
-                {name: 'pin pan pun', func: ''},
-                {name: 'Atrás', func:'showMenu(MENU.MAIN)'},
+                {text: 'Velocidad', func: ''},
+                {text: 'Nosequé', func: ''},
+                {text: 'un puñao de cosas', func: ''},
+                {text: 'pin pan pun', func: ''},
+                {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
         {
@@ -262,35 +318,24 @@ function createMenus(){
                 alt: 'Instrucciones',
             },
             buttonsArray: [
-                {name: 'Atrás', func: 'showMenu(MENU.MAIN)'},
+                {text: 'Atrás', func: 'toggleMenu(previousMenu)'},
             ],
         },
         {
             headingText: 'Pausa',
             buttonsArray: [
-                {name: 'Reanudar', func:'toggleRender()'},
-                {name: 'Instrucciones', func: 'showMenu(MENU.PAUSE_INSTR)'},
-                {name: 'Opciones rápidas', func: 'showMenu(MENU.PAUSE_OPT)'},
-                {name: 'Menú principal', func:'restartScene()'},
+                {text: 'Reanudar', func:'toggleMenu(currentMenu)'},
+                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTR)'},
+                {text: 'Opciones rápidas', func: 'toggleMenu(Menu.PAUSE_OPT)'},
+                {text: 'Menú principal', func:'restartScene()'},
             ],
         },
         {
             headingText: 'Opciones In-Game',
             buttonsArray: [
-                {name: 'Velocidad', func: ''},
-                {name: 'Nosequé', func: ''},
-                {name: 'Atrás', func:'showMenu(MENU.PAUSE)'},
-            ],
-        },
-        {
-            headingText: 'Instrucciones',
-            image: {
-                src: './imgs/Instrucciones.png',
-                title: 'Instrucciones',
-                alt: 'Instrucciones',
-            },
-            buttonsArray: [
-                {name: 'Atrás', func: 'showMenu(MENU.PAUSE)'},
+                {text: 'Velocidad', func: ''},
+                {text: 'Nosequé', func: ''},
+                {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
     ];
@@ -331,7 +376,7 @@ function createMenus(){
             currMenu.append(
                 $('<input>')
                     .attr({
-                        'value': currButton.name,
+                        'value': currButton.text,
                         'onmouseup':currButton.func,
                         'type': 'button'
                     }).addClass(
@@ -341,7 +386,7 @@ function createMenus(){
         });
 
         // Add the current menu to an array for future show/hide
-        menusArray.push(currMenu);
+        menusArray.push(currMenu.hide());
     });
 }
 
@@ -565,5 +610,5 @@ $(function() {
     scene = new TheScene(renderer.domElement);
 
     createMenus();
-    showMenu(MENU.MAIN);
+    toggleMenu(Menu.MAIN);
 });
