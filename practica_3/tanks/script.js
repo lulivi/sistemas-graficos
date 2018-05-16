@@ -316,39 +316,12 @@ function setMessage(str) {
     $('#Messages').text('<h2>' + str + '</h2>');
 }
 
-/**
- * It processes the clic-down of the mouse
- * @param event - Mouse information
- */
-function onMouseDown(event) {
-    if (event.ctrlKey) {
-        // The Trackballcontrol only works if Ctrl key is pressed
-        scene.getCameraControls().enabled = true;
     } else {
-        scene.getCameraControls().enabled = false;
     }
 }
 
 /**
- * It processes the mouse wheel rotation
- * @param event - Mouse information
- */
-function onMouseWheel(event) {
-    if (event.ctrlKey) {
-        // The Trackballcontrol only works if Ctrl key is pressed
-        scene.getCameraControls().enabled = true;
-    } else {
-        scene.getCameraControls().enabled = false;
-    }
-}
 
-/**
- * It processes the window size changes
- */
-function onWindowResize() {
-    scene.setCameraAspect(window.innerWidth / window.innerHeight);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
 
 /**
  * It creates and configures the WebGL renderer
@@ -396,6 +369,20 @@ function toggleRender(){
     }
 }
 
+
+/**
+
+##       ####  ######  ######## ######## ##    ## ######## ########   ######
+##        ##  ##    ##    ##    ##       ###   ## ##       ##     ## ##    ##
+##        ##  ##          ##    ##       ####  ## ##       ##     ## ##
+##        ##   ######     ##    ######   ## ## ## ######   ########   ######
+##        ##        ##    ##    ##       ##  #### ##       ##   ##         ##
+##        ##  ##    ##    ##    ##       ##   ### ##       ##    ##  ##    ##
+######## ####  ######     ##    ######## ##    ## ######## ##     ##  ######
+
+**/
+
+
 /**
  * Key down listener
  * @param event - The key event
@@ -408,7 +395,8 @@ function keyDownListener(event) {
         scene.swapCamera();
         break;
     case 27: // Esc key
-        toggleRender();
+        if (inGame)
+            toggleMenu(Menu.PAUSE);
     }
 }
 
@@ -419,19 +407,20 @@ function keyDownListener(event) {
 function keyUpListener(event) {
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    switch(key) {
-    case String('W').charCodeAt():
-    case String('A').charCodeAt():
-    case String('S').charCodeAt():
-    case String('D').charCodeAt():
-    case String('Q').charCodeAt():
-    case String('E').charCodeAt():        
-    case String(' ').charCodeAt():
-    case 37: // Left arrow
-    case 38: // Up arrow
-    case 39: // Right arrow
-    case 40: // Down arrow
-        pressedKeysArray.splice(pressedKeysArray.indexOf(key),1);
+    if (inGame && !pause) {
+        switch (key) {
+        case String('W').charCodeAt():
+        case String('A').charCodeAt():
+        case String('S').charCodeAt():
+        case String('D').charCodeAt():
+        case String('Q').charCodeAt():
+        case String('E').charCodeAt():
+        case 37: // Left arrow
+        case 38: // Up arrow
+        case 39: // Right arrow
+        case 40: // Down arrow
+            pressedKeysArray.splice(pressedKeysArray.indexOf(key),1);
+        }
     }
 }
 
@@ -442,21 +431,22 @@ function keyUpListener(event) {
 function onKeyDown(event){
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    switch (key) {
-    case String('W').charCodeAt():
-    case String('A').charCodeAt():
-    case String('S').charCodeAt():
-    case String('D').charCodeAt():
-    case String('Q').charCodeAt():
-    case String('E').charCodeAt():
-    case String(' ').charCodeAt():
-    case 37: // Left arrow
-    case 38: // Up arrow
-    case 39: // Right arrow
-    case 40: // Down arrow
-        pressedKey = key;
-        if(pressedKeysArray.indexOf(pressedKey) == -1) {
-            pressedKeysArray.push(pressedKey);
+    if (inGame && !pause) {
+        switch (key) {
+        case String('W').charCodeAt():
+        case String('A').charCodeAt():
+        case String('S').charCodeAt():
+        case String('D').charCodeAt():
+        case String('Q').charCodeAt():
+        case String('E').charCodeAt():
+        case 37: // Left arrow
+        case 38: // Up arrow
+        case 39: // Right arrow
+        case 40: // Down arrow
+            pressedKey = key;
+            if(pressedKeysArray.indexOf(pressedKey) == -1) {
+                pressedKeysArray.push(pressedKey);
+            }
         }
         break;
     }
@@ -467,6 +457,44 @@ function onKeyDown(event){
  */
 function onKeyUp(){
     pressedKey = null;
+}
+
+/**
+ * It processes the clic-down of the mouse
+ * @param event - Mouse information
+ */
+function onMouseDown(event) {
+    if (inGame && !pause) {
+        if (event.ctrlKey) {
+            // The Trackballcontrol only works if Ctrl key is pressed
+            scene.getCameraControls().enabled = true;
+        } else {
+            scene.getCameraControls().enabled = false;
+        }
+    }
+}
+
+/**
+ * It processes the mouse wheel rotation
+ * @param event - Mouse information
+ */
+function onMouseWheel(event) {
+    if (inGame && !pause) {
+        if (event.ctrlKey) {
+            // The Trackballcontrol only works if Ctrl key is pressed
+            scene.getCameraControls().enabled = true;
+        } else {
+            scene.getCameraControls().enabled = false;
+        }
+    }
+}
+
+/**
+ * It processes the window size changes
+ */
+function onWindowResize() {
+    scene.setCameraAspect(window.innerWidth / window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 /**
