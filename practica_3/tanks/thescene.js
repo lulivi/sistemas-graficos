@@ -17,6 +17,8 @@ class TheScene extends THREE.Scene {
         this.trackballControls = null;
         this.tank = null;
         this.ground = null;
+        this.groundWidth = 500;
+        this.groundLength = 500;
         // Test projectile
         this.projectile = null;
         // Test duck
@@ -92,6 +94,18 @@ class TheScene extends THREE.Scene {
         var model = new THREE.Object3D();
         var loader = new THREE.TextureLoader();
 
+        // Ground model
+        var groundTexture = loader.load('imgs/rock.jpg');
+        groundTexture.wrapS = THREE.RepeatWrapping;
+        groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat = new THREE.Vector2(4,4);
+        this.ground = new Ground(
+            this.groundWidth, this.groundLength, new THREE.MeshPhongMaterial({
+                map: groundTexture
+            }), 4
+        );
+        model.add(this.ground);
+
         // Tank model
         var tankTexture = loader.load('imgs/metal1.jpg');
         
@@ -102,24 +116,18 @@ class TheScene extends THREE.Scene {
                     shininess: 70,
                     map: tankTexture
                 }
-            )
+                
+            ),
+             ground: {
+                 length: this.groundLength,
+                 width: this.groundWidth
+             }
             }
         );
         model.add(this.tank);
-
-        // Ground model
-        var groundTexture = loader.load('imgs/rock.jpg');
-        groundTexture.wrapS = THREE.RepeatWrapping;
-        groundTexture.wrapT = THREE.RepeatWrapping;
-        groundTexture.repeat = new THREE.Vector2(4,4);
-        this.ground = new Ground(
-            500, 500, new THREE.MeshPhongMaterial({
-                map: groundTexture
-            }), 4
-        );
-        model.add(this.ground);
-
+        
         // Testing models
+        /*
         this.projectile = new Projectile(
             {
                 position: {x: 0, z: 0},
@@ -130,6 +138,7 @@ class TheScene extends THREE.Scene {
         model.add(this.projectile.heart);
         this.duck = new Duck();
         model.add(this.duck.duck);
+        */
         
         return model;
     }
@@ -140,7 +149,7 @@ class TheScene extends THREE.Scene {
      */
     animate(controls) {
         this.moveTank();
-        this.projectile.animateHeart();
+        //this.projectile.animateHeart();
         this.tank.bulletsArray.forEach(function(bullet){
             bullet.animateHeart();
         });

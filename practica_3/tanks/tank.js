@@ -79,6 +79,10 @@ class Tank extends THREE.Object3D{
         this.rightWheelsPosition = this.bodyFront / 2;
         this.leftWheelsPosition = - this.rightWheelsPosition;
 
+        // Limits
+        this.groundLength = parameters.ground.length;
+        this.groundWidth = parameters.ground.width;
+        
         // Extra nodes
         this.movementNode = null;
 
@@ -100,7 +104,6 @@ class Tank extends THREE.Object3D{
         this.bulletsArray = new Array();
         this.cooldown = null;
 
-        
         // First person camera
         this.subjectiveCamera = null;
 
@@ -350,10 +353,19 @@ class Tank extends THREE.Object3D{
      * @param speed {Number} - Space to displace
      */
     moveForward(speed){
+        var newXPos = this.movementNode.position.x +
+            speed * this.lookAt[0];
+        var newZPos = this.movementNode.position.z +
+            speed * this.lookAt[2];
+        console.log(this.groundLength/2);
+      //  console.log(newXPos < this.groundWidth/2);
+        
+        if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
         // X component of lookAt vector
-        this.movementNode.position.x += speed * this.lookAt[0];
+            this.movementNode.position.x = newXPos;
         // Z component of lookAt vector
-        this.movementNode.position.z += speed * this.lookAt[2];
+        if(newZPos < this.groundLength/2 &&  newZPos > -this.groundLength/2)
+            this.movementNode.position.z = newZPos;
         // Rotation of wheels
         this.rotateWheels(true, speed);
         this.rotateWheels(false, speed);
@@ -415,5 +427,14 @@ class Tank extends THREE.Object3D{
 
     reduceCooldown() {
         this.cooldown -=1;
+    }
+
+    removeBullets() {
+        this.bulletsArray.forEach(function(bullet, index) {
+            if(bullet.isOutOfRange()) {
+                this.remove(this.bulletsArray[index]);
+                this.bulletsArray.splice(index,1);
+            }
+        });
     }
 }

@@ -77,6 +77,9 @@ class Projectile extends THREE.Object3D {
         this.heart.position.z += this.speed * this.lookAt[2];        
     }
 
+    isOutOfRange() {
+        
+    }
     
 
 }
