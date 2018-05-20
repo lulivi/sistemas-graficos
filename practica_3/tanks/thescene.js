@@ -150,9 +150,8 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         //this.projectile.animateHeart();
-        this.tank.bulletsArray.forEach(function(bullet){
-            bullet.animateHeart();
-        });
+        this.tank.animateBullets();
+        //this.tank.removeBullets();
         //this.duck.animateDuck();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;

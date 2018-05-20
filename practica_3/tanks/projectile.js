@@ -12,6 +12,7 @@ class Projectile extends THREE.Object3D {
         );
         this.growMode = true;
         this.speed = 2;
+        this.explodeCount = 0;
 
         
     }
@@ -77,8 +78,20 @@ class Projectile extends THREE.Object3D {
         this.heart.position.z += this.speed * this.lookAt[2];        
     }
 
-    isOutOfRange() {
-        
+    isOutOfRange(groundLength) {
+        var xPos = this.heart.getWorldPosition().x;
+        var zPos = this.heart.getWorldPosition().z;
+        return !(groundLength/2 > xPos && -groundLength/2 < xPos
+                && groundLength/2 > zPos && -groundLength/2 < zPos);
+    }
+
+    explode() {
+        this.explodeCount++;
+        var factor = 0.3;
+        this.heart.scale.y += factor;
+        this.heart.scale.x += factor;
+        this.heart.scale.z += factor;
+        return this.explodeCount;
     }
     
 

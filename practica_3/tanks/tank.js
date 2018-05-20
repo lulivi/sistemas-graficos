@@ -357,8 +357,6 @@ class Tank extends THREE.Object3D{
             speed * this.lookAt[0];
         var newZPos = this.movementNode.position.z +
             speed * this.lookAt[2];
-        console.log(this.groundLength/2);
-      //  console.log(newXPos < this.groundWidth/2);
         
         if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
         // X component of lookAt vector
@@ -422,18 +420,22 @@ class Tank extends THREE.Object3D{
         
         this.bulletsArray.push(bullet);
         this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
-        this.cooldown = 180;
+        this.cooldown = 80;
     }
 
     reduceCooldown() {
         this.cooldown -=1;
     }
 
-    removeBullets() {
-        this.bulletsArray.forEach(function(bullet, index) {
-            if(bullet.isOutOfRange()) {
-                this.remove(this.bulletsArray[index]);
-                this.bulletsArray.splice(index,1);
+    animateBullets() {
+        let self = this;
+        this.bulletsArray.forEach(function(bullet, index){
+            bullet.animateHeart();
+            if(bullet.isOutOfRange(self.groundLength)) {
+                if(bullet.explode() >= 20) {
+                    self.remove(bullet.heart);
+                    self.bulletsArray.splice(index,1);
+                }
             }
         });
     }
