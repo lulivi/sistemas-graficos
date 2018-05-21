@@ -10,10 +10,11 @@ class Projectile extends THREE.Object3D {
             parameters.rotation,
             parameters.vector
         );
+        this.heartRadius = 5;
         this.growMode = true;
         this.speed = 2;
         this.explodeCount = 0;
-
+        this.hit = false;
         
     }
 
@@ -85,6 +86,15 @@ class Projectile extends THREE.Object3D {
                 && groundLength/2 > zPos && -groundLength/2 < zPos);
     }
 
+    checkCollision(ducks) {
+
+        // for each duck do:
+        var bullet = this.heart.getWorldPosition();
+        var duck = ducks.collider.getWorldPosition();
+        return bullet.distanceTo(duck) <
+            ducks.colliderRadius + this.heartRadius;
+    }
+    
     explode() {
         this.explodeCount++;
         var factor = 0.3;

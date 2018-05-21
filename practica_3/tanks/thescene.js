@@ -38,7 +38,6 @@ class TheScene extends THREE.Scene {
             1000,
             1000
         );
-
     }
 
     /// It creates the camera and adds it to the graph
@@ -63,7 +62,6 @@ class TheScene extends THREE.Scene {
         this.trackballControls.zoomSpeed = -2;
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
-
 
         this.add(this.camera);
     }
@@ -144,10 +142,11 @@ class TheScene extends THREE.Scene {
                 vector: [0,0,0]
             }
         );
-        model.add(this.projectile.heart);
+        */
+        //model.add(this.projectile.heart);
         this.duck = new Duck();
         model.add(this.duck.duck);
-        */
+        
         
         return model;
     }
@@ -159,9 +158,9 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         //this.projectile.animateHeart();
-        this.tank.animateBullets();
+        this.tank.animateBullets(this.duck);
         //this.tank.removeBullets();
-        //this.duck.animateDuck();
+        this.duck.animateDuck();
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);

@@ -427,11 +427,14 @@ class Tank extends THREE.Object3D{
         this.cooldown -=1;
     }
 
-    animateBullets() {
+    animateBullets(ducks) {
         let self = this;
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
-            if(bullet.isOutOfRange(self.groundLength)) {
+            if(bullet.checkCollision(ducks)) {
+                bullet.hit = true;
+            }
+            if(bullet.isOutOfRange(self.groundLength) || bullet.hit) {
                 if(bullet.explode() >= 20) {
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);

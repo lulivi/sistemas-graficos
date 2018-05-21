@@ -7,7 +7,10 @@ class Duck extends THREE.Object3D {
         this.twistCounter = 0;
         this.moveMode = true;
         this.twistMode = false;
-        this.duck = this.createDuck();
+        this.duck = null;
+        this.collider = null;
+        this.colliderRadius = 20;
+        this.add(this.createDuck());
         this.lookAt = [
             1,
             0,
@@ -16,12 +19,13 @@ class Duck extends THREE.Object3D {
     }
 
     createDuck(){
-        var duck = new THREE.Object3D();
+        this.duck = new THREE.Object3D();
 
         // /*
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath( 'obj/duck/' );
         mtlLoader.setTexturePath( 'obj/duck/' );
+        let self = this;
         mtlLoader.load( 'duck.mtl', function( materials ) {
             materials.preload();
             var objLoader = new THREE.OBJLoader();
@@ -30,10 +34,6 @@ class Duck extends THREE.Object3D {
             objLoader.setPath( 'obj/duck/' );
             objLoader.load( 'duck.obj', function ( object ) {
                 
-                object.scale.set (100, 100, 100);
-                object.position.z = 50;
-                object.position.y = 30;
-                object.rotation.y = 90* Math.PI / 180; 
 
                 // Ahora recorremos el subgrafo encabezado por object  
                 // para asignar materiales manualmente y recalcular normales
@@ -60,50 +60,42 @@ class Duck extends THREE.Object3D {
                 });
                 
 
-                duck.add(object);
+                self.duck.add(object);
+         
             });
         });
-        // */
         
-        /*
-        var mtlLoader = new THREE.MTLLoader();
-        mtlLoader.setBaseUrl('obj/duck/');
-        mtlLoader.setPath('obj/duck/');
-        mtlLoader.load('duck.mtl', function (materials) {
-            
-            materials.preload();
-            var objLoader = new THREE.OBJLoader();
-            objLoader.setMaterials(materials);
-            objLoader.setPath('obj/duck/');
-            objLoader.load('duck.obj', 
-                           
-                           function (object) {
-                               object.position.z = 50;
-                               object.rotation.y = 90* Math.PI / 180; 
-                               object.scale.y = 100;
-                               object.scale.x = 100;
-                               object.scale.z = 100;
-                               object.castShadow = true;
+        this.duck.scale.set (100, 100, 100);
+        this.duck.position.z = 50;
+        this.duck.rotation.y = 90* Math.PI / 180;
+    
+        this.duck.add(this.createCollider());
+        return this.duck;
+    }
 
-                               duck.add(object);
-                               
-                           });
-        });
-        */
-        
-        return duck;
+    createCollider() {
+        var geometry = new THREE.SphereGeometry( this.colliderRadius, 32, 32 );
+        var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+        material.transparent = true;
+        material.opacity = 0;
+        this.collider = new THREE.Mesh( geometry, material);
+        this.collider.scale.set (1/100, 1/100, 1/100);
+        this.collider.position.y /= 100;
+
+        return this.collider;
     }
     
     moveDuck(speed){
         this.duck.position.x += speed * this.lookAt[0];
         this.duck.position.z += speed * this.lookAt[2];
-        
     }
 
     rotateDuck(speed) {
         this.duck.rotation.y += speed * Math.PI / 180;
-        this.lookAt[0] = Math.cos(this.duck.rotation.y);
-        this.lookAt[2] = -Math.sin(this.duck.rotation.y);
+        var offset = -90 * Math.PI/180;
+        var lookat = this.duck.rotation.y + offset;
+        this.lookAt[0] = Math.cos(lookat);
+        this.lookAt[2] = -Math.sin(lookat);
     }
     
     animateDuck() {
