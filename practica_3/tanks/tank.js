@@ -108,6 +108,15 @@ class Tank extends THREE.Object3D{
         this.subjectiveCamera = null;
 
         this.add(this.createMovementNode());
+
+        // Audio
+        this.listener = new THREE.AudioListener();
+        this.add( this.listener );
+
+        // create a global audio source
+        this.sound = new THREE.Audio( this.listener );
+        this.audioLoader = new THREE.AudioLoader();
+        
     }
 
     //*\/*\/*\/*\/*\/*
@@ -420,7 +429,7 @@ class Tank extends THREE.Object3D{
         
         this.bulletsArray.push(bullet);
         this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
-        this.cooldown = 80;
+        this.cooldown = 40;
     }
 
     reduceCooldown() {
@@ -436,8 +445,30 @@ class Tank extends THREE.Object3D{
             }
             if(bullet.isOutOfRange(self.groundLength) || bullet.hit) {
                 if(bullet.explode() >= 20) {
+                    self.audioLoader.load(
+                        'sounds/heartPop.mp3', function( buffer ) {
+                            self.sound.setBuffer( buffer );
+                            self.sound.isPlaying = false;
+                            self.sound.setLoop( false );
+                            self.sound.setVolume( 0.5 );
+                            self.sound.play();
+                        }
+                    );
+                
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
+                }
+                
+                if(bullet.hit && bullet.explode() <= 2) {
+                    self.audioLoader.load(
+                        'sounds/cuack.mp3', function( buffer ) {
+                            self.sound.setBuffer( buffer );
+                            self.sound.isPlaying = false;
+                            self.sound.setLoop( false );
+                            self.sound.setVolume( 0.5 );
+                            self.sound.play();
+                        }
+                    );
                 }
             }
         });
