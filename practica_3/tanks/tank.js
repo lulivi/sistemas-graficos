@@ -404,7 +404,9 @@ class Tank extends THREE.Object3D{
         }
     }
 
-    /// Return tank camera
+    /**
+     * Return tank camera
+     */
     getCamera(){
         return this.subjectiveCamera;
     }
@@ -432,10 +434,17 @@ class Tank extends THREE.Object3D{
         this.cooldown = 40;
     }
 
+    /**
+     * Decreases cooldown in order to be able to shoot again
+     */
     reduceCooldown() {
-        this.cooldown -=1;
+        --this.cooldown;
     }
 
+    /**
+     * Move bullets, animate them and managing its despawn with its sounds
+     * @param ducks {Duck (array)}
+     */
     animateBullets(ducks) {
         let self = this;
         this.bulletsArray.forEach(function(bullet, index){

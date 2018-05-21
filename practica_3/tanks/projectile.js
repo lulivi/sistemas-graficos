@@ -18,6 +18,13 @@ class Projectile extends THREE.Object3D {
         
     }
 
+    /**
+     * Creates heart 
+     * @param {{x: Number, z: Number}} position - position.x
+     * and position.z of the heart
+     * @param {y: Number} rotation - y rotation of the heart
+     * @param {Array.<Number>} vector - the lookAt of the heart
+     */
     createHeart(position, rotation, vector){
         for(var i = 0; i < 3; i++)
             this.lookAt[i] = vector[i];
@@ -52,14 +59,21 @@ class Projectile extends THREE.Object3D {
         });
         return heart;
     }
-    
+
+    /**
+     * Scale heart's size
+     * @param {Bool} positive - heart will grow or shrink
+     */
     scaleHeart(positive){
         var factor = positive? 0.01 : -0.01;
         this.heart.scale.y += factor;
         this.heart.scale.x += factor;
         this.heart.scale.z += factor;
     }
-    
+
+    /**
+     * Animates heart beating
+     */
     animateHeart() {
         if(this.growMode) {
             this.count++;
@@ -79,6 +93,10 @@ class Projectile extends THREE.Object3D {
         this.heart.position.z += this.speed * this.lookAt[2];        
     }
 
+    /**
+     * Returns if the bullet is out of the field
+     * @param {Number} groundLenght - Field limits
+     */ 
     isOutOfRange(groundLength) {
         var xPos = this.heart.getWorldPosition().x;
         var zPos = this.heart.getWorldPosition().z;
@@ -86,6 +104,10 @@ class Projectile extends THREE.Object3D {
                 && groundLength/2 > zPos && -groundLength/2 < zPos);
     }
 
+    /**
+     * Checks if the heart is colliding with any duck
+     * @param {Array.<Duck>} ducks - Array of ducks in the scene
+     */
     checkCollision(ducks) {
 
         // for each duck do:
@@ -94,7 +116,10 @@ class Projectile extends THREE.Object3D {
         return bullet.distanceTo(duck) <
             ducks.colliderRadius + this.heartRadius;
     }
-    
+
+    /**
+     * Explode animation
+     */
     explode() {
         this.explodeCount++;
         var factor = 0.3;

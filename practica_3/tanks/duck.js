@@ -18,6 +18,9 @@ class Duck extends THREE.Object3D {
         ];
     }
 
+    /**
+     * Creates duck and loads its model
+     **/
     createDuck(){
         this.duck = new THREE.Object3D();
 
@@ -73,6 +76,9 @@ class Duck extends THREE.Object3D {
         return this.duck;
     }
 
+    /** 
+     * Create duck collider, which is used to calculate collisions
+     */ 
     createCollider() {
         var geometry = new THREE.SphereGeometry( this.colliderRadius, 32, 32 );
         var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
@@ -84,12 +90,20 @@ class Duck extends THREE.Object3D {
 
         return this.collider;
     }
-    
+
+    /**
+     * Moves duck towards its lookAt at a specific speed
+     * @param speed {Number}
+     */
     moveDuck(speed){
         this.duck.position.x += speed * this.lookAt[0];
         this.duck.position.z += speed * this.lookAt[2];
     }
 
+    /** 
+     * Rotates duck at a specific speed
+     * @param speed {Number}
+     */
     rotateDuck(speed) {
         this.duck.rotation.y += speed * Math.PI / 180;
         var offset = -90 * Math.PI/180;
@@ -97,6 +111,10 @@ class Duck extends THREE.Object3D {
         this.lookAt[0] = Math.cos(lookat);
         this.lookAt[2] = -Math.sin(lookat);
     }
+
+    /**
+     * Animates duck
+     */
     
     animateDuck() {
         if(this.moveMode) {
