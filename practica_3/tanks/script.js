@@ -18,6 +18,11 @@ var GUIcontrols = null;
 var stats = null;
 
 /**
+ *
+ */
+var ammoBarsArray = null;
+
+/**
  * The pressed key
  */
 var pressedKey = null;
@@ -166,7 +171,7 @@ function createGUI(withStats) {
         stats = initStats();
     }
 
-    // playerInfo = initPlayerInfo();
+    ammoBarsArray = initAmmoBars();
 }
 
 /**
@@ -189,16 +194,29 @@ function initStats() {
     return stats;
 }
 
-function initPlayerInfo() {
-    var playerInfo = new PlayerInfo();
+/**
+ * Create the ammo bar(s)
+ *
+ * @param {Boolean} multiPlayer - True if the game is 1vs1
+ */
+function initAmmoBars(multiPlayer = false){
+    var ammoBarsArray = new Array();
+    var ammoBar0 = new AmmoBar(0, 'red');
 
-    playerInfo.domElement.style.position = 'absolute';
-    playerInfo.domElement.style.left = '0px';
-    playerInfo.domElement.style.top = '100px';
+    $('#ammoBarsContainer')
+        .addClass('w3-display-topmiddle')
+        .append(ammoBar0.domElement);
 
-    $('#Player-info').append(playerInfo.domElement);
+    ammoBarsArray.push(ammoBar0);
 
-    return playerInfo;
+    if(multiPlayer){
+        var ammoBar1 = new AmmoBar(1, 'blue');
+        $('#ammoBarsContainer')
+            .append(ammoBar1.domElement);
+        ammoBarsArray.push(ammoBar1);
+    }
+
+    return ammoBarsArray;
 }
 
 /**
@@ -279,13 +297,13 @@ function createMenus(){
     // Get the div element which will contain the menus
     var fullScreenMenuContainer = $('#fullScreenMenuContainer')
         // Add basic classes for color and opacity
-        .attr('class', 'w3-container w3-opacity-min w3-black')
+        .addClass('w3-container w3-opacity-min w3-black')
         // force full-screen and above every element in html
         .css({
             'height': '100vh',
             'width': '100vw',
             'position': 'fixed',
-            'z-index': '1',
+            'z-index': '10',
             'top': '0',
         }).hide();
 
