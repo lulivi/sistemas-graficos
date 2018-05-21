@@ -108,6 +108,7 @@ class TheScene extends THREE.Scene {
 
         // Tank model
         var tankTexture = loader.load('imgs/metal1.jpg');
+        var wheelTexture = loader.load('imgs/wheel.jpg');
         
         this.tank = new Tank(
             {material: new THREE.MeshPhongMaterial(
@@ -121,7 +122,15 @@ class TheScene extends THREE.Scene {
              ground: {
                  length: this.groundLength,
                  width: this.groundWidth
-             }
+             },
+             wheelMaterial: new THREE.MeshPhongMaterial
+             (
+                 {
+                     color: '#00aa00',
+                     shininess: 0,
+                     map: wheelTexture
+                 }
+             )
             }
         );
         model.add(this.tank);
