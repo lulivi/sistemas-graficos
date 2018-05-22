@@ -198,6 +198,7 @@ function initStats() {
  * Create the ammo bar(s)
  *
  * @param {Boolean} multiPlayer - True if the game is 1vs1
+ * @return {Array.<AmmoBar>} - Ammo bars in use
  */
 function initAmmoBars(multiPlayer = false){
     var ammoBarsArray = new Array();
