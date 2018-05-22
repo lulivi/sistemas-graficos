@@ -141,6 +141,7 @@ class TheScene extends THREE.Scene {
         this.moveTank();
         //this.projectile.animateHeart();
         this.tank.animateBullets(this.duck);
+        ammoBarsArray[0].updateAmmo(this.tank.ammo);
         //this.tank.removeBullets();
         this.duck.animateDuck();
         // this.axis.visible = controls.axis;
