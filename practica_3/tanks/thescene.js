@@ -108,42 +108,24 @@ class TheScene extends THREE.Scene {
         var tankTexture = loader.load('imgs/metal1.jpg');
         var wheelTexture = loader.load('imgs/wheel.jpg');
         
-        this.tank = new Tank(
-            {material: new THREE.MeshPhongMaterial(
-                {
-                    color: '#00ff00',
-                    shininess: 70,
-                    map: tankTexture
-                }
-                
-            ),
-             ground: {
-                 length: this.groundLength,
-                 width: this.groundWidth
-             },
-             wheelMaterial: new THREE.MeshPhongMaterial
-             (
-                 {
-                     color: '#00aa00',
-                     shininess: 0,
-                     map: wheelTexture
-                 }
-             )
-            }
-        );
+        this.tank = new Tank({
+            material: new THREE.MeshPhongMaterial({
+                color: '#00ff00',
+                shininess: 70,
+                map: tankTexture
+            }),
+            ground: {
+                length: this.groundLength,
+                width: this.groundWidth
+            },
+            wheelMaterial: new THREE.MeshPhongMaterial({
+                color: '#00aa00',
+                shininess: 0,
+                map: wheelTexture
+            }),
+            playerId: 1
+        });
         model.add(this.tank);
-        
-        // Testing models
-        /*
-        this.projectile = new Projectile(
-            {
-                position: {x: 0, z: 0},
-                rotation: {y: 0},
-                vector: [0,0,0]
-            }
-        );
-        */
-        //model.add(this.projectile.heart);
         this.duck = new Duck();
         model.add(this.duck.duck);
         

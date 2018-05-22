@@ -15,6 +15,7 @@ class Projectile extends THREE.Object3D {
         this.speed = 2;
         this.explodeCount = 0;
         this.hit = false;
+        this.playerId = parameters.playerId;
         
     }
 

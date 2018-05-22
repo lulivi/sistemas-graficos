@@ -86,6 +86,10 @@ class Tank extends THREE.Object3D{
         // Extra nodes
         this.movementNode = null;
 
+        //********
+        // Look At
+        //********
+        
         // Look-at vector for tank movement
         this.lookAt = [
             1,
@@ -101,8 +105,12 @@ class Tank extends THREE.Object3D{
             0
         ];
 
+        this.ammo = 20;
+        this.firedAmmo = 0;
+
         this.bulletsArray = new Array();
         this.cooldown = null;
+        this.playerId = parameters.playerId;
 
         // First person camera
         this.subjectiveCamera = null;
@@ -415,9 +423,9 @@ class Tank extends THREE.Object3D{
      * Shoots a projectile
      */
     shoot() {
-        var array = this.turretLookAt;
-        var bullet = new Projectile(
-            {
+        if(this.firedAmmo < 20) {
+            var array = this.turretLookAt;
+            var bullet = new Projectile({
                 position: {
                     x: this.bulletSpawnPoint.getWorldPosition().x,
                     z: this.bulletSpawnPoint.getWorldPosition().z
@@ -425,13 +433,15 @@ class Tank extends THREE.Object3D{
                 rotation: {
                     y: this.turret.rotation.y + this.movementNode.rotation.y
                 },
-                vector: array
-            }
-        );
-        
-        this.bulletsArray.push(bullet);
-        this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
-        this.cooldown = 40;
+                vector: array,
+                playerId: this.playerId
+            });
+
+            this.bulletsArray.push(bullet);
+            this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
+            this.cooldown = 40;
+            this.firedAmmo++;
+        }
     }
 
     /**
@@ -463,11 +473,17 @@ class Tank extends THREE.Object3D{
                             self.sound.play();
                         }
                     );
-                
+                    
+                    
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
+                    self.ammo--;
+                    if(self.ammo == 0) {
+                        //console.log('Perdiste culeao');
+                    }
                 }
-                
+
+
                 if(bullet.hit && bullet.explode() <= 2) {
                     self.audioLoader.load(
                         'sounds/cuack.mp3', function( buffer ) {
@@ -476,8 +492,12 @@ class Tank extends THREE.Object3D{
                             self.sound.setLoop( false );
                             self.sound.setVolume( 0.5 );
                             self.sound.play();
-                        }
+                        }   
                     );
+                    if(bullet.playerId == self.playerId) {
+                        self.ammo = Math.min(20, self.ammo + 3);
+                        self.firedAmmo = Math.max(0, self.firedAmmo - 3);
+                    }
                 }
             }
         });
