@@ -29,8 +29,8 @@ class TheScene extends THREE.Scene {
         this.createLights();
         this.createCamera(renderer);
         this.firstPersonCamera = false;
-        this.axis = new THREE.AxisHelper(25);
-        this.add(this.axis);
+        //this.axis = new THREE.AxisHelper(25);
+        //this.add(this.axis);
         this.model = this.createModel();
         this.add(this.model);
         this.fog = new THREE.Fog(
@@ -127,7 +127,10 @@ class TheScene extends THREE.Scene {
         });
         model.add(this.tank);
         this.duck = new Duck({
-            groundWidth: this.groundWidth
+            groundWidth: this.groundWidth,
+            xPos: randNum(500) - 250,
+            yPos: randNum(500) - 250,
+            rotationY: randNum(360)
         });
         model.add(this.duck.duck);
         
@@ -143,6 +146,7 @@ class TheScene extends THREE.Scene {
         this.moveTank();
         //this.projectile.animateHeart();
         this.tank.animateBullets(this.duck);
+        console.log('tankAmmo: ' + this.tank.ammo + ' Bar Ammo: ' + ammoBarsArray[0].currentAmmo());
         ammoBarsArray[0].updateAmmo(this.tank.ammo);
         //this.tank.removeBullets();
         this.duck.animateDuck();

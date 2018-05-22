@@ -456,6 +456,7 @@ class Tank extends THREE.Object3D{
      * @param ducks {Duck (array)}
      */
     animateBullets(ducks) {
+//        console.log('ammo' + this.ammo + ' fired' + this.firedAmmo);
         let self = this;
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
