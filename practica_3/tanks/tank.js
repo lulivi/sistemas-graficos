@@ -440,7 +440,7 @@ class Tank extends THREE.Object3D{
             this.bulletsArray.push(bullet);
             this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
             this.cooldown = 40;
-            this.firedAmmo++;
+            ++this.firedAmmo;
         }
     }
 
@@ -473,16 +473,13 @@ class Tank extends THREE.Object3D{
                             self.sound.play();
                         }
                     );
-                    
-                    
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
-                    self.ammo--;
-                    if(self.ammo == 0) {
-                        //console.log('Perdiste culeao');
-                    }
+                    if (!bullet.hit)
+                        --self.ammo;
+                    // When no amo
+                    // if (self.ammo == 0)
                 }
-
 
                 if(bullet.hit && bullet.explode() <= 2) {
                     self.audioLoader.load(
