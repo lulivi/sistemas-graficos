@@ -72,9 +72,8 @@ var AmmoBar = function(id = 0, ammoColor = 'red') {
         currentAmmo: currentAmmo,
         color: ammoColor,
         domElement: bar,
-        updateAmmo: function(ammoDiff = 0) {
-            var newAmmo = currentAmmo + ammoDiff;
-            if (0 <= newAmmo && newAmmo <= 20)
+        updateAmmo: function(newAmmo) {
+            if (0 <= newAmmo && newAmmo <= 20 && newAmmo != currentAmmo)
                 changeAmmo(newAmmo);
         },
     };
