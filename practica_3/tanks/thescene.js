@@ -126,7 +126,9 @@ class TheScene extends THREE.Scene {
             playerId: 1
         });
         model.add(this.tank);
-        this.duck = new Duck();
+        this.duck = new Duck({
+            groundWidth: this.groundWidth
+        });
         model.add(this.duck.duck);
         
         

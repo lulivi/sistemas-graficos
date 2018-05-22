@@ -1,13 +1,14 @@
 'use strict';
 
 class Duck extends THREE.Object3D {
-    constructor(){
+    constructor(parameters){
         super();
         this.moveCounter = 0;
         this.twistCounter = 0;
         this.moveMode = true;
         this.twistMode = false;
         this.duck = null;
+        this.speed = 1;
         this.collider = null;
         this.colliderRadius = 20;
         this.add(this.createDuck());
@@ -16,6 +17,7 @@ class Duck extends THREE.Object3D {
             0,
             0
         ];
+        this.groundWidth = parameters.groundWidth; 
     }
 
     /**
@@ -69,7 +71,7 @@ class Duck extends THREE.Object3D {
         });
         
         this.duck.scale.set (100, 100, 100);
-        this.duck.position.z = 50;
+        this.duck.position.x = 200;
         this.duck.rotation.y = 90* Math.PI / 180;
     
         this.duck.add(this.createCollider());
@@ -96,8 +98,17 @@ class Duck extends THREE.Object3D {
      * @param speed {Number}
      */
     moveDuck(speed){
-        this.duck.position.x += speed * this.lookAt[0];
-        this.duck.position.z += speed * this.lookAt[2];
+        var newXPos = this.duck.position.x +
+            speed * this.lookAt[0];
+        var newZPos = this.duck.position.z +
+            speed * this.lookAt[2];
+
+        if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
+        // X component of lookAt vector
+            this.duck.position.x = newXPos;
+        // Z component of lookAt vector
+        if(newZPos < this.groundWidth/2 &&  newZPos > -this.groundWidth/2)
+            this.duck.position.z = newZPos;
     }
 
     /** 
@@ -119,7 +130,7 @@ class Duck extends THREE.Object3D {
     animateDuck() {
         if(this.moveMode) {
             this.moveCounter++;
-            this.moveDuck(1);
+            this.moveDuck(this.speed);
             if(this.moveCounter >= 100) {
                 this.moveMode = false;
                 this.twistMode = true;
