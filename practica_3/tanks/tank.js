@@ -239,14 +239,16 @@ class Tank extends THREE.Object3D{
     createCamera() {
         this.subjectiveCamera =
             new THREE.PerspectiveCamera(
-                45,
+                50,
                 window.innerWidth / window.innerHeight,
                 0.1,
                 1000
             );
         this.subjectiveCamera.rotation.y = Math.PI * -90 / 180;
+        var look = new THREE.Vector3(30,-5,0);
+        this.subjectiveCamera.lookAt(look);
         this.subjectiveCamera.position.x += 1;
-        this.subjectiveCamera.position.y += 4;
+        this.subjectiveCamera.position.y += 7;
         return this.subjectiveCamera;
     }
 
