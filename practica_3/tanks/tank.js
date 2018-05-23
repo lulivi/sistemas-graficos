@@ -496,7 +496,7 @@ class Tank extends THREE.Object3D{
                     );
                     if(bullet.playerId == self.playerId) {
                         self.ammo = Math.min(20, self.ammo + 3);
-                        self.firedAmmo = Math.max(0, self.firedAmmo - 3);
+                        self.firedAmmo = Math.max(0, self.firedAmmo - 4);
                     }
                 }
             }
