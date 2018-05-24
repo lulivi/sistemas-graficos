@@ -188,6 +188,7 @@ class Duck extends THREE.Object3D {
         if(this.timeToGoHome) {            
             this.fadeCounter += 2;
             this.duck.position.y = this.fadeCounter;
+            this.duck.rotation.y +=3*Math.PI /180;
         }
     }
 

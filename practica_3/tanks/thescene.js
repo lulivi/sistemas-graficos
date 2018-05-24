@@ -90,8 +90,9 @@ class TheScene extends THREE.Scene {
 
         // add spotlight for the shadows
         this.spotLight = new THREE.SpotLight(0xffffff, 0.5);
+        this.spotLight.angle = Math.PI/2;
         this.spotLight.position.set(
-            100, 100, 30
+            0, 100, 0
         );
         this.spotLight.castShadow = true;
         // the shadow resolution
