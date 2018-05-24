@@ -455,18 +455,22 @@ class Tank extends THREE.Object3D{
      */
     animateBullets(ducks) {
         let self = this;
+        ducks.forEach(function(duck,i) {
+            if(duck.timeToGoHome) {
+                if(duck.goHome() >= 30) {
+                    scene.model.remove(duck.duck);
+                    ducks.splice(i,1);
+                    self.friendsCount++;
+                }
+            }
+        });
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
 
-            ducks.forEach(function(duck,i) {   
+            ducks.forEach(function(duck) {   
                 if(bullet.checkCollision(duck)) {
-                    
                     bullet.hit = true;
-                    if(duck.goHome() >= 100) {
-                        scene.model.remove(duck.duck);
-                        ducks.splice(i,1);
-                        self.friendsCount++;
-                    }
+                    duck.timeToGoHome = true;
                 }
             });
             

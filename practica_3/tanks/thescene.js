@@ -290,7 +290,7 @@ class TheScene extends THREE.Scene {
             this.duckArray.push(duck);
         
             this.model.add(this.duckArray[this.duckArray.length-1].duck);
-            this.duckCooldown = 300;
+            this.duckCooldown = 200;
             this.tank.playCuack();
         }
         this.duckCooldown--;

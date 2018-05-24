@@ -194,7 +194,6 @@ class Duck extends THREE.Object3D {
 
 
     goHome() {
-        this.timeToGoHome = true;
         return this.fadeCounter;
     }
 
