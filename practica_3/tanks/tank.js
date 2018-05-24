@@ -107,6 +107,7 @@ class Tank extends THREE.Object3D{
 
         this.ammo = 20;
         this.firedAmmo = 0;
+        this.friendsCount = 0;
 
         this.bulletsArray = new Array();
         this.cooldown = null;
@@ -207,7 +208,6 @@ class Tank extends THREE.Object3D{
         wheel.position.z = wheelZPosition;
         wheel.position.x = wheelXPosition;
         wheel.position.y = -this.bodyHeight / 2;
-        // wheel.rotation.x = 90 * Math.PI / 180;
         return wheel;
     }
 
@@ -353,11 +353,6 @@ class Tank extends THREE.Object3D{
         var wheelsArray = (rightWheels) ?
             this.wheelsArrayRight :
             this.wheelsArrayLeft;
-
-        /*var speed;
-        speed = (direction == 'forward')?
-            3 :
-            -3;*/
         wheelsArray.forEach(function(item){
             item.rotation.z += -speed * 5 * Math.PI / 180;
         });
@@ -405,7 +400,7 @@ class Tank extends THREE.Object3D{
         this.turretLookAt[2] = -Math.sin(
             this.turret.rotation.y + this.movementNode.rotation.y
         );
-        if (rotationSpeed > 0) { // giro izquierda
+        if (rotationSpeed > 0) { // Turn left
             this.rotateWheels(true, speed);
             this.rotateWheels(false, -speed);
         } else if (rotationSpeed < 0) {
@@ -459,17 +454,19 @@ class Tank extends THREE.Object3D{
      * @param ducks {Duck (array)}
      */
     animateBullets(ducks) {
-//        console.log('ammo' + this.ammo + ' fired' + this.firedAmmo);
         let self = this;
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
 
             ducks.forEach(function(duck,i) {   
                 if(bullet.checkCollision(duck)) {
+                    
                     bullet.hit = true;
-                    //lovedDuck = duck;
-                    scene.model.remove(duck.duck);
-                    ducks.splice(i,1);
+                    if(duck.goHome() >= 100) {
+                        scene.model.remove(duck.duck);
+                        ducks.splice(i,1);
+                        self.friendsCount++;
+                    }
                 }
             });
             
@@ -480,8 +477,6 @@ class Tank extends THREE.Object3D{
                     self.bulletsArray.splice(index,1);
                     if (!bullet.hit)
                         --self.ammo;
-                    // When no amo
-                    // if (self.ammo == 0)
                 }
 
                 if(bullet.hit && bullet.explode() <= 2) {
@@ -496,6 +491,9 @@ class Tank extends THREE.Object3D{
         });
     }
 
+    /**
+     * Plays "cuack" sound
+     **/
     playCuack() {
         let self = this;
         self.audioLoader.load(
@@ -522,6 +520,9 @@ class Tank extends THREE.Object3D{
         );
     }
 
+    /**
+     * Plays "pium" sound
+     **/
     playPium() {
         let self = this;
         self.audioLoader.load(

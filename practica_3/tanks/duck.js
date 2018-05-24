@@ -3,12 +3,20 @@
 class Duck extends THREE.Object3D {
     constructor(parameters){
         super();
+
+        // Counters
         this.moveCounter = 0;
         this.moveLimit = randNum(100) + 50;
         this.twistCounter = 0;
         this.twistLimit = randNum(180) - 90;
+        this.fadeCounter = 0;
+
+        // Modes
         this.moveMode = true;
         this.twistMode = false;
+        this.timeToGoHome = false; // Fades duck with animation
+
+        // Model and properties
         this.duck = null;
         this.speed = 1;
         this.rotationSpeed = 2;
@@ -24,12 +32,16 @@ class Duck extends THREE.Object3D {
                 this.rotationOffset
             )
         );
+
+        // LookAt
         this.lookAt = [
             Math.cos(this.duck.rotation.y - Math.PI / 2),
             0,
             -Math.sin(this.duck.rotation.y -  Math.PI / 2)
         ];
-        this.groundWidth = parameters.groundWidth; 
+
+        // Movement limits
+        this.groundWidth = parameters.groundWidth;
     }
 
     /**
@@ -172,6 +184,17 @@ class Duck extends THREE.Object3D {
                     (randNum(10) < 5) ? 2 : -2;
             }
         }
+
+        if(this.timeToGoHome) {            
+            this.fadeCounter += 2;
+            this.duck.position.y = this.fadeCounter;
+        }
+    }
+
+
+    goHome() {
+        this.timeToGoHome = true;
+        return this.fadeCounter;
     }
 
     

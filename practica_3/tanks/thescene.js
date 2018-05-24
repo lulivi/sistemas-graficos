@@ -152,14 +152,11 @@ class TheScene extends THREE.Scene {
     animate(controls) {
         this.moveTank();
         this.tank.animateBullets(this.duckArray);
-        ammoBarsArray[0].updateAmmo(this.tank.ammo);
+        ammoBarsArray[0].updateAmmo(this.tank.ammo, this.tank.friendsCount);
         this.createDucks();
         this.duckArray.forEach(function(duck) {
             duck.animateDuck();
         });
-        // this.axis.visible = controls.axis;
-        // this.spotLight.intensity = controls.lightIntensity;
-        // this.tank.setTurretRotation(controls.tankTurretRotation);
     }
 
     /// It returns the camera
@@ -210,6 +207,9 @@ class TheScene extends THREE.Scene {
         this.camera.updateProjectionMatrix();
     }
 
+    /**
+     * Moves tank, depending on which keys are being pressed 
+     **/
     moveTank() {
         var speed = 1;
         var rotationSpeed = Math.PI*2/180;
@@ -244,6 +244,9 @@ class TheScene extends THREE.Scene {
         });
     }
 
+    /**
+     * Plays "focus" music
+     **/
     playFocus() {
         let self = this;
         self.audioLoader.load(
@@ -256,17 +259,25 @@ class TheScene extends THREE.Scene {
         );
     }
 
+    /**
+     * Stops any sound playing on the scene and goes cuacks
+     **/
     stopMusic() {
         this.sound.stop();
         this.tank.playCuack();
     }
 
+    /**
+     * Stops main theme and 
+     **/ 
     stopTheme() {
         this.sound.stop();
-        this.tank.playCuack();
         this.playFocus();
     }
 
+    /** 
+     * Creates ducks when possible, at random pos.
+     **/
     createDucks() {
         if(this.duckArray.length < this.ducksLimit && this.duckCooldown <= 0) {
             var duck = new Duck({
@@ -286,6 +297,10 @@ class TheScene extends THREE.Scene {
 }
 
 
+/**
+ * Generates a random number between 0 and top
+ * @param {Number} top - The greatest number that might be generated
+**/
 
 function randNum(top) {
     return Math.floor(Math.random() * Math.floor(top));
