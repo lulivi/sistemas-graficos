@@ -1,7 +1,7 @@
 /**
  * Create a ammoBar to display player ammo
  */
-var AmmoBar = function(id = 0, ammoColor = 'red') {
+var AmmoBar = function(id = 1, ammoColor = 'red') {
     // Current ammo count
     var currentAmmo = 20;
 
@@ -27,6 +27,18 @@ var AmmoBar = function(id = 0, ammoColor = 'red') {
         bar.append(
             $('<i>').addClass('w3-cell-middle fas fa-heart')
         ).append(' ');
+
+    bar.append(
+        $('<div>')
+            .append('Friends made: ')
+            .append(
+                $('<div>')
+                    .attr('id', 'Player' + barId + 'FriendsCount')
+                    .css('display', 'inline')
+                    .addClass('w3-cell-middle')
+                    .text('0')
+            )
+    );
 
     /**
      * Toggle between grey and the real color of the heart
@@ -144,7 +156,7 @@ var AmmoBar = function(id = 0, ammoColor = 'red') {
         },
         color: ammoColor,
         domElement: bar,
-        updateAmmo: function(newAmmo) {
+        updateAmmo: function(newAmmo, friendsCount) {
             // Execute one ammo update of the queue
             if (!updatingAmmo && updateQueue.length > 0)
                 (updateQueue.shift())();
@@ -155,6 +167,8 @@ var AmmoBar = function(id = 0, ammoColor = 'red') {
                 // Change the currentAmmo var for futures updates
                 currentAmmo = newAmmo;
             }
+            // Friends count
+            $('#Player' + barId + 'FriendsCount').text(friendsCount);
         },
     };
 };

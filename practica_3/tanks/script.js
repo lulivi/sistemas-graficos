@@ -206,7 +206,7 @@ function initStats() {
  */
 function initAmmoBars(multiPlayer = false){
     var ammoBarsArray = new Array();
-    var ammoBar0 = new AmmoBar(0, 'red');
+    var ammoBar0 = new AmmoBar(1, 'red');
 
     $('#ammoBarsContainer')
         .addClass('w3-display-topmiddle')
@@ -215,7 +215,7 @@ function initAmmoBars(multiPlayer = false){
     ammoBarsArray.push(ammoBar0);
 
     if(multiPlayer){
-        var ammoBar1 = new AmmoBar(1, 'blue');
+        var ammoBar1 = new AmmoBar(2, 'blue');
         $('#ammoBarsContainer')
             .append(ammoBar1.domElement);
         ammoBarsArray.push(ammoBar1);
