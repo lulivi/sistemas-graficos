@@ -126,6 +126,7 @@ function startGame(){
     scene.stopTheme();
     toggleMenu(currentMenu);
     $('#Stats-output').show();
+    $('#ammoBarsContainer').show();
 }
 
 function restartScene() {
@@ -133,6 +134,7 @@ function restartScene() {
     scene = new TheScene(renderer.domElement);
     renderer.clear(false,true,true);
     $('#Stats-output').hide();
+    $('#ammoBarsContainer').hide();
     toggleMenu(Menu.MAIN);
 }
 
