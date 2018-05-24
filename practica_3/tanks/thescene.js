@@ -19,11 +19,10 @@ class TheScene extends THREE.Scene {
         this.ground = null;
         this.groundWidth = 500;
         this.groundLength = 500;
-        // Test projectile
-        this.projectile = null;
-        // Test duck
-        this.duck = null;
-
+        // Ducks
+        this.duckArray = Array();
+        this.ducksLimit = 5;
+        this.duckCooldown = 0;
         // Audio
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
@@ -143,15 +142,6 @@ class TheScene extends THREE.Scene {
             playerId: 1
         });
         model.add(this.tank);
-        this.duck = new Duck({
-            groundWidth: this.groundWidth,
-            xPos: randNum(500) - 250,
-            yPos: randNum(500) - 250,
-            rotationY: randNum(360)
-        });
-        model.add(this.duck.duck);
-        
-        
         return model;
     }
 
@@ -161,11 +151,12 @@ class TheScene extends THREE.Scene {
      */
     animate(controls) {
         this.moveTank();
-        //this.projectile.animateHeart();
-        this.tank.animateBullets(this.duck);
+        this.tank.animateBullets(this.duckArray);
         ammoBarsArray[0].updateAmmo(this.tank.ammo);
-        //this.tank.removeBullets();
-        this.duck.animateDuck();
+        this.createDucks();
+        this.duckArray.forEach(function(duck) {
+            duck.animateDuck();
+        });
         // this.axis.visible = controls.axis;
         // this.spotLight.intensity = controls.lightIntensity;
         // this.tank.setTurretRotation(controls.tankTurretRotation);
@@ -274,6 +265,23 @@ class TheScene extends THREE.Scene {
         this.sound.stop();
         this.tank.playCuack();
         this.playFocus();
+    }
+
+    createDucks() {
+        if(this.duckArray.length < this.ducksLimit && this.duckCooldown <= 0) {
+            var duck = new Duck({
+                groundWidth: this.groundWidth,
+                xPos: randNum(500) - 250,
+                yPos: randNum(500) - 250,
+                rotationY: randNum(360)
+            });
+            this.duckArray.push(duck);
+        
+            this.model.add(this.duckArray[this.duckArray.length-1].duck);
+            this.duckCooldown = 300;
+            this.tank.playCuack();
+        }
+        this.duckCooldown--;
     }
 }
 
