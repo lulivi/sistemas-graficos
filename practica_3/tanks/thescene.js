@@ -24,6 +24,23 @@ class TheScene extends THREE.Scene {
         // Test duck
         this.duck = null;
 
+        // Audio
+        this.listener = new THREE.AudioListener();
+        this.add( this.listener );
+
+        // create a global audio source
+        this.sound = new THREE.Audio( this.listener );
+        this.audioLoader = new THREE.AudioLoader();
+        let self = this;
+        this.audioLoader.load(
+            'sounds/song.mp3', function( buffer ) {
+                self.sound.setBuffer( buffer );
+                self.sound.setLoop( true );
+                self.sound.setVolume( 0.5 );
+                self.sound.play();
+            }
+        );
+        
         this.gameReset = false;
         this.hardMode = false;
         this.createLights();
@@ -235,7 +252,15 @@ class TheScene extends THREE.Scene {
             }
         });
     }
+
+
+    stopMusic() {
+        this.sound.stop();
+        this.tank.playCuack();
+    }
 }
+
+
 
 function randNum(top) {
     return Math.floor(Math.random() * Math.floor(top));

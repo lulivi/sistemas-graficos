@@ -467,15 +467,7 @@ class Tank extends THREE.Object3D{
             }
             if(bullet.isOutOfRange(self.groundLength) || bullet.hit) {
                 if(bullet.explode() >= 20) {
-                    self.audioLoader.load(
-                        'sounds/heartPop.mp3', function( buffer ) {
-                            self.sound.setBuffer( buffer );
-                            self.sound.isPlaying = false;
-                            self.sound.setLoop( false );
-                            self.sound.setVolume( 0.5 );
-                            self.sound.play();
-                        }
-                    );
+                    self.playPop();
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
                     if (!bullet.hit)
@@ -485,15 +477,8 @@ class Tank extends THREE.Object3D{
                 }
 
                 if(bullet.hit && bullet.explode() <= 2) {
-                    self.audioLoader.load(
-                        'sounds/cuack.mp3', function( buffer ) {
-                            self.sound.setBuffer( buffer );
-                            self.sound.isPlaying = false;
-                            self.sound.setLoop( false );
-                            self.sound.setVolume( 0.5 );
-                            self.sound.play();
-                        }   
-                    );
+                    self.playCuack();
+                    
                     if(bullet.playerId == self.playerId) {
                         self.ammo = Math.min(20, self.ammo + 3);
                         self.firedAmmo = Math.max(0, self.firedAmmo - 4);
@@ -502,4 +487,31 @@ class Tank extends THREE.Object3D{
             }
         });
     }
+
+    playCuack() {
+        let self = this;
+        self.audioLoader.load(
+            'sounds/cuack.mp3', function( buffer ) {
+                self.sound.setBuffer( buffer );
+                self.sound.isPlaying = false;
+                self.sound.setLoop( false );
+                self.sound.setVolume( 0.5 );
+                self.sound.play();
+            }   
+        );
+    }
+
+    playPop() {
+        let self = this;
+        self.audioLoader.load(
+            'sounds/heartPop.mp3', function( buffer ) {
+                self.sound.setBuffer( buffer );
+                self.sound.isPlaying = false;
+                self.sound.setLoop( false );
+                self.sound.setVolume( 0.5 );
+                self.sound.play();
+            }
+        );
+    }
+        
 }

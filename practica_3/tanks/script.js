@@ -123,6 +123,7 @@ function startGame(){
     } else {
         requestAnimationFrame(render);
     }
+    scene.stopMusic();
     toggleMenu(currentMenu);
     $('#Stats-output').show();
 }
