@@ -253,10 +253,27 @@ class TheScene extends THREE.Scene {
         });
     }
 
+    playFocus() {
+        let self = this;
+        self.audioLoader.load(
+            'sounds/focus.mp3', function( buffer ) {
+                self.sound.setBuffer( buffer );
+                self.sound.setLoop( true );
+                self.sound.setVolume( 0.5 );
+                self.sound.play();
+            }
+        );
+    }
 
     stopMusic() {
         this.sound.stop();
         this.tank.playCuack();
+    }
+
+    stopTheme() {
+        this.sound.stop();
+        this.tank.playCuack();
+        this.playFocus();
     }
 }
 

@@ -439,6 +439,7 @@ class Tank extends THREE.Object3D{
                 playerId: this.playerId
             });
 
+            this.playPium();
             this.bulletsArray.push(bullet);
             this.add(this.bulletsArray[this.bulletsArray.length -1].heart);
             this.cooldown = 40;
@@ -513,5 +514,17 @@ class Tank extends THREE.Object3D{
             }
         );
     }
-        
+
+    playPium() {
+        let self = this;
+        self.audioLoader.load(
+            'sounds/pium.mp3', function( buffer ) {
+                self.sound.setBuffer( buffer );
+                self.sound.isPlaying = false;
+                self.sound.setLoop( false );
+                self.sound.setVolume( 0.5 );
+                self.sound.play();
+            }
+        );
+    }
 }

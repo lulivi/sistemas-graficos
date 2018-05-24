@@ -123,12 +123,13 @@ function startGame(){
     } else {
         requestAnimationFrame(render);
     }
-    scene.stopMusic();
+    scene.stopTheme();
     toggleMenu(currentMenu);
     $('#Stats-output').show();
 }
 
 function restartScene() {
+    scene.stopMusic();
     scene = new TheScene(renderer.domElement);
     renderer.clear(false,true,true);
     $('#Stats-output').hide();
