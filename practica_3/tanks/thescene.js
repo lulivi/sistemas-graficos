@@ -43,12 +43,13 @@ class TheScene extends THREE.Scene {
         this.gameReset = false;
         this.hardMode = false;
         this.createLights();
-        this.createCamera(renderer);
         this.firstPersonCamera = false;
         //this.axis = new THREE.AxisHelper(25);
         //this.add(this.axis);
         this.model = this.createModel();
         this.add(this.model);
+        this.tank.createCamera(renderer);
+        this.createCamera(renderer);
         this.fog = new THREE.Fog(
             0xffffff,
             1000,
@@ -66,20 +67,21 @@ class TheScene extends THREE.Scene {
             0.1, 1000
         );
         this.camera.position.set(
-            80, 50, 80
+            -60, 20, 0
         );
         var look = new THREE.Vector3(
-            0, 20, 0
+            0, 0, 0
         );
         this.camera.lookAt(look);
         this.trackballControls = new THREE.TrackballControls(this.camera,
                                                              renderer);
         this.trackballControls.rotateSpeed = 5;
-        this.trackballControls.zoomSpeed = -2;
+        this.trackballControls.zoomSpeed = 2;
         this.trackballControls.panSpeed = 0.5;
         this.trackballControls.target = look;
 
-        this.add(this.camera);
+        //this.add(this.camera);
+        this.tank.turret.add(this.camera);
     }
 
     /// It creates lights and adds them to the graph

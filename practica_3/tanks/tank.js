@@ -457,7 +457,7 @@ class Tank extends THREE.Object3D{
         let self = this;
         ducks.forEach(function(duck,i) {
             if(duck.timeToGoHome) {
-                if(duck.goHome() >= 30) {
+                if(duck.goHome() >= 50) {
                     scene.model.remove(duck.duck);
                     ducks.splice(i,1);
                     self.friendsCount++;
