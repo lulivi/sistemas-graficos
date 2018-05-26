@@ -44,8 +44,6 @@ class TheScene extends THREE.Scene {
         this.hardMode = false;
         this.createLights();
         this.firstPersonCamera = false;
-        //this.axis = new THREE.AxisHelper(25);
-        //this.add(this.axis);
         this.model = this.createModel();
         this.add(this.model);
         this.tank.createCamera(renderer);
@@ -55,6 +53,26 @@ class TheScene extends THREE.Scene {
             1000,
             1000
         );
+        this.background = this.createBackground();
+        
+    }
+
+    
+    /** Creates background cube image
+     *
+     **/
+
+    createBackground() {
+        var path = 'imgs/cube/';
+        var format = '.jpg';
+        var urls = [
+            path + 'px' + format, path + 'nx' + format,
+            path + 'py' + format, path + 'ny' + format,
+            path + 'pz' + format, path + 'nz' + format
+        ];
+        var reflectionCube = new THREE.CubeTextureLoader().load( urls );
+        reflectionCube.format = THREE.RGBFormat;
+        return reflectionCube;
     }
 
     /// It creates the camera and adds it to the graph
@@ -112,10 +130,10 @@ class TheScene extends THREE.Scene {
         var loader = new THREE.TextureLoader();
 
         // Ground model
-        var groundTexture = loader.load('imgs/rock.jpg');
+        var groundTexture = loader.load('imgs/water.jpg');
         groundTexture.wrapS = THREE.RepeatWrapping;
         groundTexture.wrapT = THREE.RepeatWrapping;
-        groundTexture.repeat = new THREE.Vector2(4,4);
+        groundTexture.repeat = new THREE.Vector2(8,8);
         this.ground = new Ground(
             this.groundWidth, this.groundLength, new THREE.MeshPhongMaterial({
                 map: groundTexture
