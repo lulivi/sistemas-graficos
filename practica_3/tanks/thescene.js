@@ -46,7 +46,6 @@ class TheScene extends THREE.Scene {
         this.firstPersonCamera = false;
         this.model = this.createModel();
         this.add(this.model);
-        this.tank.createCamera(renderer);
         this.createCamera(renderer);
         this.fog = new THREE.Fog(
             0xffffff,
