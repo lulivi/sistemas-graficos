@@ -84,7 +84,7 @@ class TheScene extends THREE.Scene {
             0.1, 1000
         );
         this.camera.position.set(
-            -60, 20, 0
+            -120, 40, 0
         );
         var look = new THREE.Vector3(
             0, 0, 0
