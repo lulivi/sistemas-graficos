@@ -119,8 +119,10 @@ class Tank extends THREE.Object3D{
         this.add(this.createMovementNode());
 
         // Audio
+        this.volume = 0.5;
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
+        
 
         // create a global audio source
         this.sound = new THREE.Audio( this.listener );
@@ -495,30 +497,43 @@ class Tank extends THREE.Object3D{
         });
     }
 
+    /** 
+     * Toggles effects on and off
+     **/
+
+    toggleEffects() {
+        this.volume =
+            this.volume == 0 ? 0.5 : 0;
+        this.sound.setVolume(this.volume);
+    }
+    
     /**
      * Plays "cuack" sound
      **/
     playCuack() {
         let self = this;
         self.audioLoader.load(
-            'sounds/cuack.mp3', function( buffer ) {
-                self.sound.setBuffer( buffer );
+            'sounds/cuack.mp3', function(buffer) {
+                self.sound.setBuffer(buffer);
                 self.sound.isPlaying = false;
-                self.sound.setLoop( false );
-                self.sound.setVolume( 0.5 );
+                self.sound.setLoop(false);
+                self.sound.setVolume(self.volume);
                 self.sound.play();
             }   
         );
     }
 
+    /**
+     * Plays "Pop" sound
+     **/
     playPop() {
         let self = this;
         self.audioLoader.load(
-            'sounds/heartPop.mp3', function( buffer ) {
-                self.sound.setBuffer( buffer );
+            'sounds/heartPop.mp3', function(buffer) {
+                self.sound.setBuffer(buffer);
                 self.sound.isPlaying = false;
-                self.sound.setLoop( false );
-                self.sound.setVolume( 0.5 );
+                self.sound.setLoop(false);
+                self.sound.setVolume(self.volume);
                 self.sound.play();
             }
         );
@@ -530,11 +545,11 @@ class Tank extends THREE.Object3D{
     playPium() {
         let self = this;
         self.audioLoader.load(
-            'sounds/pium.mp3', function( buffer ) {
-                self.sound.setBuffer( buffer );
+            'sounds/pium.mp3', function(buffer) {
+                self.sound.setBuffer(buffer);
                 self.sound.isPlaying = false;
-                self.sound.setLoop( false );
-                self.sound.setVolume( 0.5 );
+                self.sound.setLoop(false);
+                self.sound.setVolume(self.volume);
                 self.sound.play();
             }
         );

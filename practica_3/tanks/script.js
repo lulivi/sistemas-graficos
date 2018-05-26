@@ -138,6 +138,14 @@ function restartScene() {
     toggleMenu(Menu.MAIN);
 }
 
+function toggleMusic() {
+    scene.toggleMusic();
+}
+
+function toggleEffects() {
+    scene.toggleEffects();
+}
+
 /**
  * It creates the GUI and, optionally, adds statistic information
  * @param withStats - A boolean to show the statictics or not
@@ -318,7 +326,7 @@ function createMenus(){
             headingText: 'Tanks n\' Ducks',
             buttonsArray: [
                 {text: '1 Jugador', func: 'startGame()'},
-                {text: '1 vs 1', func: 'startGame()'},
+                {text: '1 vs 1 (coming soon)', func: ''},
                 {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTR)'},
                 {text: 'Opciones', func: 'toggleMenu(Menu.MAIN_OPT)'},
             ],
@@ -327,8 +335,8 @@ function createMenus(){
             headingText: 'Opciones',
             buttonsArray: [
                 {text: 'Velocidad', func: ''},
-                {text: 'Nosequé', func: ''},
-                {text: 'un puñao de cosas', func: ''},
+                {text: 'Música', func: 'toggleMusic()'},
+                {text: 'Efectos', func: 'toggleEffects()'},
                 {text: 'pin pan pun', func: ''},
                 {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
@@ -357,7 +365,8 @@ function createMenus(){
             headingText: 'Opciones In-Game',
             buttonsArray: [
                 {text: 'Velocidad', func: ''},
-                {text: 'Nosequé', func: ''},
+                {text: 'Música', func: 'toggleMusic()'},
+                {text: 'Efectos', func: 'toggleEffects()'},
                 {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
@@ -574,10 +583,10 @@ function onMouseDown(event) {
 function onMouseWheel(event) {
     if (inGame && !pause) {
         if (event.ctrlKey) {
-            // The Trackballcontrol only works if Ctrl key is pressed
-            scene.getCameraControls().enabled = true;
-        } else {
+            // The Trackballcontrol only works if Ctrl key isn't pressed
             scene.getCameraControls().enabled = false;
+        } else {
+            scene.getCameraControls().enabled = true;
         }
     }
 }

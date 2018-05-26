@@ -280,6 +280,19 @@ class TheScene extends THREE.Scene {
     }
 
     /**
+     * Turns music on/off
+     **/
+    toggleMusic() {
+        this.sound.isPlaying?
+            this.sound.stop() :
+            this.sound.play();
+    }
+
+    toggleEffects() {
+        this.tank.toggleEffects();
+    }
+
+    /**
      * Stops any sound playing on the scene and goes cuacks
      **/
     stopMusic() {
