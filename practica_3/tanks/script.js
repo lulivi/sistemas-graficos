@@ -32,16 +32,6 @@ var pressedKey = null;
 var pressedKeysArray = new Array();
 
 /**
- * Player information GUI
- */
-// var playerInfo = null;
-
-/**
- * The current mode of the application
- */
-// var gameMode = null;
-
-/**
  * Renderer
  */
 var renderer = null;
@@ -71,10 +61,10 @@ var firstTime = true;
  */
 const Menu = {
     MAIN: 0,
-    MAIN_OPT: 1,
-    INSTR: 2,
+    OPTIONS: 1,
+    INSTRUCTIONS: 2,
     PAUSE: 3,
-    PAUSE_OPT: 4,
+    MAP_SELECTOR: 4,
 };
 
 /**
@@ -115,7 +105,7 @@ var previousMenu = null;
 
 **/
 
-function startGame(){
+function startGame(mapName = 'cube'){
     if (firstTime) {
         firstTime = false;
         createGUI(true);
@@ -124,6 +114,7 @@ function startGame(){
         requestAnimationFrame(render);
     }
     scene.stopTheme();
+    scene.createBackground(mapName);
     toggleMenu(currentMenu);
     $('#Stats-output').show();
     $('#ammoBarsContainer').show();
@@ -325,10 +316,10 @@ function createMenus(){
         {
             headingText: 'Tanks n\' Ducks',
             buttonsArray: [
-                {text: '1 Jugador', func: 'startGame()'},
-                {text: '1 vs 1 (coming soon)', func: ''},
-                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTR)'},
-                {text: 'Opciones', func: 'toggleMenu(Menu.MAIN_OPT)'},
+                {text: '1 Jugador', func: 'toggleMenu(Menu.MAP_SELECTOR)'},
+                {text: '1 vs 1', func: 'alert(\'Comming soon...\')'},
+                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTRUCTIONS)'},
+                {text: 'Opciones', func: 'toggleMenu(Menu.OPTIONS)'},
             ],
         },
         {
@@ -356,18 +347,17 @@ function createMenus(){
             headingText: 'Pausa',
             buttonsArray: [
                 {text: 'Reanudar', func:'toggleMenu(currentMenu)'},
-                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTR)'},
-                {text: 'Opciones rápidas', func: 'toggleMenu(Menu.PAUSE_OPT)'},
+                {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTRUCTIONS)'},
+                {text: 'Opciones rápidas', func: 'toggleMenu(Menu.OPTIONS)'},
                 {text: 'Menú principal', func:'restartScene()'},
             ],
         },
         {
-            headingText: 'Opciones In-Game',
+            headingText: 'Selección de mapas',
             buttonsArray: [
-                {text: 'Velocidad', func: ''},
-                {text: 'Música', func: 'toggleMusic()'},
-                {text: 'Efectos', func: 'toggleEffects()'},
-                {text: 'Atrás', func:'toggleMenu(previousMenu)'},
+                {text: 'Universo', func:'startGame(\'galaxy\')'},
+                {text: 'Parque', func: 'startGame(\'park\')'},
+                {text: 'Atrás', func:'toggleMenu(Menu.MAIN)'},
             ],
         },
     ];
