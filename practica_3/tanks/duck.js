@@ -60,14 +60,14 @@ class Duck extends THREE.Object3D {
             materials.preload();
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials( materials );
-            
+
             objLoader.setPath( 'obj/duck/' );
             objLoader.load( 'duck.obj', function ( object ) {
-                
 
-                // Ahora recorremos el subgrafo encabezado por object  
+
+                // Ahora recorremos el subgrafo encabezado por object
                 // para asignar materiales manualmente y recalcular normales
-                
+
                 object.traverse (function (child) {
                     if (child instanceof THREE.Mesh) {
                         // Asignación manual de material basándonos en que
@@ -76,7 +76,7 @@ class Duck extends THREE.Object3D {
                         child.material = materials.materials[child.name];
                         // No se quiere que se vea la geometría facetada
                         child.material.flatShading = false;
-                        
+
                         // Se recalculan las normales
                         var geom = new THREE.Geometry().fromBufferGeometry(
                             child.geometry
@@ -88,25 +88,25 @@ class Duck extends THREE.Object3D {
                         child.geometry = geom.clone();
                     }
                 });
-                
+
 
                 self.duck.add(object);
-         
+
             });
         });
-        
+
         this.duck.scale.set (100, 100, 100);
         this.duck.position.x = position.x;
         this.duck.position.z = position.z;
         this.duck.rotation.y = rotationY * Math.PI / 180;
-    
+
         this.duck.add(this.createCollider());
         return this.duck;
     }
 
-    /** 
+    /**
      * Create duck collider, which is used to calculate collisions
-     */ 
+     */
     createCollider() {
         var geometry = new THREE.SphereGeometry( this.colliderRadius, 32, 32 );
         var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
@@ -124,12 +124,13 @@ class Duck extends THREE.Object3D {
      * @param speed {Number}
      */
     moveDuck(speed){
+        speed *= gameSpeedFactor;
         var newXPos = this.duck.position.x +
             speed * this.lookAt[0];
         var newZPos = this.duck.position.z +
             speed * this.lookAt[2];
         var outOfRange = false;
-        
+
         if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
         // X component of lookAt vector
             this.duck.position.x = newXPos;
@@ -143,11 +144,12 @@ class Duck extends THREE.Object3D {
         return outOfRange;
     }
 
-    /** 
+    /**
      * Rotates duck at a specific speed
      * @param speed {Number}
      */
     rotateDuck(speed) {
+        speed *= gameSpeedFactor;
         this.duck.rotation.y += speed * Math.PI / 180;
         var offset = -90 * Math.PI/180;
         var lookat = this.duck.rotation.y + offset;
@@ -158,14 +160,14 @@ class Duck extends THREE.Object3D {
     /**
      * Animates duck
      */
-    
+
     animateDuck() {
         if(this.moveMode) {
             this.moveCounter++;
             if(this.moveDuck(this.speed)){
                 this.moveCounter = this.moveLimit;
             }
-           
+
             if(this.moveCounter >= this.moveLimit) {
                 this.moveMode = false;
                 this.twistMode = true;
@@ -185,7 +187,7 @@ class Duck extends THREE.Object3D {
             }
         }
 
-        if(this.timeToGoHome) {            
+        if(this.timeToGoHome) {
             this.fadeCounter += 2;
             this.duck.position.y = this.fadeCounter;
             this.duck.rotation.y +=3*Math.PI /180;
@@ -197,6 +199,6 @@ class Duck extends THREE.Object3D {
         return this.fadeCounter;
     }
 
-    
+
 
 }

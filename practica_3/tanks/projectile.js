@@ -16,11 +16,11 @@ class Projectile extends THREE.Object3D {
         this.explodeCount = 0;
         this.hit = false;
         this.playerId = parameters.playerId;
-        
+
     }
 
     /**
-     * Creates heart 
+     * Creates heart
      * @param {{x: Number, z: Number}} position - position.x
      * and position.z of the heart
      * @param {y: Number} rotation - y rotation of the heart
@@ -29,27 +29,27 @@ class Projectile extends THREE.Object3D {
     createHeart(position, rotation, vector){
         for(var i = 0; i < 3; i++)
             this.lookAt[i] = vector[i];
-        
+
         var heart = new THREE.Object3D();
         heart.rotation.y = rotation.y + Math.PI * 90 / 180;
         heart.position.x = position.x;
         heart.position.y = 7;
         heart.position.z = position.z;
-        
+
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setBaseUrl('obj/heart/');
         mtlLoader.setPath('obj/heart/');
         mtlLoader.load('heart.mtl', function (materials) {
-            
+
             materials.preload();
             var objLoader = new THREE.OBJLoader();
             objLoader.setMaterials(materials);
             objLoader.setPath('obj/heart/');
-            objLoader.load('heart.obj', 
-                           
+            objLoader.load('heart.obj',
+
                            function (object) {
 
-                               
+
                                object.scale.y = 0.1;
                                object.scale.x = 0.1;
                                object.scale.z = 0.1;
@@ -89,15 +89,15 @@ class Projectile extends THREE.Object3D {
         }
 
         // X component of lookAt vector
-        this.heart.position.x += this.speed * this.lookAt[0];
+        this.heart.position.x += this.speed * gameSpeedFactor * this.lookAt[0];
         // Z component of lookAt vector
-        this.heart.position.z += this.speed * this.lookAt[2];        
+        this.heart.position.z += this.speed * gameSpeedFactor * this.lookAt[2];
     }
 
     /**
      * Returns if the bullet is out of the field
      * @param {Number} groundLenght - Field limits
-     */ 
+     */
     isOutOfRange(groundLength) {
         var xPos = this.heart.getWorldPosition().x;
         var zPos = this.heart.getWorldPosition().z;
@@ -129,6 +129,6 @@ class Projectile extends THREE.Object3D {
         this.heart.scale.z += factor;
         return this.explodeCount;
     }
-    
+
 
 }
