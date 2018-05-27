@@ -57,6 +57,11 @@ var inGame = false;
 var firstTime = true;
 
 /**
+ * The game speed factor
+ */
+var gameSpeedFactor = 1;
+
+/**
  * @enum
  */
 const Menu = {
@@ -105,6 +110,67 @@ var previousMenu = null;
 
 **/
 
+
+/**
+ * Update music option text value
+ */
+function updateMusicOption() {
+    var currText = 'Música';
+    var currValue = (scene.musicOn ? 'ON': 'OFF');
+    $('#optMusic').attr('value', currText + ' (' + currValue + ')');
+}
+
+/**
+ * Update effects option text value
+ */
+function updateEffectsOption() {
+    var currText = 'Efectos';
+    var currValue = (scene.effectsOn() ? 'ON': 'OFF');
+    $('#optEffects').attr('value', currText + ' (' + currValue + ')');
+}
+
+/**
+ * Update speed option text value
+ */
+function updateSpeedOption() {
+    var currText = 'Velocidad';
+    var currValue = gameSpeedFactor;
+    $('#optSpeed').attr('value', currText + ' (' + currValue + ')');
+}
+
+/**
+ * Update every option text value
+ */
+function updateAllOptions() {
+    updateMusicOption();
+    updateEffectsOption();
+    updateSpeedOption();
+}
+
+/**
+ * Toggle music ON/OFF
+ */
+function toggleMusic() {
+    scene.toggleMusic();
+    updateMusicOption();
+}
+
+/**
+ * Toggle effects ON/OFF
+ */
+function toggleEffects() {
+    scene.toggleEffects();
+    updateEffectsOption();
+}
+
+/**
+ * Rotate game speed factor
+ */
+function changeSpeed() {
+    gameSpeedFactor = (gameSpeedFactor % 3) + 1;
+    updateSpeedOption();
+}
+
 function startGame(mapName = 'cube'){
     if (firstTime) {
         firstTime = false;
@@ -127,14 +193,6 @@ function restartScene() {
     $('#Stats-output').hide();
     $('#ammoBarsContainer').hide();
     toggleMenu(Menu.MAIN);
-}
-
-function toggleMusic() {
-    scene.toggleMusic();
-}
-
-function toggleEffects() {
-    scene.toggleEffects();
 }
 
 /**
@@ -271,6 +329,9 @@ function toggleMenu(menuId = Menu.MAIN) {
         currentMenu = menuId;
     }
 
+    if (currentMenu === Menu.OPTIONS)
+        updateAllOptions();
+
     // If we come from the main menu, we are in game
     if (previousMenu === Menu.MAIN) {
         inGame = true;
@@ -325,10 +386,26 @@ function createMenus(){
         {
             headingText: 'Opciones',
             buttonsArray: [
-                {text: 'Velocidad', func: ''},
-                {text: 'Música', func: 'toggleMusic()'},
-                {text: 'Efectos', func: 'toggleEffects()'},
-                {text: 'pin pan pun', func: ''},
+                {
+                    text: 'Música (ON)',
+                    func: 'toggleMusic()',
+                    id: 'optMusic'
+                },
+                {
+                    text: 'Efectos (ON)',
+                    func: 'toggleEffects()',
+                    id: 'optEffects'
+                },
+                {
+                    text: 'Velocidad (1)',
+                    func: 'changeSpeed()',
+                    id: 'optSpeed'
+                },
+                // {
+                //     text: 'Niebla (ON)',
+                //     func: 'scene.toggleFog()',
+                //     id: 'optFog'
+                // },
                 {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
@@ -398,6 +475,7 @@ function createMenus(){
             currMenu.append(
                 $('<input>')
                     .attr({
+                        'id': (currButton.id === undefined? '': currButton.id),
                         'value': currButton.text,
                         'onmouseup':currButton.func,
                         'type': 'button'
