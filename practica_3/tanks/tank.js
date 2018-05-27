@@ -82,14 +82,14 @@ class Tank extends THREE.Object3D{
         // Limits
         this.groundLength = parameters.ground.length;
         this.groundWidth = parameters.ground.width;
-        
+
         // Extra nodes
         this.movementNode = null;
 
         //********
         // Look At
         //********
-        
+
         // Look-at vector for tank movement
         this.lookAt = [
             1,
@@ -122,12 +122,12 @@ class Tank extends THREE.Object3D{
         this.volume = 0.5;
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
-        
+
 
         // create a global audio source
         this.sound = new THREE.Audio( this.listener );
         this.audioLoader = new THREE.AudioLoader();
-        
+
     }
 
     //*\/*\/*\/*\/*\/*
@@ -323,7 +323,7 @@ class Tank extends THREE.Object3D{
      */
     rotateTurret(rotationSpeed){
         this.turret.rotation.y += rotationSpeed;
-        
+
         this.turretLookAt[0] = Math.cos(
             this.turret.rotation.y + this.movementNode.rotation.y
         );
@@ -373,7 +373,7 @@ class Tank extends THREE.Object3D{
             speed * this.lookAt[0];
         var newZPos = this.movementNode.position.z +
             speed * this.lookAt[2];
-        
+
         if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
         // X component of lookAt vector
             this.movementNode.position.x = newXPos;
@@ -469,13 +469,13 @@ class Tank extends THREE.Object3D{
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
 
-            ducks.forEach(function(duck) {   
+            ducks.forEach(function(duck) {
                 if(bullet.checkCollision(duck)) {
                     bullet.hit = true;
                     duck.timeToGoHome = true;
                 }
             });
-            
+
             if(bullet.isOutOfRange(self.groundLength) || bullet.hit) {
                 if(bullet.explode() >= 20) {
                     self.playPop();
@@ -487,7 +487,7 @@ class Tank extends THREE.Object3D{
 
                 if(bullet.hit && bullet.explode() <= 2) {
                     self.playCuack();
-                    
+
                     if(bullet.playerId == self.playerId) {
                         self.ammo = Math.min(20, self.ammo + 3);
                         self.firedAmmo = Math.max(0, self.firedAmmo - 4);
@@ -497,16 +497,22 @@ class Tank extends THREE.Object3D{
         });
     }
 
-    /** 
+    /**
      * Toggles effects on and off
      **/
-
     toggleEffects() {
         this.volume =
-            this.volume == 0 ? 0.5 : 0;
+            this.volume === 0 ? 0.5 : 0;
         this.sound.setVolume(this.volume);
     }
-    
+
+    /**
+     * Returns if effects are on
+     **/
+    effectsOn() {
+        return this.volume !== 0;
+    }
+
     /**
      * Plays "cuack" sound
      **/
@@ -519,7 +525,7 @@ class Tank extends THREE.Object3D{
                 self.sound.setLoop(false);
                 self.sound.setVolume(self.volume);
                 self.sound.play();
-            }   
+            }
         );
     }
 

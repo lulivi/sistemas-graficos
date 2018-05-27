@@ -27,6 +27,8 @@ class TheScene extends THREE.Scene {
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
 
+        this.musicOn = true;
+
         // create a global audio source
         this.sound = new THREE.Audio( this.listener );
         this.audioLoader = new THREE.AudioLoader();
@@ -36,7 +38,8 @@ class TheScene extends THREE.Scene {
                 self.sound.setBuffer( buffer );
                 self.sound.setLoop( true );
                 self.sound.setVolume( 0.5 );
-                self.sound.play();
+                if (self.musicOn)
+                    self.sound.play();
             }
         );
 
@@ -272,7 +275,8 @@ class TheScene extends THREE.Scene {
                 self.sound.setBuffer( buffer );
                 self.sound.setLoop( true );
                 self.sound.setVolume( 0.5 );
-                self.sound.play();
+                if (self.musicOn)
+                    self.sound.play();
             }
         );
     }
@@ -281,6 +285,7 @@ class TheScene extends THREE.Scene {
      * Turns music on/off
      **/
     toggleMusic() {
+        this.musicOn = !this.musicOn;
         this.sound.isPlaying?
             this.sound.stop() :
             this.sound.play();
@@ -288,6 +293,10 @@ class TheScene extends THREE.Scene {
 
     toggleEffects() {
         this.tank.toggleEffects();
+    }
+
+    effectsOn() {
+        return this.tank.effectsOn();
     }
 
     /**
