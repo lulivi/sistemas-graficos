@@ -39,7 +39,7 @@ class TheScene extends THREE.Scene {
                 self.sound.play();
             }
         );
-        
+
         this.gameReset = false;
         this.hardMode = false;
         this.createLights();
@@ -52,17 +52,15 @@ class TheScene extends THREE.Scene {
             1000,
             1000
         );
-        this.background = this.createBackground();
-        
     }
 
-    
+
     /** Creates background cube image
      *
      **/
 
-    createBackground() {
-        var path = 'imgs/cube/';
+    createBackground(mapName) {
+        var path = 'imgs/' + mapName + '/';
         var format = '.jpg';
         var urls = [
             path + 'px' + format, path + 'nx' + format,
@@ -71,7 +69,7 @@ class TheScene extends THREE.Scene {
         ];
         var reflectionCube = new THREE.CubeTextureLoader().load( urls );
         reflectionCube.format = THREE.RGBFormat;
-        return reflectionCube;
+        this.background = reflectionCube;
     }
 
     /// It creates the camera and adds it to the graph
@@ -143,7 +141,7 @@ class TheScene extends THREE.Scene {
         // Tank model
         var tankTexture = loader.load('imgs/metal1.jpg');
         var wheelTexture = loader.load('imgs/wheel.jpg');
-        
+
         this.tank = new Tank({
             material: new THREE.MeshPhongMaterial({
                 color: '#00ff00',
@@ -228,7 +226,7 @@ class TheScene extends THREE.Scene {
     }
 
     /**
-     * Moves tank, depending on which keys are being pressed 
+     * Moves tank, depending on which keys are being pressed
      **/
     moveTank() {
         var speed = 1;
@@ -301,14 +299,14 @@ class TheScene extends THREE.Scene {
     }
 
     /**
-     * Stops main theme and 
-     **/ 
+     * Stops main theme and
+     **/
     stopTheme() {
         this.sound.stop();
         this.playFocus();
     }
 
-    /** 
+    /**
      * Creates ducks when possible, at random pos.
      **/
     createDucks() {
@@ -320,7 +318,7 @@ class TheScene extends THREE.Scene {
                 rotationY: randNum(360)
             });
             this.duckArray.push(duck);
-        
+
             this.model.add(this.duckArray[this.duckArray.length-1].duck);
             this.duckCooldown = 200;
             this.tank.playCuack();
