@@ -3,7 +3,8 @@
  */
 var AmmoBar = function(id = 1, ammoColor = 'red') {
     // Current ammo count
-    var currentAmmo = 20;
+    var maxAmmo = 10;
+    var currentAmmo = maxAmmo;
 
     // To queue new updates and don't
     var updateQueue = [];
@@ -22,8 +23,8 @@ var AmmoBar = function(id = 1, ammoColor = 'red') {
 
     bar.append('Player ' + id + ' ');
 
-    // Insert 20 hearts in the bar
-    for (var i = 0; i < 20; ++i)
+    // Insert 10 hearts in the bar
+    for (var i = 0; i < maxAmmo; ++i)
         bar.append(
             $('<i>').addClass('w3-cell-middle fas fa-heart')
         ).append(' ');
@@ -161,7 +162,7 @@ var AmmoBar = function(id = 1, ammoColor = 'red') {
             if (!updatingAmmo && updateQueue.length > 0)
                 (updateQueue.shift())();
             // Queue a new ammo update
-            if (0 <= newAmmo && newAmmo <= 20 && newAmmo != currentAmmo) {
+            if (0 <= newAmmo && newAmmo <= maxAmmo && newAmmo != currentAmmo) {
                 // Queue a new update with currentAmmo and the newAmmo
                 queueAmmoUpdate(currentAmmo, newAmmo);
                 // Change the currentAmmo var for futures updates

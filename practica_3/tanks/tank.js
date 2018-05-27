@@ -105,9 +105,17 @@ class Tank extends THREE.Object3D{
             0
         ];
 
-        this.ammo = 20;
+        this.maxAmmo = 10;
+        this.ammo = 10;
         this.firedAmmo = 0;
         this.friendsCount = 0;
+
+        // The ammo gain depending on the gameSpeedFactor
+        this.ammoGain = {
+            1: 3,
+            2: 2,
+            3: 1
+        };
 
         this.bulletsArray = new Array();
         this.cooldown = null;
@@ -369,6 +377,7 @@ class Tank extends THREE.Object3D{
      * @param speed {Number} - Space to displace
      */
     moveForward(speed){
+        // speed *= gameSpeedFactor;
         var newXPos = this.movementNode.position.x +
             speed * this.lookAt[0];
         var newZPos = this.movementNode.position.z +
@@ -392,6 +401,7 @@ class Tank extends THREE.Object3D{
      */
     /// Rotate tank (left/right)
     rotate(rotationSpeed, speed){
+        // speed *= gameSpeedFactor;
         speed /=2;
         this.movementNode.rotation.y += rotationSpeed;
         this.lookAt[0] = Math.cos(this.movementNode.rotation.y);
@@ -422,7 +432,7 @@ class Tank extends THREE.Object3D{
      * Shoots a projectile
      */
     shoot() {
-        if(this.firedAmmo < 20) {
+        if(this.firedAmmo < this.maxAmmo) {
             var array = this.turretLookAt;
             var bullet = new Projectile({
                 position: {
@@ -458,11 +468,11 @@ class Tank extends THREE.Object3D{
     animateBullets(ducks) {
         let self = this;
         ducks.forEach(function(duck,i) {
-            if(duck.timeToGoHome) {
-                if(duck.goHome() >= 50) {
+            if (duck.timeToGoHome) {
+                if (duck.goHome() >= 50) {
                     scene.model.remove(duck.duck);
                     ducks.splice(i,1);
-                    self.friendsCount++;
+                    ++self.friendsCount;
                 }
             }
         });
@@ -489,7 +499,10 @@ class Tank extends THREE.Object3D{
                     self.playCuack();
 
                     if(bullet.playerId == self.playerId) {
-                        self.ammo = Math.min(20, self.ammo + 3);
+                        self.ammo = Math.min(
+                            self.maxAmmo,
+                            self.ammo + self.ammoGain[gameSpeedFactor]
+                        );
                         self.firedAmmo = Math.max(0, self.firedAmmo - 4);
                     }
                 }
