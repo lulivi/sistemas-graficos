@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * Duck object
+ *
+ * @param {Object} parameters - Initial object parameters
+ * @param {Number} rotationY - Initial offset rotation
+ * @param {Number} xPos - Initial x position
+ * @param {Number} zPos - Initial z position
+ * @param {Number} groundWidth - Movement limits
+ */
 class Duck extends THREE.Object3D {
     constructor(parameters){
         super();
@@ -27,7 +36,7 @@ class Duck extends THREE.Object3D {
             this.createDuck(
                 {
                     x: parameters.xPos,
-                    z: parameters.yPos
+                    z: parameters.zPos
                 },
                 this.rotationOffset
             )
@@ -46,7 +55,9 @@ class Duck extends THREE.Object3D {
 
     /**
      * Creates duck and loads its model
+     *
      * @param {{x: Number, z: Number}} position - x and z position of the duck
+     * @param {Number} rotationY - y rotation angle
      **/
     createDuck(position, rotationY){
         this.duck = new THREE.Object3D();
@@ -121,7 +132,8 @@ class Duck extends THREE.Object3D {
 
     /**
      * Moves duck towards its lookAt at a specific speed
-     * @param speed {Number}
+     *
+     * @param {Number} speed
      */
     moveDuck(speed){
         speed *= gameSpeedFactor;
@@ -146,7 +158,8 @@ class Duck extends THREE.Object3D {
 
     /**
      * Rotates duck at a specific speed
-     * @param speed {Number}
+     *
+     * @param {Number} speed
      */
     rotateDuck(speed) {
         speed *= gameSpeedFactor;
@@ -160,7 +173,6 @@ class Duck extends THREE.Object3D {
     /**
      * Animates duck
      */
-
     animateDuck() {
         if(this.moveMode) {
             this.moveCounter++;
@@ -181,7 +193,7 @@ class Duck extends THREE.Object3D {
                 this.twistMode = false;
                 this.moveMode = true;
                 this.twistCounter = 0;
-                this.twistLimit = randNum(180) - 90;
+                this.twistLimit = (randNum(180) - 90) / gameSpeedFactor;
                 this.rotationSpeed =
                     (randNum(10) < 5) ? 2 : -2;
             }
@@ -194,11 +206,7 @@ class Duck extends THREE.Object3D {
         }
     }
 
-
     goHome() {
         return this.fadeCounter;
     }
-
-
-
 }
