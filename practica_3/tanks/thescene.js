@@ -10,7 +10,6 @@ class TheScene extends THREE.Scene {
         super();
 
         // Attributes
-
         this.ambientLight = null;
         this.spotLight = null;
         this.camera = null;
@@ -20,16 +19,17 @@ class TheScene extends THREE.Scene {
         this.groundWidth = 500;
         this.groundLength = 500;
         // Ducks
+
         this.duckArray = Array();
         this.ducksLimit = 5;
         this.duckCooldown = 0;
         // Audio
+
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
 
-        this.musicOn = true;
-
         // create a global audio source
+        this.musicOn = true;
         this.sound = new THREE.Audio( this.listener );
         this.audioLoader = new THREE.AudioLoader();
         let self = this;
@@ -232,8 +232,8 @@ class TheScene extends THREE.Scene {
      * Moves tank, depending on which keys are being pressed
      **/
     moveTank() {
-        var speed = 1;
-        var rotationSpeed = Math.PI*2/180;
+        var speed = 1 * gameSpeedFactor;
+        var rotationSpeed = Math.PI * 2 / 180;
         let self = this;
         self.tank.reduceCooldown();
         pressedKeysArray.forEach(function(item) {
