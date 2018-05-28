@@ -2,7 +2,30 @@
 
 ## Personajes
 
+Los personajes que aparecen en este juego son básicamente 2 modelos:
+
+- Los patos: son los objetivos a alcanzar por el tanque.
+- El tanque: es el jugador, que se desplaza por el mapa y lanza proyectiles a los patos que se encuentre en él.
+- En el modo 1vs1 no existirían patos, sólo se encontrarían dos tanques.
+
 ## Diseño de niveles
+
+El diseño de niveles consiste en el aumento de la dificultad dependiendo de la
+velocidad de juego (alternable en el menú opciones) entre 1, 2 y 3.
+
+En los tres niveles se resta una unidad a la munición del jugador cuando al
+lanzar un proyectil, no intercepta ningun pato.
+
+En el nivel 1, al interceptar un pato con un proyectil, a parte de recuperar
+el proyectil disparado, se consiguen 3 más. La velocidad tanto del tanque como
+de los patos es de una unidad (la mínima).
+
+En el nivel 2, se consiguen 2 más el proyectil disparado. La velocidad de los
+personajes presentes en el juego es de 2 unidades
+
+En el nivel 3, sólo se recupera el proyectil disparado, es decir, una vez has
+gastado munición, no se podrá volver a recuperar. La velocidad de los
+personajes presentes en el juego es de 3 unidades (la máxima).
 
 ## Jugabilidad
 
