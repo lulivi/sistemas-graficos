@@ -76,8 +76,8 @@ class Tank extends THREE.Object3D{
         this.leftWheelsPosition = - this.rightWheelsPosition;
 
         // Limits
-        this.groundLength = parameters.ground.length;
-        this.groundWidth = parameters.ground.width;
+        this.lengthLimit = parameters.ground.length;
+        this.widthLimit = parameters.ground.width;
 
         // Extra nodes
         this.movementNode = null;
@@ -110,7 +110,7 @@ class Tank extends THREE.Object3D{
         this.ammoGain = {
             1: 3,
             2: 2,
-            3: 1
+            3: 0
         };
 
         this.bulletsArray = [];
@@ -379,11 +379,11 @@ class Tank extends THREE.Object3D{
         var newZPos = this.movementNode.position.z +
             speed * this.lookAt[2];
 
-        if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
+        if(newXPos < this.widthLimit/2 &&  newXPos > -this.widthLimit/2)
         // X component of lookAt vector
             this.movementNode.position.x = newXPos;
         // Z component of lookAt vector
-        if(newZPos < this.groundLength/2 &&  newZPos > -this.groundLength/2)
+        if(newZPos < this.lengthLimit/2 &&  newZPos > -this.lengthLimit/2)
             this.movementNode.position.z = newZPos;
         // Rotation of wheels
         this.rotateWheels(true, speed);
@@ -482,15 +482,17 @@ class Tank extends THREE.Object3D{
                 }
             });
 
-            if(bullet.isOutOfRange(self.groundLength) || bullet.hit) {
+            if(bullet.isOutOfRange(self.lengthLimit) || bullet.hit) {
                 if(bullet.explode() >= 20) {
                     self.playPop();
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
                     if (!bullet.hit) {
                         --self.ammo;
-                        if (self.ammo == 0)
+                        if (self.ammo == 0) {
+                            scene.stopMusic();
                             toggleMenu(Menu.END_SCREEN);
+                        }
                     }
                 }
 
