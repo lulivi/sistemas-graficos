@@ -3,21 +3,28 @@
 class Projectile extends THREE.Object3D {
     constructor(parameters){
         super();
+        // Counters
         this.count = 0;
-        this.lookAt = [0,0,0];
+        this.explodeCount = 0;
+        // Modes
+        this.growMode = true;
+        this.hit = false;
+        // Model
         this.heart = this.createHeart(
             parameters.position,
             parameters.rotation,
             parameters.vector
         );
         this.heartRadius = 5;
-        this.growMode = true;
+        this.lookAt = [0,0,0];
         this.speed = 2;
-        this.explodeCount = 0;
-        this.hit = false;
+        // Id
         this.playerId = parameters.playerId;
-
     }
+
+    //*\/*\/*\/*\/*\/*
+    // MODEL CREATION
+    //*\/*\/*\/*\/*\/*
 
     /**
      * Creates heart
@@ -29,7 +36,6 @@ class Projectile extends THREE.Object3D {
     createHeart(position, rotation, vector){
         for(var i = 0; i < 3; i++)
             this.lookAt[i] = vector[i];
-
         var heart = new THREE.Object3D();
         heart.rotation.y = rotation.y + Math.PI * 90 / 180;
         heart.position.x = position.x;
@@ -87,7 +93,6 @@ class Projectile extends THREE.Object3D {
             if(this.count <= 0)
                 this.growMode = true;
         }
-
         // X component of lookAt vector
         this.heart.position.x += this.speed * gameSpeedFactor * this.lookAt[0];
         // Z component of lookAt vector
@@ -110,7 +115,6 @@ class Projectile extends THREE.Object3D {
      * @param {Array.<Duck>} ducks - Array of ducks in the scene
      */
     checkCollision(ducks) {
-
         // for each duck do:
         var bullet = this.heart.getWorldPosition();
         var duck = ducks.collider.getWorldPosition();
@@ -129,6 +133,4 @@ class Projectile extends THREE.Object3D {
         this.heart.scale.z += factor;
         return this.explodeCount;
     }
-
-
 }
