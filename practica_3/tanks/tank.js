@@ -37,10 +37,6 @@ class Tank extends THREE.Object3D{
         this.turretMaterial = (parameters.turretMaterial === undefined ?
             this.material : parameters.turretMaterial);
 
-        // wheel material
-        this.wheelMaterial = (parameters.wheelMaterial === undefined ?
-            this.material : parameters.wheelMaterial);
-
         // body material
         this.bodyMaterial = (parameters.bodyMaterial === undefined ?
             this.material : parameters.bodyMaterial);
@@ -117,7 +113,7 @@ class Tank extends THREE.Object3D{
             3: 1
         };
 
-        this.bulletsArray = new Array();
+        this.bulletsArray = [];
         this.cooldown = null;
         this.playerId = parameters.playerId;
 
@@ -177,7 +173,7 @@ class Tank extends THREE.Object3D{
      * @return {THREE.Object3D} Wheel array node
      */
     createWheelArray(wheelZPosition){
-        var wheelsArray = new Array();
+        var wheelsArray = [];
         var wheelsArrayNode = new THREE.Object3D();
 
         var frontWheel = this.createWheel(9, wheelZPosition);
@@ -491,8 +487,11 @@ class Tank extends THREE.Object3D{
                     self.playPop();
                     self.remove(bullet.heart);
                     self.bulletsArray.splice(index,1);
-                    if (!bullet.hit)
+                    if (!bullet.hit) {
                         --self.ammo;
+                        if (self.ammo == 0)
+                            toggleMenu(Menu.END_SCREEN);
+                    }
                 }
 
                 if(bullet.hit && bullet.explode() <= 2) {
