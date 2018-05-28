@@ -148,14 +148,6 @@ var AmmoBar = function(id = 1, ammoColor = 'red') {
 
     return {
         id: barId,
-        getVars: function() {
-            return {
-                currentAmmo: currentAmmo,
-                updatingAmmo: updatingAmmo,
-                updateQueue: updateQueue,
-            };
-        },
-        color: ammoColor,
         domElement: bar,
         updateAmmo: function(newAmmo, friendsCount) {
             // Execute one ammo update of the queue
