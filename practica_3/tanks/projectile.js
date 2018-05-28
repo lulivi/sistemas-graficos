@@ -10,13 +10,13 @@ class Projectile extends THREE.Object3D {
         this.growMode = true;
         this.hit = false;
         // Model
+        this.lookAt = [0,0,0];
         this.heart = this.createHeart(
             parameters.position,
             parameters.rotation,
             parameters.vector
         );
         this.heartRadius = 5;
-        this.lookAt = [0,0,0];
         this.speed = 2;
         // Id
         this.playerId = parameters.playerId;
