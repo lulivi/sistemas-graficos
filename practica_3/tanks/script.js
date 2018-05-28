@@ -18,18 +18,19 @@ var GUIcontrols = null;
 var stats = null;
 
 /**
- *
+ * True if stats on screen
+ */
+var showStats = true;
+
+/**
+ * Array of ammo bars
  */
 var ammoBarsArray = null;
 
 /**
- * The pressed key
- */
-var pressedKey = null;
-/**
  * Currently pressed keys
  */
-var pressedKeysArray = new Array();
+var pressedKeysArray = [];
 
 /**
  * Renderer
@@ -39,7 +40,7 @@ var renderer = null;
 /**
  * Array of menus to show/hide them
  */
-var menusArray = new Array();
+var menusArray = [];
 
 /**
  * If the game is in pause
@@ -70,6 +71,7 @@ const Menu = {
     INSTRUCTIONS: 2,
     PAUSE: 3,
     MAP_SELECTOR: 4,
+    END_SCREEN: 5,
 };
 
 /**
@@ -139,12 +141,22 @@ function updateSpeedOption() {
 }
 
 /**
+ * Update stats option text value
+ */
+function updateStatsOption() {
+    var currText = 'Información';
+    var currValue = (showStats ? 'ON': 'OFF');
+    $('#optStats').attr('value', currText + ' (' + currValue + ')');
+}
+
+/**
  * Update every option text value
  */
 function updateAllOptions() {
     updateMusicOption();
     updateEffectsOption();
     updateSpeedOption();
+    updateStatsOption();
 }
 
 /**
@@ -171,7 +183,16 @@ function changeSpeed() {
     updateSpeedOption();
 }
 
-function startGame(mapName = 'cube'){
+/**
+ * Toggle stats ON/OFF
+ */
+function toggleStats() {
+    showStats = !showStats;
+    $('#statsOutput').toggle();
+    updateStatsOption();
+}
+
+function startGame(mapName = 'galaxy'){
     if (firstTime) {
         firstTime = false;
         createGUI(true);
@@ -182,7 +203,8 @@ function startGame(mapName = 'cube'){
     scene.stopTheme();
     scene.createBackground(mapName);
     toggleMenu(currentMenu);
-    $('#Stats-output').show();
+    if (showStats)
+        $('#statsOutput').show();
     $('#ammoBarsContainer').show();
 }
 
@@ -190,7 +212,7 @@ function restartScene() {
     scene.stopMusic();
     scene = new TheScene(renderer.domElement);
     renderer.clear(false,true,true);
-    $('#Stats-output').hide();
+    $('#statsOutput').hide();
     $('#ammoBarsContainer').hide();
     toggleMenu(Menu.MAIN);
 }
@@ -200,33 +222,6 @@ function restartScene() {
  * @param withStats - A boolean to show the statictics or not
  */
 function createGUI(withStats) {
-    // GUIcontrols = new function() {
-    //     this.axis = false;
-    //     this.lightIntensity = 0.3;
-    //     this.tankTurretRotation = 0;
-    //     this.tankBarrelRotation = 0;
-    //     this.hardMode = false;
-    // };
-    //
-    // var gui = new dat.GUI();
-    //
-    // var gameControls = gui.addFolder('Game Controls');
-    // gameControls.add(GUIcontrols, 'hardMode').name('Hard Mode: ');
-    //
-    // var tankControls = gui.addFolder('Tank Controls');
-    // tankControls.add(
-    //     GUIcontrols, 'tankTurretRotation', -180.0, 180.0
-    // ).name('Turret Rotation :');
-    //
-    // var axisLights = gui.addFolder('Axis and Lights');
-    // axisLights.add(GUIcontrols, 'axis').name('Axis on/off :');
-    // axisLights.add(
-    //     GUIcontrols, 'lightIntensity', 0, 1.0
-    // ).name('Light intensity :');
-
-
-    // The method  listen()  allows the height attribute to be written,
-    // not only read
 
     if(withStats) {
         stats = initStats();
@@ -250,7 +245,7 @@ function initStats() {
     stats.domElement.style.left = '0px';
     stats.domElement.style.top = '0px';
 
-    $('#Stats-output').append(stats.domElement);
+    $('#statsOutput').append(stats.domElement);
 
     return stats;
 }
@@ -262,7 +257,7 @@ function initStats() {
  * @return {Array.<AmmoBar>} - Ammo bars in use
  */
 function initAmmoBars(multiPlayer = false){
-    var ammoBarsArray = new Array();
+    var ammoBarsArray = [];
     var ammoBar0 = new AmmoBar(1, 'red');
 
     $('#ammoBarsContainer')
@@ -280,15 +275,6 @@ function initAmmoBars(multiPlayer = false){
 
     return ammoBarsArray;
 }
-
-/**
- * It shows a feed-back message for the user
- * @param str - The message
- */
-function setMessage(str) {
-    $('#Messages').text('<h2>' + str + '</h2>');
-}
-
 
 /**
 
@@ -333,7 +319,7 @@ function toggleMenu(menuId = Menu.MAIN) {
         updateAllOptions();
 
     // If we come from the main menu, we are in game
-    if (previousMenu === Menu.MAIN) {
+    if (previousMenu === Menu.MAP_SELECTOR) {
         inGame = true;
         pause = false;
     }
@@ -341,6 +327,7 @@ function toggleMenu(menuId = Menu.MAIN) {
     // If we are in the main menu, we are not in game
     if (currentMenu === Menu.MAIN) {
         inGame = false;
+        pause = false;
     }
 
     // If we came from pause menu and we are in game, restart rendering!
@@ -350,7 +337,9 @@ function toggleMenu(menuId = Menu.MAIN) {
     }
 
     // If we are on pause menu and came from the game, it is paused
-    if (currentMenu === Menu.PAUSE && previousMenu === null) {
+    if ((currentMenu === Menu.PAUSE || currentMenu === Menu.END_SCREEN) &&
+            previousMenu === null) {
+        pressedKeysArray = [];
         pause = true;
     }
 }
@@ -362,7 +351,7 @@ function createMenus(){
     // Get the div element which will contain the menus
     var fullScreenMenuContainer = $('#fullScreenMenuContainer')
         // Add basic classes for color and opacity
-        .addClass('w3-container w3-opacity-min w3-black')
+        .addClass('w3-container w3-black')
         // force full-screen and above every element in html
         .css({
             'height': '100vh',
@@ -370,6 +359,7 @@ function createMenus(){
             'position': 'fixed',
             'z-index': '10',
             'top': '0',
+            'opacity': '0.85'
         }).hide();
 
     // Create the menus with each heading and buttons
@@ -401,11 +391,11 @@ function createMenus(){
                     func: 'changeSpeed()',
                     id: 'optSpeed'
                 },
-                // {
-                //     text: 'Niebla (ON)',
-                //     func: 'scene.toggleFog()',
-                //     id: 'optFog'
-                // },
+                {
+                    text: 'Información (ON)',
+                    func: 'toggleStats()',
+                    id: 'optStats'
+                },
                 {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
@@ -425,7 +415,7 @@ function createMenus(){
             buttonsArray: [
                 {text: 'Reanudar', func:'toggleMenu(currentMenu)'},
                 {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTRUCTIONS)'},
-                {text: 'Opciones rápidas', func: 'toggleMenu(Menu.OPTIONS)'},
+                {text: 'Opciones', func: 'toggleMenu(Menu.OPTIONS)'},
                 {text: 'Menú principal', func:'restartScene()'},
             ],
         },
@@ -434,9 +424,20 @@ function createMenus(){
             buttonsArray: [
                 {text: 'Universo', func:'startGame(\'galaxy\')'},
                 {text: 'Parque', func: 'startGame(\'park\')'},
-                {text: 'Atrás', func:'toggleMenu(Menu.MAIN)'},
+                {text: 'Atrás', func:'toggleMenu(previousMenu)'},
             ],
         },
+        {
+            headingText: 'Fin del juego',
+            image: {
+                src: './imgs/see_you_later.png',
+                title: 'See you later',
+                alt: 'See you later',
+            },
+            buttonsArray: [
+                {text: 'Menú principal', func:'restartScene()'},
+            ]
+        }
     ];
 
     // For each menu, add it to the html
@@ -518,24 +519,19 @@ function createRenderer() {
  * It renders every frame
  */
 function render() {
-
     // If we are in pause, dont request another animation frame
     if (pause)
         return;
 
     requestAnimationFrame(render);
 
-    stats.update();
-    // playerInfo.update(scene.robot.energy, scene.robot.score);
+    if (showStats)
+        stats.update();
+
     scene.getCameraControls().update();
     scene.animate(GUIcontrols);
 
     renderer.render(scene, scene.getCamera());
-
-    if (scene.gameReset){
-        scene.toggleReset();
-        pressedKey = null;
-    }
 }
 
 
@@ -564,7 +560,7 @@ function keyDownListener(event) {
         scene.swapCamera();
         break;
     case 27: // Esc key
-        if (inGame)
+        if (inGame || pause)
             toggleMenu(Menu.PAUSE);
     }
 }
@@ -614,9 +610,8 @@ function onKeyDown(event){
         case 38: // Up arrow
         case 39: // Right arrow
         case 40: // Down arrow
-            pressedKey = key;
-            if(pressedKeysArray.indexOf(pressedKey) == -1) {
-                pressedKeysArray.push(pressedKey);
+            if(pressedKeysArray.indexOf(key) == -1) {
+                pressedKeysArray.push(key);
             }
         }
     }
@@ -626,7 +621,6 @@ function onKeyDown(event){
  * Runs code while a key is released
  */
 function onKeyUp(){
-    pressedKey = null;
 }
 
 /**
@@ -675,7 +669,7 @@ $(function() {
     renderer = createRenderer();
 
     // add the output of the renderer to the html element
-    $('#WebGL-output').append(renderer.domElement);
+    $('#webGLOutput').append(renderer.domElement);
 
     // liseners
     window.addEventListener('resize', onWindowResize);
