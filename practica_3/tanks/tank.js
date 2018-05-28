@@ -417,12 +417,9 @@ class Tank extends THREE.Object3D{
         }
     }
 
-    /**
-     * Return tank camera
-     */
-    getCamera(){
-        return this.subjectiveCamera;
-    }
+    //*\/*\/*\/*\/*\/*\/*
+    // SHOOTING FUNCTIONS
+    //*\/*\/*\/*\/*\/*\/*
 
     /**
      * Shoots a projectile
@@ -474,14 +471,12 @@ class Tank extends THREE.Object3D{
         });
         this.bulletsArray.forEach(function(bullet, index){
             bullet.animateHeart();
-
             ducks.forEach(function(duck) {
                 if(bullet.checkCollision(duck)) {
                     bullet.hit = true;
                     duck.timeToGoHome = true;
                 }
             });
-
             if(bullet.isOutOfRange(self.lengthLimit) || bullet.hit) {
                 if(bullet.explode() >= 20) {
                     self.playPop();
@@ -495,10 +490,8 @@ class Tank extends THREE.Object3D{
                         }
                     }
                 }
-
                 if(bullet.hit && bullet.explode() <= 2) {
                     self.playCuack();
-
                     if(bullet.playerId == self.playerId) {
                         self.ammo = Math.min(
                             self.maxAmmo,
@@ -511,6 +504,19 @@ class Tank extends THREE.Object3D{
         });
     }
 
+
+    //*\/*\/*\/*\/*\/*\/*
+    // OTHER FUNCTIONS
+    //*\/*\/*\/*\/*\/*\/*
+
+    /**
+     * Return tank camera
+     */
+    getCamera(){
+        return this.subjectiveCamera;
+    }
+
+    
     /**
      * Toggles effects on and off
      **/
