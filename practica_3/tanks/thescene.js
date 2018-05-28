@@ -43,7 +43,6 @@ class TheScene extends THREE.Scene {
             }
         );
 
-        this.gameReset = false;
         this.hardMode = false;
         this.createLights();
         this.firstPersonCamera = false;
@@ -196,17 +195,6 @@ class TheScene extends THREE.Scene {
         this.firstPersonCamera = !this.firstPersonCamera;
     }
 
-    /*
-    pauseGame() {
-        alert('El juego está en pausa, pulse de nuevo la barra' +
-              'espaciadora para continuar');
-    }
-    */
-
-    toggleReset() {
-        this.gameReset = !this.gameReset;
-    }
-
     reset() {
         this.toggleReset();
     }
@@ -323,7 +311,7 @@ class TheScene extends THREE.Scene {
             var duck = new Duck({
                 groundWidth: this.groundWidth,
                 xPos: randNum(500) - 250,
-                yPos: randNum(500) - 250,
+                zPos: randNum(500) - 250,
                 rotationY: randNum(360)
             });
             this.duckArray.push(duck);
