@@ -9,7 +9,7 @@
 ## Arte
 
 El apartado visual del juego se puede agrupar principalmente en arte
-2D y arte 3D. 
+2D y arte 3D.
 
 En el **arte 2D** se encuentran las texturas *metal1*, *wheel* y
 *water* que se han obtenido de fuentes libres, del mismo modo que las
@@ -34,3 +34,19 @@ por el equipo. Los efectos sonoros han sido también producidos
 nuestras voces y un editor de audio simple.
 
 ## Interfaz de usuario, controles de juego
+
+La interfaz de usuario estará compuesta de lo siguiente:
+
+- Un sistema de menús para entrar/salir del juego, cambiar opciones, seleccionar mapas y ver controles básicos.
+- Información acerca de los FPS (fotogramas por segundo) y los milisegundos que tarda en renderizarse cada fotograma.
+- Una barra con información del jugador (su nombre, su munición restante y el número de amigos que ha hecho).
+
+En cuanto a los controles del juego, se utilizará:
+
+- El click izquierdo del ratón para navegar por las opciones de los menús.
+- La tecla escape para alternar entre menú de pausa y el juego, y volver atrás en un submenú.
+- Las teclas W, A, S, D para mover el tanque adelante, girar a la izquierda, mover el tanque hacia atrás y girar a la derecha respectivamente.
+- Las teclas Q y E para rotar la torreta del tanque a izquierda y derecha respectivamente.
+- La tecla V para alternar entre primera y tercera persona (sólo en modo un jugador).
+- La rueda del raton para acercar y alejar la cámara de tercera persona.
+- El espacio para disparar un proyectil.
