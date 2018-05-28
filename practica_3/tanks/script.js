@@ -529,7 +529,7 @@ function render() {
         stats.update();
 
     scene.getCameraControls().update();
-    scene.animate(GUIcontrols);
+    scene.animate();
 
     renderer.render(scene, scene.getCamera());
 }

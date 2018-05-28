@@ -42,18 +42,11 @@ class TheScene extends THREE.Scene {
                     self.sound.play();
             }
         );
-
-        this.hardMode = false;
         this.createLights();
         this.firstPersonCamera = false;
         this.model = this.createModel();
         this.add(this.model);
         this.createCamera(renderer);
-        this.fog = new THREE.Fog(
-            0xffffff,
-            1000,
-            1000
-        );
     }
 
 
@@ -127,7 +120,6 @@ class TheScene extends THREE.Scene {
     createModel() {
         var model = new THREE.Object3D();
         var loader = new THREE.TextureLoader();
-
         // Ground model
         var groundTexture = loader.load('imgs/water.jpg');
         groundTexture.wrapS = THREE.RepeatWrapping;
@@ -139,11 +131,9 @@ class TheScene extends THREE.Scene {
             }), 4
         );
         model.add(this.ground);
-
         // Tank model
         var tankTexture = loader.load('imgs/metal1.jpg');
         var wheelTexture = loader.load('imgs/wheel.jpg');
-
         this.tank = new Tank({
             material: new THREE.MeshPhongMaterial({
                 color: '#00ff00',
@@ -169,7 +159,7 @@ class TheScene extends THREE.Scene {
     /**
      * @controls - The GUI information
      */
-    animate(controls) {
+    animate() {
         this.moveTank();
         this.tank.animateBullets(this.duckArray);
         ammoBarsArray[0].updateAmmo(this.tank.ammo, this.tank.friendsCount);
