@@ -92,8 +92,10 @@ class Tank extends THREE.Object3D{
             0,
             0
         ];
-
+        //*********
         // Shooting
+        //*********
+        
         // Look-at vector for turret. Used for shooting
         this.turretLookAt = [
             1,
@@ -117,12 +119,17 @@ class Tank extends THREE.Object3D{
         this.cooldown = null;
         this.playerId = parameters.playerId;
 
+        //*********
+        // Camera
+        //*********
+        
         // First person camera
         this.subjectiveCamera = null;
-
-        this.add(this.createMovementNode());
-
+        
+        //*********
         // Audio
+        //*********
+        
         this.volume = 0.5;
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
@@ -131,6 +138,11 @@ class Tank extends THREE.Object3D{
         // create a global audio source
         this.sound = new THREE.Audio( this.listener );
         this.audioLoader = new THREE.AudioLoader();
+
+        //*********
+        // Add to model
+        //*********
+        this.add(this.createMovementNode());
 
     }
 

@@ -13,19 +13,28 @@ class Duck extends THREE.Object3D {
     constructor(parameters){
         super();
 
+        //*********
         // Counters
+        //*********
+        
         this.moveCounter = 0;
         this.moveLimit = randNum(100) + 50;
         this.twistCounter = 0;
         this.twistLimit = randNum(180) - 90;
         this.fadeCounter = 0;
 
+        //*********
         // Modes
+        //*********
+        
         this.moveMode = true;
         this.twistMode = false;
         this.timeToGoHome = false; // Fades duck with animation
 
+        //*********************
         // Model and properties
+        //*********************
+        
         this.duck = null;
         this.speed = 1;
         this.rotationSpeed = 2;
@@ -42,16 +51,27 @@ class Duck extends THREE.Object3D {
             )
         );
 
+        //*********
         // LookAt
+        //*********
+        
         this.lookAt = [
             Math.cos(this.duck.rotation.y - Math.PI / 2),
             0,
             -Math.sin(this.duck.rotation.y -  Math.PI / 2)
         ];
-
+        
+        //****************
         // Movement limits
-        this.groundWidth = parameters.groundWidth;
+        //****************
+        this.widthLimit = parameters.groundWidth;
     }
+
+    
+    //*\/*\/*\/*\/*\/*
+    // MODEL CREATION
+    //*\/*\/*\/*\/*\/*
+
 
     /**
      * Creates duck and loads its model
@@ -126,9 +146,14 @@ class Duck extends THREE.Object3D {
         this.collider = new THREE.Mesh( geometry, material);
         this.collider.scale.set (1/100, 1/100, 1/100);
         this.collider.position.y /= 100;
-
         return this.collider;
     }
+
+
+    
+    //*\/*\/*\/*\/*\/*
+    // DUCK MOVEMENT
+    //*\/*\/*\/*\/*\/*
 
     /**
      * Moves duck towards its lookAt at a specific speed
@@ -142,14 +167,13 @@ class Duck extends THREE.Object3D {
         var newZPos = this.duck.position.z +
             speed * this.lookAt[2];
         var outOfRange = false;
-
-        if(newXPos < this.groundWidth/2 &&  newXPos > -this.groundWidth/2)
+        if(newXPos < this.widthLimit/2 &&  newXPos > -this.widthLimit/2)
         // X component of lookAt vector
             this.duck.position.x = newXPos;
         else
             outOfRange = true;
         // Z component of lookAt vector
-        if(newZPos < this.groundWidth/2 &&  newZPos > -this.groundWidth/2)
+        if(newZPos < this.widthLimit/2 &&  newZPos > -this.widthLimit/2)
             this.duck.position.z = newZPos;
         else
             outOfRange = true;
@@ -179,7 +203,6 @@ class Duck extends THREE.Object3D {
             if(this.moveDuck(this.speed)){
                 this.moveCounter = this.moveLimit;
             }
-
             if(this.moveCounter >= this.moveLimit) {
                 this.moveMode = false;
                 this.twistMode = true;
@@ -198,13 +221,17 @@ class Duck extends THREE.Object3D {
                     (randNum(10) < 5) ? 2 : -2;
             }
         }
-
         if(this.timeToGoHome) {
             this.fadeCounter += 2;
             this.duck.position.y = this.fadeCounter;
             this.duck.rotation.y +=3*Math.PI /180;
         }
     }
+
+    
+    //*\/*\/*\/*\/*\/*
+    // ACCESSORS
+    //*\/*\/*\/*\/*\/*
 
     goHome() {
         return this.fadeCounter;
