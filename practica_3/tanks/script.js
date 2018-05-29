@@ -41,10 +41,11 @@ var renderer = null;
  * @enum - Possible game states
  */
 const GameState = {
-    START_END: 0,
+    START: 0,
     MAIN_SUBMENU: 1,
     PAUSE_OR_PAUSE_SUBMENU: 2,
     IN_GAME: 3,
+    END: 4,
 };
 
 var currentGameState = null;
@@ -346,9 +347,13 @@ function toggleMenu(menuId = Menu.MAIN) {
             currentMenu === Menu.PAUSE)
         currentGameState = GameState.PAUSE_OR_PAUSE_SUBMENU;
 
+    // If we are in the mainscreen
+    if (currentMenu === Menu.MAIN)
+        currentGameState = GameState.START;
+
     // If we are in the end screen
-    if (currentMenu === Menu.MAIN || currentMenu === Menu.END)
-        currentGameState = GameState.START_END;
+    if (currentMenu === Menu.END)
+        currentGameState = GameState.END;
 
     // Clear pressed keys
     pressedKeysArray = [];
@@ -530,7 +535,8 @@ function createRenderer() {
  */
 function render() {
     // If we are in pause, dont request another animation frame
-    if (currentGameState !== GameState.IN_GAME)
+    if (currentGameState !== GameState.IN_GAME &&
+            currentGameState !== GameState.END)
         return;
 
     requestAnimationFrame(render);
