@@ -94,9 +94,9 @@ class Projectile extends THREE.Object3D {
                 this.growMode = true;
         }
         // X component of lookAt vector
-        this.heart.position.x += this.speed * gameSpeedFactor * this.lookAt[0];
+        this.heart.position.x += this.speed * gameSpeed * this.lookAt[0];
         // Z component of lookAt vector
-        this.heart.position.z += this.speed * gameSpeedFactor * this.lookAt[2];
+        this.heart.position.z += this.speed * gameSpeed * this.lookAt[2];
     }
 
     /**

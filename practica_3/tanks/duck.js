@@ -161,7 +161,7 @@ class Duck extends THREE.Object3D {
      * @param {Number} speed
      */
     moveDuck(speed){
-        speed *= gameSpeedFactor;
+        speed *= gameSpeed;
         var newXPos = this.duck.position.x +
             speed * this.lookAt[0];
         var newZPos = this.duck.position.z +
@@ -186,7 +186,7 @@ class Duck extends THREE.Object3D {
      * @param {Number} speed
      */
     rotateDuck(speed) {
-        speed *= gameSpeedFactor;
+        speed *= gameSpeed;
         this.duck.rotation.y += speed * Math.PI / 180;
         var offset = -90 * Math.PI/180;
         var lookat = this.duck.rotation.y + offset;
@@ -216,7 +216,7 @@ class Duck extends THREE.Object3D {
                 this.twistMode = false;
                 this.moveMode = true;
                 this.twistCounter = 0;
-                this.twistLimit = (randNum(180) - 90) / gameSpeedFactor;
+                this.twistLimit = (randNum(180) - 90) / gameSpeed;
                 this.rotationSpeed =
                     (randNum(10) < 5) ? 2 : -2;
             }

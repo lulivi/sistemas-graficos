@@ -210,7 +210,7 @@ class TheScene extends THREE.Scene {
      * Moves tank, depending on which keys are being pressed
      **/
     moveTank() {
-        var speed = 1 * gameSpeedFactor;
+        var speed = 1 * gameSpeed;
         var rotationSpeed = Math.PI * 2 / 180;
         let self = this;
         self.tank.reduceCooldown();

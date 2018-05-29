@@ -95,7 +95,7 @@ class Tank extends THREE.Object3D{
         //*********
         // Shooting
         //*********
-        
+
         // Look-at vector for turret. Used for shooting
         this.turretLookAt = [
             1,
@@ -108,7 +108,7 @@ class Tank extends THREE.Object3D{
         this.firedAmmo = 0;
         this.friendsCount = 0;
 
-        // The ammo gain depending on the gameSpeedFactor
+        // The ammo gain depending on the gameSpeed
         this.ammoGain = {
             1: 3,
             2: 2,
@@ -122,14 +122,14 @@ class Tank extends THREE.Object3D{
         //*********
         // Camera
         //*********
-        
+
         // First person camera
         this.subjectiveCamera = null;
-        
+
         //*********
         // Audio
         //*********
-        
+
         this.volume = 0.5;
         this.listener = new THREE.AudioListener();
         this.add( this.listener );
@@ -385,7 +385,7 @@ class Tank extends THREE.Object3D{
      * @param speed {Number} - Space to displace
      */
     moveForward(speed){
-        // speed *= gameSpeedFactor;
+        // speed *= gameSpeed;
         var newXPos = this.movementNode.position.x +
             speed * this.lookAt[0];
         var newZPos = this.movementNode.position.z +
@@ -409,7 +409,7 @@ class Tank extends THREE.Object3D{
      */
     /// Rotate tank (left/right)
     rotate(rotationSpeed, speed){
-        // speed *= gameSpeedFactor;
+        // speed *= gameSpeed;
         speed /=2;
         this.movementNode.rotation.y += rotationSpeed;
         this.lookAt[0] = Math.cos(this.movementNode.rotation.y);
@@ -507,7 +507,7 @@ class Tank extends THREE.Object3D{
                     if(bullet.playerId == self.playerId) {
                         self.ammo = Math.min(
                             self.maxAmmo,
-                            self.ammo + self.ammoGain[gameSpeedFactor]
+                            self.ammo + self.ammoGain[gameSpeed]
                         );
                         self.firedAmmo = Math.max(0, self.firedAmmo - 4);
                     }
@@ -528,7 +528,7 @@ class Tank extends THREE.Object3D{
         return this.subjectiveCamera;
     }
 
-    
+
     /**
      * Toggles effects on and off
      **/

@@ -60,7 +60,7 @@ var firstTime = true;
 /**
  * The game speed factor
  */
-var gameSpeedFactor = 1;
+var gameSpeed = 1;
 
 /**
  * @enum
@@ -136,7 +136,7 @@ function updateEffectsOption() {
  */
 function updateSpeedOption() {
     var currText = 'Velocidad';
-    var currValue = gameSpeedFactor;
+    var currValue = gameSpeed;
     $('#optSpeed').attr('value', currText + ' (' + currValue + ')');
 }
 
@@ -179,7 +179,7 @@ function toggleEffects() {
  * Rotate game speed factor
  */
 function changeSpeed() {
-    gameSpeedFactor = (gameSpeedFactor % 3) + 1;
+    gameSpeed = (gameSpeed % 3) + 1;
     updateSpeedOption();
 }
 
