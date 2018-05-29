@@ -194,44 +194,6 @@ function toggleStats() {
     updateStatsOption();
 }
 
-function startGame(mapName = 'galaxy'){
-    if (firstTime) {
-        firstTime = false;
-        createGUI(true);
-        render();
-    } else {
-        requestAnimationFrame(render);
-    }
-    scene.stopTheme();
-    scene.createBackground(mapName);
-    toggleMenu(currentMenu);
-    if (showStats)
-        $('#statsOutput').show();
-    $('#ammoBarsContainer').show();
-}
-
-function restartScene() {
-    scene.stopMusic();
-    scene = new TheScene(renderer.domElement);
-    renderer.clear(false,true,true);
-    $('#statsOutput').hide();
-    $('#ammoBarsContainer').hide();
-    toggleMenu(Menu.MAIN);
-}
-
-/**
- * It creates the GUI and, optionally, adds statistic information
- * @param withStats - A boolean to show the statictics or not
- */
-function createGUI(withStats) {
-
-    if(withStats) {
-        stats = initStats();
-    }
-
-    ammoBarsArray = initAmmoBars();
-}
-
 /**
  * It adds statistics information to a previously created Div
  * @return The statistics object
@@ -276,6 +238,50 @@ function initAmmoBars(multiPlayer = false){
     }
 
     return ammoBarsArray;
+}
+
+/**
+ * It creates the GUI and, optionally, adds statistic information
+ * @param withStats - A boolean to show the statictics or not
+ */
+function createGUI(withStats) {
+
+    if(withStats) {
+        stats = initStats();
+    }
+
+    ammoBarsArray = initAmmoBars();
+}
+
+/**
+ * Start game: show gui and start a new render/request animation frame
+ */
+function startGame(mapName = 'galaxy'){
+    toggleMenu(currentMenu);
+    if (showStats)
+        $('#statsOutput').show();
+    $('#ammoBarsContainer').show();
+    scene.stopTheme();
+    scene.createBackground(mapName);
+    if (firstTime) {
+        firstTime = false;
+        createGUI(true);
+        render();
+    } else {
+        requestAnimationFrame(render);
+    }
+}
+
+/**
+ * Restart the scene, clear the render and show main menu
+ */
+function resetGame() {
+    toggleMenu(Menu.MAIN);
+    $('#statsOutput').hide();
+    $('#ammoBarsContainer').hide();
+    scene.stopMusic();
+    renderer.clear(false, true, true);
+    scene = new TheScene(renderer.domElement);
 }
 
 /**
@@ -420,7 +426,7 @@ function createMenus(){
                 {text: 'Reanudar', func:'toggleMenu(currentMenu)'},
                 {text: 'Instrucciones', func: 'toggleMenu(Menu.INSTRUCTIONS)'},
                 {text: 'Opciones', func: 'toggleMenu(Menu.OPTIONS)'},
-                {text: 'Menú principal', func:'restartScene()'},
+                {text: 'Menú principal', func:'resetGame()'},
             ],
         },
         {
@@ -439,7 +445,7 @@ function createMenus(){
                 alt: 'See you later',
             },
             buttonsArray: [
-                {text: 'Menú principal', func:'restartScene()'},
+                {text: 'Menú principal', func:'resetGame()'},
             ]
         }
     ];
