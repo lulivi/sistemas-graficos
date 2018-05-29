@@ -496,9 +496,9 @@ class Tank extends THREE.Object3D{
                     self.bulletsArray.splice(index,1);
                     if (!bullet.hit) {
                         --self.ammo;
-                        if (self.ammo == 0) {
+                        if (self.ammo === 0) {
                             scene.stopMusic();
-                            toggleMenu(Menu.END_SCREEN);
+                            toggleMenu(Menu.END);
                         }
                     }
                 }

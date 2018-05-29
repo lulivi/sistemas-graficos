@@ -71,7 +71,7 @@ const Menu = {
     INSTRUCTIONS: 2,
     PAUSE: 3,
     MAP_SELECTOR: 4,
-    END_SCREEN: 5,
+    END: 5,
 };
 
 /**
