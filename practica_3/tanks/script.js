@@ -38,19 +38,16 @@ var pressedKeysArray = [];
 var renderer = null;
 
 /**
- * Array of menus to show/hide them
+ * @enum - Possible game states
  */
-var menusArray = [];
+const GameState = {
+    START_END: 0,
+    MAIN_SUBMENU: 1,
+    PAUSE_OR_PAUSE_SUBMENU: 2,
+    IN_GAME: 3,
+};
 
-/**
- * If the game is in pause
- */
-var pause = false;
-
-/**
-* If we are in-game (pause menu, or the game itself)
-*/
-var inGame = false;
+var currentGameState = null;
 
 /**
  * If it is the irst time the function startGame is executed
@@ -63,7 +60,7 @@ var firstTime = true;
 var gameSpeed = 1;
 
 /**
- * @enum
+ * @enum - Possible menus
  */
 const Menu = {
     MAIN: 0,
@@ -73,6 +70,11 @@ const Menu = {
     MAP_SELECTOR: 4,
     END: 5,
 };
+
+/**
+ * Array of menus to show/hide them
+ */
+var menusArray = [];
 
 /**
  * Current visible menu
@@ -315,33 +317,35 @@ function toggleMenu(menuId = Menu.MAIN) {
         currentMenu = menuId;
     }
 
+    // Update all options when entering the options menu
     if (currentMenu === Menu.OPTIONS)
         updateAllOptions();
 
-    // If we come from the main menu, we are in game
-    if (previousMenu === Menu.MAP_SELECTOR) {
-        inGame = true;
-        pause = false;
+    // If we are in a main sub-menu
+    if (previousMenu == Menu.MAIN && currentMenu !== null)
+        currentGameState = GameState.MAIN_SUBMENU;
+
+    // If we are playing
+    if (currentMenu === null) {
+        currentGameState = GameState.IN_GAME;
+        // If we came from pause
+        if (previousMenu === Menu.PAUSE)
+            requestAnimationFrame(render);
     }
 
-    // If we are in the main menu, we are not in game
-    if (currentMenu === Menu.MAIN) {
-        inGame = false;
-        pause = false;
-    }
+    // If we are in pause
+    if ((previousMenu === Menu.PAUSE &&
+            currentMenu !== Menu.MAIN &&
+            currentMenu !== null) ||
+            currentMenu === Menu.PAUSE)
+        currentGameState = GameState.PAUSE_OR_PAUSE_SUBMENU;
 
-    // If we came from pause menu and we are in game, restart rendering!
-    if (previousMenu === Menu.PAUSE && currentMenu === null) {
-        pause = false;
-        requestAnimationFrame(render);
-    }
+    // If we are in the end screen
+    if (currentMenu === Menu.MAIN || currentMenu === Menu.END)
+        currentGameState = GameState.START_END;
 
-    // If we are on pause menu and came from the game, it is paused
-    if ((currentMenu === Menu.PAUSE || currentMenu === Menu.END_SCREEN) &&
-            previousMenu === null) {
-        pressedKeysArray = [];
-        pause = true;
-    }
+    // Clear pressed keys
+    pressedKeysArray = [];
 }
 
 /**
@@ -520,7 +524,7 @@ function createRenderer() {
  */
 function render() {
     // If we are in pause, dont request another animation frame
-    if (pause)
+    if (currentGameState !== GameState.IN_GAME)
         return;
 
     requestAnimationFrame(render);
@@ -557,11 +561,16 @@ function keyDownListener(event) {
 
     switch(key){
     case String('V').charCodeAt():
-        scene.swapCamera();
+        if (currentGameState === GameState.IN_GAME)
+            scene.swapCamera();
         break;
     case 27: // Esc key
-        if (inGame || pause)
+        if (currentGameState === GameState.MAIN_SUBMENU)
+            toggleMenu(Menu.MAIN);
+        else if (currentGameState === GameState.PAUSE_OR_PAUSE_SUBMENU ||
+                currentGameState === GameState.IN_GAME) {
             toggleMenu(Menu.PAUSE);
+        }
     }
 }
 
@@ -572,7 +581,7 @@ function keyDownListener(event) {
 function keyUpListener(event) {
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    if (inGame && !pause) {
+    if (currentGameState === GameState.IN_GAME) {
         switch (key) {
         case String('W').charCodeAt():
         case String('A').charCodeAt():
@@ -597,7 +606,7 @@ function keyUpListener(event) {
 function onKeyDown(event){
     var key = (event.keyCode) ? event.keyCode : event.which;
 
-    if (inGame && !pause) {
+    if (currentGameState === GameState.IN_GAME) {
         switch (key) {
         case String('W').charCodeAt():
         case String('A').charCodeAt():
@@ -618,17 +627,11 @@ function onKeyDown(event){
 }
 
 /**
- * Runs code while a key is released
- */
-function onKeyUp(){
-}
-
-/**
  * It processes the clic-down of the mouse
  * @param event - Mouse information
  */
 function onMouseDown(event) {
-    if (inGame && !pause) {
+    if (currentGameState === GameState.IN_GAME) {
         if (event.ctrlKey) {
             // The Trackballcontrol only works if Ctrl key is pressed
             scene.getCameraControls().enabled = true;
@@ -643,7 +646,7 @@ function onMouseDown(event) {
  * @param event - Mouse information
  */
 function onMouseWheel(event) {
-    if (inGame && !pause) {
+    if (currentGameState === GameState.IN_GAME) {
         if (event.ctrlKey) {
             // The Trackballcontrol only works if Ctrl key isn't pressed
             scene.getCameraControls().enabled = false;
@@ -685,9 +688,6 @@ $(function() {
     ); // For Firefox
     window.addEventListener(
         'keydown', onKeyDown, false
-    ); // For Firefox
-    window.addEventListener(
-        'keyup', onKeyUp, false
     ); // For Firefox
     window.onkeydown = keyDownListener;
     window.onkeyup = keyUpListener;
