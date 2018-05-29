@@ -5,7 +5,8 @@
 Los personajes que aparecen en este juego son básicamente 2 modelos:
 
 - Los patos: son los objetivos a alcanzar por el tanque.
-- El tanque: es el jugador, que se desplaza por el mapa y lanza proyectiles a los patos que se encuentre en él.
+- El tanque: es el jugador, que se desplaza por el mapa y lanza
+  proyectiles a los patos que se encuentre en él. 
 - En el modo 1vs1 no existirían patos, sólo se encontrarían dos tanques.
 
 ## Diseño de niveles
@@ -29,6 +30,16 @@ personajes presentes en el juego es de 3 unidades (la máxima).
 
 ## Jugabilidad
 
+En el juego el jugador se dedicará a entregarle amor al mayor número
+de patos posibles con el fin de hacer el mayor número de amigos antes
+de que el tanque se quede sin amor. Esto se hará moviéndose libremente
+por el escenario principal en el modo 1 jugador (del mismo modo los
+patos se moverán libremente por el mapa).
+
+Para el modo 2 jugadores el objetivo será proporcionar la mayor
+cantidad de amor a tu rival antes de quedarse sin munición usando la
+misma mecánica de disparo que en el modo 1 jugador.
+
 ## Arte
 
 El apartado visual del juego se puede agrupar principalmente en arte
@@ -40,7 +51,7 @@ skyboxes de *park* y *galaxy*. El diseño de las *instrucciones*
 in-game así como el de la imagen *see_you_later* ha sido realizado por
 el equipo de producción.
 
-El arte 3D tiene por una parte el modelo del tanque, diseñado por el
+El **arte 3D** tiene por una parte el modelo del tanque, diseñado por el
 equipo haciendo uso de `Three.js`, y por otra, para los modelos del
 proyectil (corazón) y del pato modelos gratis
 de [***turbosquid***](www.turbosquid.com) y
@@ -73,3 +84,5 @@ En cuanto a los controles del juego, se utilizará:
 - La tecla V para alternar entre primera y tercera persona (sólo en modo un jugador).
 - La rueda del raton para acercar y alejar la cámara de tercera persona.
 - El espacio para disparar un proyectil.
+
+<!-- Adjuntar diagrama de clases -->
